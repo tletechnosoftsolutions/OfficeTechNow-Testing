@@ -81,6 +81,7 @@ class CabinetPage extends Page {
     async createQuickNote() {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button//i[.="add"]').click();
+         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button//i[.="note_add"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await expect($('//div[contains(text(),"Create QuickNote")]')).toBeExisting();

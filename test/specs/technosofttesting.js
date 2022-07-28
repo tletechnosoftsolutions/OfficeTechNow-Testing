@@ -44,7 +44,7 @@ describe('Cabinets/ Favourites page', () => {
         await CabinetPage.createTask()
         //Create tasks Clients - folder A
         await CabinetPage.expandCabinet("A")
-        await CabinetPage.createTask()
+        //await CabinetPage.createTask()
         //Collap All cabinets
         await CabinetPage.collapCabinet('A');
         await CabinetPage.collapCabinet('Clients');
@@ -62,7 +62,7 @@ describe('Cabinets/ Favourites page', () => {
         await CabinetPage.createTask()
         //Create tasks Clients - folder A
         await CabinetPage.expandCabinet("A")
-        await CabinetPage.createTask()
+        //await CabinetPage.createTask()
         //Collap All cabinets
         await CabinetPage.collapCabinet('A');
         await CabinetPage.collapCabinet('Prospects');
@@ -81,13 +81,17 @@ describe('Intrays page', () => {
     });
 });
 
+
 describe('File', () => {
     it('tc001 Verify the Create QuickNote popup will display when clicking on Floating button > Create quicknote button', async () => {
         //Cabinet
         await CabinetPage.open();
-        await CabinetPage.expandCabinetToChild("Clients");
+        await CabinetPage.expandCabinet('Clients');
+        await CabinetPage.expandCabinet("A")
+        await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+        //await CabinetPage.expandCabinet('2021');
         await CabinetPage.createQuickNote()
-        await CabinetPage.collapCabinet('Clients');
+       await CabinetPage.collapCabinet('Clients');
 
     });
 });
@@ -207,7 +211,7 @@ describe('Search quick find', () => {
   });
 
 describe('Logout', () => {
-    it('should login with valid credentials', async () => {
+    it('should logout', async () => {
         await LoginPage.open();
         await LoginPage.logout();
     });
