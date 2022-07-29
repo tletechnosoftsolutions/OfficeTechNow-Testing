@@ -3,18 +3,22 @@ const CabinetPage = require('../pageobjects/cabinet.page');
 const FavouritesPage = require('../pageobjects/favourites.page');
 const InTraysPage = require('../pageobjects/intray.page');
 const CabinetAccessControl = require('../pageobjects/cabinetAccessControl.page');
+const StructureMaintenance = require('../pageobjects/structureMaintenance.page');
+const ClientMaintenance = require('../pageobjects/ClientMaintenance.page');
 
 const { exec } = require("child_process");
 const ks = require('node-key-sender');
+const templatename = "AutomationTemplate" + new Date().getTime();
+const newTemplatename = "New" + templatename;
 describe('Login', () => {
     it('should login with valid credentials', async () => {
        await LoginPage.open();
       //await LoginPage.login('tssadmin3', 'Abc@12345');
-      // await expect($('//span[text()="Home"]')).toBeExisting();
+      //await expect($('//span[text()="Home"]')).toBeExisting();
     });
 });
 
-describe('File', () => {
+// describe('File', () => {
 
     //it('tc002 Verify the Upload File(s) popup will display when clicking on Floating button > Upload button', async () => {
     //    //Cabinet
@@ -142,18 +146,52 @@ describe('File', () => {
      //    await LoginPage.login('tssadmin3', 'Abc@12345');
      //});
 
-});
+//describe('File', () => {
+//    it('tc001 Verify the Create QuickNote popup will display when clicking on Floating button > Create quicknote button', async () => {
+//        //Cabinet
+//        await CabinetPage.open();
+//        await CabinetPage.expandCabinet('Clients');
+//        await CabinetPage.expandCabinet("A")
+//        await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+//        await CabinetPage.expandCabinet('2021');
+//        await CabinetPage.createQuickNote()
+//       await CabinetPage.collapCabinet('Clients');
 
-describe('File', () => {
-    it('tc001 Verify the Create QuickNote popup will display when clicking on Floating button > Create quicknote button', async () => {
-        //Cabinet
-        await CabinetPage.open();
-        await CabinetPage.expandCabinet('Clients');
-        await CabinetPage.expandCabinet("A")
-        await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
-        await CabinetPage.expandCabinet('2021');
-        await CabinetPage.createQuickNote()
-       await CabinetPage.collapCabinet('Clients');
+//    });
 
+describe('Structure Maintenance', () => {
+        it('tc001 Verify the user can see and access the Structure Maintenance page to add a new template when user has “Structure Maintenance” permission checked on the Group & Permission Maintenance', async () => {
+            await StructureMaintenance.open();
+            await StructureMaintenance.addNewTemplate(templatename);
+            await StructureMaintenance.saveTemplate();
+            
+        });
+
+        it('tc004 Verify that user can see list of the action in contextual menu: Set Folder Colour, Add Folder, Add Sub Folder, Clone Folder, Delete Folder, Rename Folder and do it when right-clicking a Folder structure', async () => {
+            await StructureMaintenance.open();
+            await StructureMaintenance.checkFolderFunctions(templatename, "New Folder");
+            await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
+            await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
+            await expect($('//span[contains(.,"Add Sub Folder")]')).toBeExisting();
+            await expect($('//span[contains(.,"Clone Folder")]')).toBeExisting();
+            await expect($('//span[contains(.,"Delete Folder")]')).toBeExisting();
+            await expect($('//span[contains(.,"Rename Folder")]')).toBeExisting();
+        });
+
+   
+        it('tc003 Verify that user can select any of available template structure to rename ', async () => {
+                await LoginPage.open();
+                await StructureMaintenance.open();
+              await StructureMaintenance.renameTemplate(templatename, newTemplatename);
+             await expect($('//label[contains(.,"' + newTemplatename + '")]')).toBeExisting();
+         });
+
+   
+    it('tc005 Verify that user can apply one or multiple cabinets to the Structure template ', async () => {
+                 await LoginPage.open();
+                 await StructureMaintenance.open();
+                 await StructureMaintenance.applyCabinets(newTemplatename, "Clients", "Prospects");
+                 await expect($('//span[contains(.,"Change(s) on mapping the structure to cabinet(s) has been updated successfully")]')).toBeExisting();
+         });
+       
     });
-});
