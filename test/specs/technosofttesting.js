@@ -227,7 +227,8 @@ describe('Structure Maintenance', () => {
 	});
 
 	it('tc004 Verify that user can see list of the action in contextual menu: Set Folder Colour, Add Folder, Add Sub Folder, Clone Folder, Delete Folder, Rename Folder and do it when right-clicking a Folder structure', async () => {
-		await StructureMaintenance.open();
+        await LoginPage.open();
+        await StructureMaintenance.open();
 		await StructureMaintenance.checkFolderFunctions(templatename, "New Folder");
 		await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
 		await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();

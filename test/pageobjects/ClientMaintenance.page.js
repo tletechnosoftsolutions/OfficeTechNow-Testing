@@ -30,7 +30,7 @@ class ClientMaintenancePage extends Page {
         await $('(//label[.="Client Code"]/following-sibling::input)').setValue(clientcode);
         await $('(//label[contains(text(),"' + structure + '")])').click();   
         await $('//button[contains(text(),"Cancel")]').click();
-
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
 
@@ -44,7 +44,7 @@ class ClientMaintenancePage extends Page {
         await $('(//label[.="Client Code"]/following-sibling::input)').setValue(clientcode);
         await $('(//label[contains(text(),"' + structure + '")])').click();
         await $('//button/span[text()="Add"]').click();
-
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
     /**
@@ -56,6 +56,7 @@ class ClientMaintenancePage extends Page {
         await $('(//label[.="Client Name"]/following-sibling::input)').setValue(clientname);
         await $('(//label[.="Client Code"]/following-sibling::input)').setValue(clientcode);
         await $('//button/span[text()="Add"]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
 
     }
 
@@ -67,6 +68,7 @@ class ClientMaintenancePage extends Page {
         await $('//button//i[.="account_tree"]').click();
         await $('(//label[contains(text(),"' + structure + '")])').click();
         await $('//button/span[text()="Add"]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
     
@@ -79,7 +81,7 @@ class ClientMaintenancePage extends Page {
         await $('//button//i[.="delete"]').click();
         await $('//textarea').setValue("delete the tested" + clientname);
         await $('//button[.="Delete"]').click();
-
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
     /**
