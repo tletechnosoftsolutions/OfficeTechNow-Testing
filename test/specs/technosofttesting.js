@@ -17,7 +17,9 @@ var structure = "01. Standard Client";
 describe('Login', () => {
 	it('should login with valid credentials', async () => {
 		await LoginPage.open();
-		await LoginPage.login('tssadmin3', 'Abc@12345');
+		await LoginPage.login('tle@technosoftsolutions.com.au', 'Abc@12345');
+		await expect($('//span[text()="Home"]')).toBeExisting();
+		await expect($('//span[text()="Home"]')).toBeExisting();
 		await expect($('//span[text()="Home"]')).toBeExisting();
 	});
 });
@@ -82,7 +84,7 @@ describe('Intrays page', () => {
 	it('tc001 Verify that the user can access In-Trays page in the Home tab and the current users Intray will be highlighted by default and displayed at the top in Intray / Folder Browser / File Browser / Save form', async () => {
 		//Intrays
 		await InTraysPage.open();
-		await expect($('//span[text()= " tssadmin "]')).toBeExisting();
+		await expect($('//span[text()= " Tuyen Le"]')).toBeExisting();
 
 	});
 });
@@ -193,14 +195,14 @@ describe('Search quick find', () => {
 		}
 
 		await $('#Tools-link').click();
-		for (let i = 1; i <= 6; i++) {
+		for (let i = 1; i <= 5; i++) {
 			await $('(//*[@id="Tools"]//button[contains(@class,"toolbar")])[' + i + ']').click();
 			await new Promise(resolve => setTimeout(resolve, 1000));
 			await expect($('//input[@placeholder="Quick Find"]')).toBeExisting();
 		}
 
 		await $('#Administration-link').click();
-		for (let i = 1; i <= 14; i++) {
+		for (let i = 1; i <= 10; i++) {
 			if (i == 13) continue;
 			await $('(//*[@id="Administration"]//button[contains(@class,"toolbar")])[' + i + ']').click();
 			await new Promise(resolve => setTimeout(resolve, 1000));
