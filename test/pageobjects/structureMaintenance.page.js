@@ -91,6 +91,7 @@ class StructureMaintenancePage extends Page {
     async renameTemplate(templatename, newTemplatename) { 
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//label[contains(.,"' + templatename + '")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button[contains(.,"Rename")]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//input[contains(@placeholder,"Enter Name")]').setValue(newTemplatename);
@@ -105,8 +106,10 @@ class StructureMaintenancePage extends Page {
    */
     async checkFolderFunctions(templatename, mainFolderName) {
         await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//label[contains(.,"' + templatename+'")]').click();
+        await $('//label[contains(.,"' + templatename + '")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//span[normalize-space()="' + mainFolderName + '"]/parent::button').click({ button: 'right' });
+        await new Promise(resolve => setTimeout(resolve, 1000));
         
         
     }
@@ -114,6 +117,7 @@ class StructureMaintenancePage extends Page {
     async applyCabinets(templatename, cabinet1, cabinet2){ 
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//label[contains(.,"' + templatename + '")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//div[contains(.,"' + cabinet1 + '") and @class="d-flex row-item ng-star-inserted"]/div/mat-checkbox').click();
         await $('//div[contains(.,"' + cabinet2 + '") and @class="d-flex row-item ng-star-inserted"]/div/mat-checkbox').click();
         await new Promise(resolve => setTimeout(resolve, 1000));

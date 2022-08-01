@@ -96,14 +96,18 @@ class CabinetPage extends Page {
     async uploadFileSystem(filename) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button//i[.="add"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button//i[.="file_upload"]').click();
         await new Promise(resolve => setTimeout(resolve, 2000));
         await $('//button//*[.="add_circle"]').click();
+        //await clibboardy.writeSync(filename);
         await new Promise(resolve => setTimeout(resolve, 1000));
-        await ks.sendText("C:\OTNow\test\testdata\testfile_xlsx_1.71MB.xlsx")
+        //await ks.sendCombination(['control', 'v']);
+        await ks.sendText(filename);
         await new Promise(resolve => setTimeout(resolve, 1000));
-        ks.sendKey('enter');
-        //await clibboardy.readSync();
+        await ks.sendKey('enter');
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        //await clibboardy.writeSync(filename);
         //await browser.keys(['C:\\OTNow\\test\\testdata\\testfile_xlsx_1.7MB.xlsx']);
         //await browser.keys(['Enter']);
        
@@ -123,14 +127,14 @@ class CabinetPage extends Page {
         //console.log("DEBUGGGGGGGGGGGGGGGGGGGGGGG 2");
         //await new Promise(resolve => setTimeout(resolve, 20000));
         
-
+        
         //[Khúc này chạy được rồi - Điền textbox và ấn nút]
         /* Fill mandatory */
         await $('//label[.="Type"]/following-sibling::*//span[@class="ng-arrow-wrapper"]').click();
         await $('//span[.="fn - File Note"]').click();
         await $('//label[.="Subject"]/following-sibling::*//span[@class="arrow-btn"]').click();
-        await $('//a[.="New File Subject"]').click();
-        await this.$('#comment').setValue('testing upload');
+        await $('//a[.="Subject A"]').click();
+        await $('#comment').setValue('testing upload');
 
         /* Click Upload button then Close */
         await $('//button/span[.="Upload"]').click();
@@ -146,6 +150,7 @@ class CabinetPage extends Page {
     async renameFolder(oldFolderName, newFolderName) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('(//span[contains(.,"' + oldFolderName + '")])[1]').click({ button: 'right' });
+         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//span[contains(.,"Rename Folder")]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('#folderName').setValue(newFolderName);
@@ -159,6 +164,7 @@ class CabinetPage extends Page {
     async deleteFolder(folderName) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('(//span[contains(.,"' + folderName + '")])[1]').click({ button: 'right' });
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//span[contains(.,"Delete Folder")]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//textarea').setValue('testing reason for deleting');
