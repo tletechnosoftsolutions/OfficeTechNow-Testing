@@ -26,7 +26,7 @@ class CabinetSettingsPage extends Page {
         await $('input[id*=input_folderName]').clearValue();
         await $('input[id*=input_folderName]').setValue(cabinetName);
         await $('//label[contains(.,"Index type")]/following-sibling::*//input').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
         await $('//div[@role="option"]/span[normalize-space()="' + indexType + '"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//label[normalize-space()="Enable DCM"]').click();
