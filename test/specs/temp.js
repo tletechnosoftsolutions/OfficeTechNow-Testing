@@ -8,25 +8,26 @@ const CabinetAccessControlPage = require('../pageobjects/cabinetAccessControl.pa
 const CabinetSettingsPage = require('../pageobjects/cabinetSettings.page');
 const TaskPage = require('../pageobjects/task.page');
 
-const { exec } = require("child_process");
-const ks = require('node-key-sender');
-
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
-
+const superadmin = 'tssadmin3';
+const superadmin2='tssadmin4';
+const user = 'tle@technosoftsolutions.com.au';
+const password = 'Abc@12345';
+const isSuperadmin = true;
 var clientname = "Automation" + new Date().getTime();
 var clientcode = new Date().getTime();
 var structure = "01. Standard Client";
 var cabinet_name = "Automation Testing Cabinet" +new Date().getTime();
 var new_cabinet_name = "Renamed Automation Testing Cabinet" + new Date().getTime();
 
-const superadmin = 'tssadmin3';
-const user = 'tle@technosoftsolutions.com.au';
-
 describe('Login', () => {
     it('should login with valid credentials', async () => {
        await LoginPage.open();
-      await LoginPage.login(superadmin, 'Abc@12345');
+      if (isSuperadmin) {
+			await LoginPage.login(superadmin, password);
+		} else await LoginPage.login(user, password);
+
         await expect($('//span[text()="Home"]')).toBeExisting();
         await expect($('//span[text()="Home"]')).toBeExisting();
         await expect($('//span[text()="Home"]')).toBeExisting();
@@ -292,75 +293,98 @@ describe('Login', () => {
 //});
 
 
-describe('Task', () => {
-    it('tc001 Verify that user can create a new task by clicking Create Task button', async () => {
-        await TaskPage.open();
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeExisting();
-    });
+//describe('Task', () => {
+//    it('tc001 Verify that user can create a new task by clicking Create Task button', async () => {
+//		await LoginPage.reload();
+//		await TaskPage.open();
+//        await TaskPage.createTask();
+//        await TaskPage.saveAndClose();
+//        expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeExisting();
+//    });
 
-    it('tc003 Verify that user can select one or multiple the task(s) to reassign to another user in the Task list', async () => {
-        let assignee = "tssadmin4";
-        //Pre-condition: create 02 tasks
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        //Reassign
-        await TaskPage.tickOnTasks();
-        await TaskPage.reassignTask(assignee);
-        expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
-        await LoginPage.logout();
-        await LoginPage.login(assignee, "Abc@12345");
-        await TaskPage.open();
-        expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeElementsArrayOfSize(2);
-        //Post-condition: relog to current account
-        await LoginPage.logout();
-        await LoginPage.login("tssadmin3", "Abc@12345");
-    });
+//	it('tc003 Verify that user can select one or multiple the task(s) to reassign to another user in the Task list', async () => {
+//		if (isSuperadmin) { 
+//			let assignee = superadmin2;
+//			//Pre-condition: create 02 tasks
+//			await TaskPage.createTask();
+//			await TaskPage.saveAndClose();
+//			await TaskPage.createTask();
+//			await TaskPage.saveAndClose();
+//			//Reassign
+//			await TaskPage.tickOnTasks();
+//			await TaskPage.reassignTask(assignee);
+//			expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
+//			await LoginPage.logout();
+//			await LoginPage.login(assignee, "Abc@12345");
+//			await TaskPage.open();
+//			expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeElementsArrayOfSize(2);
+//			//Post-condition: relog to current account
+//			await LoginPage.logout();
+//			await LoginPage.login(superadmin, "Abc@12345");
+//		}
+//    });
 
-    it('tc004 Verify that user can create a new task by clicking Create Task button', async () => {
-        //Pre-condition: create 01 task
-        await TaskPage.open();
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        await TaskPage.goToClient();
-        expect($('[aria-label="toggle Automation"]')).toBeExisting();
-    });
+//    it('tc004 Verify that user can create a new task by clicking Create Task button', async () => {
+//        //Pre-condition: create 01 task
+//        await TaskPage.open();
+//        await TaskPage.createTask();
+//        await TaskPage.saveAndClose();
+//        await TaskPage.goToClient();
+//        expect($('[aria-label="toggle Automation"]')).toBeExisting();
+//    });
 
-    it('tc005 Verify that the data in task filtered will deleted when Clicking on Clear All button on Task list', async () => {
-        await TaskPage.open();
-        await TaskPage.fulfilldata();
-        await TaskPage.clearAll();
-        let isZero = await TaskPage.isEmptyFields();
-        await expect(isNaN(isZero) ? true : false).toEqual(true);
-    });
+//    it('tc005 Verify that the data in task filtered will deleted when Clicking on Clear All button on Task list', async () => {
+//		if (isSuperadmin) {
+//			await TaskPage.open();
+//			await TaskPage.fulfilldata();
+//			await TaskPage.clearAll();
+//			let isZero = await TaskPage.isEmptyFields();
+//			await expect(isNaN(isZero) ? true : false).toEqual(true);
+//		}
+//    });
 
-    /*need to fix subjet dropdown list*/
-    it('tc007 Verify that the ott file will be created in the selected location when user complete a task', async () => {
-        //Pre-condition: create 01 completed task
-        await LoginPage.reload();
-        await TaskPage.open();
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        await TaskPage.changeStatus("Complete");
-        await TaskPage.openTask('Task: Automation -- Business -- ',' -- Complete');
-        await TaskPage.saveAndClose();
-        await TaskPage.saveToOfficeNow();
-        let today = new Date().getFullYear()+'.'+ ("0" + (new Date().getMonth() + 1)).slice(-2)+'.'+("0" + (new Date().getDate())).slice(-2);
-        await expect($('//span[contains(.,"Business.ott") and contains(.,"'+today+'")]')).toBeExisting();      
-        await TaskPage.switchWindow('OTNOW-Develop');
-    });
+//    /*need to fix subjet dropdown list*/
+//    it('tc007 Verify that the ott file will be created in the selected location when user complete a task', async () => {
+//        //Pre-condition: create 01 completed task
+//        await LoginPage.reload();
+//        await TaskPage.open();
+//        await TaskPage.createTask();
+//        await TaskPage.saveAndClose();
+//        await TaskPage.changeStatus("Complete");
+//        await TaskPage.openTask('Task: Automation -- Business -- ',' -- Complete');
+//        await TaskPage.saveAndClose();
+//        await TaskPage.saveToOfficeNow();
+//        let today = new Date().getFullYear()+'.'+ ("0" + (new Date().getMonth() + 1)).slice(-2)+'.'+("0" + (new Date().getDate())).slice(-2);
+//        await expect($('//span[contains(.,"Business.ott") and contains(.,"'+today+'")]')).toBeExisting();      
+//        await TaskPage.switchWindow('OTNOW-Develop');
+//        if (isSuperadmin) {
+//            await LoginPage.reload();
+//            await TaskPage.open();
+//			await TaskPage.search();
+//			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
+//		}
+//    });
 
-     it('tc002 Verify that user can select one or multiple task(s) in the Task list to delete', async () => {
-        //Pre-condition: create 01 task
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        //Delete selected tasks
-        await TaskPage.tickOnTasks();
-        await TaskPage.deleteTask();
-        expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
-    });
-});
+//    it('tc005 Verify that user can search task when entering data search all task fields', async () => {
+//        if (isSuperadmin) {
+//            await LoginPage.reload();
+//            await TaskPage.open();
+//            await TaskPage.createTask();
+//            await TaskPage.saveAndClose();
+//			await TaskPage.fulfilldata();
+//			await TaskPage.search();
+//			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
+//		}
+//    });
+    
+//     it('tc002 Verify that user can select one or multiple task(s) in the Task list to delete', async () => {
+//        //Pre-condition: create 01 task
+//        await TaskPage.createTask();
+//        await TaskPage.saveAndClose();
+//        //Delete selected tasks
+//        await TaskPage.tickOnTasks();
+//        await TaskPage.deleteTask();
+//        expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
+//    });
+//});
 

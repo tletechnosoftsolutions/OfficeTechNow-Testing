@@ -12,8 +12,10 @@ const TaskPage = require('../pageobjects/task.page');
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
 const superadmin = 'tssadmin3';
+const superadmin2='tssadmin4';
 const user = 'tle@technosoftsolutions.com.au';
 const password = 'Abc@12345';
+const isSuperadmin = false;
 var clientname = "Automation" + new Date().getTime();
 var clientcode = new Date().getTime();
 var structure = "01. Standard Client";
@@ -23,7 +25,10 @@ var new_cabinet_name = "Renamed Automation Testing Cabinet" + new Date().getTime
 describe('Login', () => {
 	it('should login with valid credentials', async () => {
 		await LoginPage.open();
-		await LoginPage.login(user, password);
+		if (isSuperadmin) {
+			await LoginPage.login(superadmin, password);
+		} else await LoginPage.login(user, password);
+
 		await expect($('//span[text()="Home"]')).toBeExisting();
 		await expect($('//span[text()="Home"]')).toBeExisting();
 		await expect($('//span[text()="Home"]')).toBeExisting();
@@ -89,6 +94,7 @@ describe('Intrays page', () => {
 
 	it('tc001 Verify that the user can access In-Trays page in the Home tab and the current users Intray will be highlighted by default and displayed at the top in Intray / Folder Browser / File Browser / Save form', async () => {
 		//Intrays
+		await LoginPage.reload();
 		await InTraysPage.open();
 		await expect($('//span[text()= " Tuyen Le"]')).toBeExisting();
 
@@ -99,6 +105,7 @@ describe('Intrays page', () => {
 describe('File', () => {
 	it('tc001 Verify the Create QuickNote popup will display when clicking on Floating button > Create quicknote button', async () => {
 		//Cabinet
+		await LoginPage.reload();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
 		await CabinetPage.expandCabinet("A")
@@ -124,6 +131,7 @@ describe('File', () => {
 describe('Client Maintenance', () => {
 
 	it('tc001 Verify the user can see and access the Client Maintenance page to Add a new client', async () => {
+		await LoginPage.reload();
 		//open Client Maintenance Page
 		await ClientMaintenancePage.open();
 		await expect($('//button//i[.="person_add"]')).toBeExisting();
@@ -205,6 +213,7 @@ describe('Client Maintenance', () => {
 
 describe('Search quick find', () => {
 	it('tc001 Verify that user can see search quick find field on all pages', async () => {
+		await LoginPage.reload();
 		for (let i = 1; i <= 7; i++) {
 			await $('(//*[@id="Home"]//button[contains(@class,"toolbar")])[' + i + ']').click();
 			await new Promise(resolve => setTimeout(resolve, 1000));
@@ -239,6 +248,7 @@ describe('Search quick find', () => {
 describe('Structure Maintenance', () => {
 	//TC001->TC004->TC003->TC005
 	it('tc001 Verify the user can see and access the Structure Maintenance page to add a new template when user has “Structure Maintenance” permission checked on the Group & Permission Maintenance', async () => {
+		await LoginPage.reload();
 		await StructureMaintenance.open();
 		await StructureMaintenance.addNewTemplate(templatename);
 		await StructureMaintenance.saveTemplate();
@@ -278,7 +288,8 @@ describe('Structure Maintenance', () => {
 
 describe('Cabinet Settings', () => {
     it('tc001 Verify the user can see and access the Cabinet Setting page to add a new cabinet', async () => {
-        await CabinetSettingsPage.open();
+		await LoginPage.reload();
+		await CabinetSettingsPage.open();
         await expect($('//td[normalize-space()="Clients"]')).toBeExisting();
         await expect($('//td[normalize-space()="Prospects"]')).toBeExisting();
     });
@@ -286,7 +297,7 @@ describe('Cabinet Settings', () => {
 
     it('tc002 Verify that user can see created cabinet in Cabinet list, Cabinet Settings after user apllied Read permission for it on the CAC page', async () => {
         await CabinetSettingsPage.open();
-        await CabinetSettingsPage.addCabinet(cabinet_name, "None");
+        await CabinetSettingsPage.addCabinet(cabinet_name, "None", isSuperadmin);
 
         await CabinetAccessControlPage.open();
         await CabinetAccessControlPage.checkCabinet(cabinet_name);
@@ -353,32 +364,37 @@ describe('Cabinet Settings', () => {
 });
 
 
+
+
 describe('Task', () => {
     it('tc001 Verify that user can create a new task by clicking Create Task button', async () => {
-        await TaskPage.open();
+		await LoginPage.reload();
+		await TaskPage.open();
         await TaskPage.createTask();
         await TaskPage.saveAndClose();
         expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeExisting();
     });
 
-    it('tc003 Verify that user can select one or multiple the task(s) to reassign to another user in the Task list', async () => {
-        let assignee = "tssadmin4";
-        //Pre-condition: create 02 tasks
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        //Reassign
-        await TaskPage.tickOnTasks();
-        await TaskPage.reassignTask(assignee);
-        expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
-        await LoginPage.logout();
-        await LoginPage.login(assignee, "Abc@12345");
-        await TaskPage.open();
-        expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeElementsArrayOfSize(2);
-        //Post-condition: relog to current account
-        await LoginPage.logout();
-        await LoginPage.login("tssadmin3", "Abc@12345");
+	it('tc003 Verify that user can select one or multiple the task(s) to reassign to another user in the Task list', async () => {
+		if (isSuperadmin) { 
+			let assignee = superadmin2;
+			//Pre-condition: create 02 tasks
+			await TaskPage.createTask();
+			await TaskPage.saveAndClose();
+			await TaskPage.createTask();
+			await TaskPage.saveAndClose();
+			//Reassign
+			await TaskPage.tickOnTasks();
+			await TaskPage.reassignTask(assignee);
+			expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
+			await LoginPage.logout();
+			await LoginPage.login(assignee, "Abc@12345");
+			await TaskPage.open();
+			expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeElementsArrayOfSize(2);
+			//Post-condition: relog to current account
+			await LoginPage.logout();
+			await LoginPage.login(superadmin, "Abc@12345");
+		}
     });
 
     it('tc004 Verify that user can create a new task by clicking Create Task button', async () => {
@@ -391,11 +407,13 @@ describe('Task', () => {
     });
 
     it('tc005 Verify that the data in task filtered will deleted when Clicking on Clear All button on Task list', async () => {
-        await TaskPage.open();
-        await TaskPage.fulfilldata();
-        await TaskPage.clearAll();
-        let isZero = await TaskPage.isEmptyFields();
-        await expect(isNaN(isZero) ? true : false).toEqual(true);
+		if (isSuperadmin) {
+			await TaskPage.open();
+			await TaskPage.fulfilldata();
+			await TaskPage.clearAll();
+			let isZero = await TaskPage.isEmptyFields();
+			await expect(isNaN(isZero) ? true : false).toEqual(true);
+		}
     });
 
     /*need to fix subjet dropdown list*/
@@ -412,8 +430,26 @@ describe('Task', () => {
         let today = new Date().getFullYear()+'.'+ ("0" + (new Date().getMonth() + 1)).slice(-2)+'.'+("0" + (new Date().getDate())).slice(-2);
         await expect($('//span[contains(.,"Business.ott") and contains(.,"'+today+'")]')).toBeExisting();      
         await TaskPage.switchWindow('OTNOW-Develop');
+        if (isSuperadmin) {
+            await LoginPage.reload();
+            await TaskPage.open();
+			await TaskPage.search();
+			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
+		}
     });
 
+    it('tc005 Verify that user can search task when entering data search all task fields', async () => {
+        if (isSuperadmin) {
+            await LoginPage.reload();
+            await TaskPage.open();
+            await TaskPage.createTask();
+            await TaskPage.saveAndClose();
+			await TaskPage.fulfilldata();
+			await TaskPage.search();
+			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
+		}
+    });
+    
      it('tc002 Verify that user can select one or multiple task(s) in the Task list to delete', async () => {
         //Pre-condition: create 01 task
         await TaskPage.createTask();

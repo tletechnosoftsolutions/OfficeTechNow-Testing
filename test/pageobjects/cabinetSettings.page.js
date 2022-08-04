@@ -20,7 +20,7 @@ class CabinetSettingsPage extends Page {
      /**
      * add the Cabinet. Param indexType: None, Alphabetic, Numeric, Alpha-Numeric
      */
-    async addCabinet(cabinetName, indexType) {
+    async addCabinet(cabinetName, indexType, isSuperadmin) {
         await $('//span[normalize-space()="Add Cabinet"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('input[id*=input_folderName]').clearValue();
@@ -29,7 +29,7 @@ class CabinetSettingsPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 3000));
         await $('//div[@role="option"]/span[normalize-space()="' + indexType + '"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//label[normalize-space()="Enable DCM"]').click();
+        if (isSuperadmin)  { await $('//label[normalize-space()="Enable DCM"]').click();}
         await $('//span[.="Create"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button[.="No"]').click();

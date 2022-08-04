@@ -37,6 +37,10 @@ class TaskPage extends Page {
         await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
         //Note
         await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//a[.="Task Subject 01"]').click();
     }
 
     /**
@@ -122,14 +126,15 @@ class TaskPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 3000));
         let folder = "2021";
         await $('//span[text()=" ' + folder + '"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        /*need to fix subjet dropdown list*/
+        await new Promise(resolve => setTimeout(resolve, 1000));     
         //await $('(//mat-icon[text()="arrow_drop_down"])[3]').click();
         //await $('//a[.="Subject A"]').click();
+        /*need to fix subjet dropdown list
         await $('(//input[@type="text"])[20]').setValue("Subject A");
-        /**/
+        */
         await $('//textarea').setValue("Automation testing completed task");
-        await $('//span[.="Save"]').click();
+        await new Promise(resolve => setTimeout(resolve, 4000));
+        await $('//button[.="Save"]').click();
         await new Promise(resolve => setTimeout(resolve, 4000));
         
     }
@@ -137,6 +142,11 @@ class TaskPage extends Page {
     async switchWindow(title) {
         await browser.switchWindow(title);
     }
+
+     async search() {
+        await await $('//button[contains(.,"Search")]').click();
+     }
+
     /**
      * fulfill data search 
      */
@@ -154,8 +164,8 @@ class TaskPage extends Page {
         await $('//ng-dropdown-panel//span[.="Complete"]').click();
         await $('//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"]').click();
         await $('//a[.="Task Subject 01"]').click();
-        await $('//label[normalize-space()="Reminder For"]/following-sibling::*//input[@type="text"]').click();
-        await $('//ng-dropdown-panel//span[normalize-space()="tssadmin3"]').click();
+        //await $('//label[normalize-space()="Reminder For"]/following-sibling::*//input[@type="text"]').click();
+        //await $('//ng-dropdown-panel//span[normalize-space()="tssadmin3"]').click();
         await $('//label[normalize-space()="Assigned To"]/following-sibling::*//input[@type="text"]').click();
         await $('//ng-dropdown-panel//span[normalize-space()="tssadmin3"]').click();
         await $('//label[normalize-space()="Assigned By"]/following-sibling::*//input[@type="text"]').click();
@@ -163,16 +173,17 @@ class TaskPage extends Page {
         await $('//label[normalize-space()="Filter By Date"]/following-sibling::*//input[@type="text"]').click();
         await $('//span[.="Created Date"]').click();
         await $('//label[normalize-space()="From" and contains(@for,"fromDate")]/following-sibling::*//input').setValue("01/07/2022");
-        await $('//label[normalize-space()="To" and contains(@for,"toDate")]/following-sibling::*//input').setValue("01/08/2022");
+        await $('//label[normalize-space()="To" and contains(@for,"toDate")]/following-sibling::*//input').setValue("01/08/2023");
         await $('//label[normalize-space()="Step Name"]/following-sibling::*//input').click();
         await $('//span[.="Email UW"]').click();
         await $('//label[normalize-space()="State"]/following-sibling::*//input').click();
         await $('//ng-dropdown-panel//span[.="Complete"]').click();
         await $('//label[normalize-space()="Field Name"]/following-sibling::*//input').click();
-        await $('//ng-dropdown-panel//span[.="Business Type"]').click();
+        await $('//ng-dropdown-panel//span[.="Notes"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//label[normalize-space()="Value"]/following-sibling::*//div[@role="combobox"]').click();
-        await $('//ng-dropdown-panel//span[.="CGU"]').click();
+        //await $('//label[normalize-space()="Value"]/following-sibling::*//div[@role="combobox"]').click();
+        //await $('//ng-dropdown-panel//span[.="CGU"]').click();
+        
     }
 
      /**
