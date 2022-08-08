@@ -7,6 +7,7 @@ const StructureMaintenance = require('../pageobjects/structureMaintenance.page')
 const CabinetAccessControlPage = require('../pageobjects/cabinetAccessControl.page');
 const CabinetSettingsPage = require('../pageobjects/cabinetSettings.page');
 const TaskPage = require('../pageobjects/task.page');
+const TaskTemplateMaintenance = require('../pageobjects/taskTemplateMaintenance.page');
 
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
@@ -20,6 +21,7 @@ var clientcode = new Date().getTime();
 var structure = "01. Standard Client";
 var cabinet_name = "Automation Testing Cabinet" +new Date().getTime();
 var new_cabinet_name = "Renamed Automation Testing Cabinet" + new Date().getTime();
+var newTemplateName = "Automation Task Template " + new Date().getTime();
 
 describe('Login', () => {
     it('should login with valid credentials', async () => {
@@ -365,7 +367,7 @@ describe('Login', () => {
 //		}
 //    });
 
-//    it('tc005 Verify that user can search task when entering data search all task fields', async () => {
+//    it('tc008 Verify that user can search task when entering data search all task fields', async () => {
 //        if (isSuperadmin) {
 //            await LoginPage.reload();
 //            await TaskPage.open();
@@ -388,3 +390,143 @@ describe('Login', () => {
 //    });
 //});
 
+//describe('Send to task', () => {
+  //  it('tc001 Verify that user can select a file(s) to attach to a new task, the selected file will show in Attachments tab', async () => {
+  //      //Pre-condition: attach a file in cabinet's folder
+  //      let fileName = "testfile.xlsx";
+  //      await CabinetPage.open();
+  //      await CabinetPage.expandCabinet('Clients');
+  //      await CabinetPage.expandCabinet("A");
+		//await CabinetPage.expandCabinet('Automation');
+		//await CabinetPage.expandCabinet('2021');
+		//await CabinetPage.uploadFileSystem(fileName);
+  //      //Attach to new task
+  //      await CabinetPage.tickOnFile(fileName);
+  //      await CabinetPage.sendToTask("New Task");
+  //      await TaskPage.switchTab("Attachments");
+  //      await expect($('//mat-dialog-container//td[contains(.,"' + fileName + '")]')).toBeExisting();
+  //      //Fill task info
+  //      await TaskPage.createTask2();
+  //      await TaskPage.saveAndClose();
+  //      await CabinetPage.collapCabinet('Automation');
+  //      expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeExisting();
+  //  });
+
+    //it('tc002 Verify that user can select a file(s) to attach to existing task, the selected file will be attached to task selected', async () => {
+    //    //Upload new file
+    //    let fileName = "testfilePDF.pdf";
+    //    await CabinetPage.open();
+    //    await CabinetPage.expandCabinet('Clients');
+    //    await CabinetPage.expandCabinet("A");
+    //    await CabinetPage.expandCabinet('Automation');
+    //    await CabinetPage.expandCabinet('2021');
+    //    await CabinetPage.uploadFileSystem(fileName);
+    //    //Attach to existing task and save task
+    //    await CabinetPage.tickOnFile(fileName);
+    //    await CabinetPage.sendToTask("Existing Task");
+    //    await TaskPage.selectExistingTask("Task: Automation -- Business -- ", " -- New");
+    //    await TaskPage.saveAndClose();
+    //    await TaskPage.switchWindow('OTNOW-Develop');
+    //    //Back main window and verify attachment is successfully saved
+    //    await CabinetPage.collapCabinet('Automation');
+    //    await TaskPage.openTask("Task: Automation -- Business -- ", " -- New");
+    //    await TaskPage.switchTab("Attachments");
+    //    await expect($('//td[contains(.,"' + fileName + '")]')).toBeExisting();
+    //});
+//});
+
+//describe('Task Template Maintenance', () => {
+ 
+//    it('tc001 Verify the user can see and access the Task Template Maintenance page to add a new task template', async () => {
+//        await TaskTemplateMaintenance.open();
+//        await TaskTemplateMaintenance.createTaskTemplate(newTemplateName);
+//        await expect($('//label[normalize-space()="' + newTemplateName + '"]')).toBeExisting();
+//    });
+
+    
+//    it('tc003 Verify that user can select any of the available task template to copy the copied task template will copy all task steps, step setting and task field of the selected template to copy', async () => {
+//        await TaskTemplateMaintenance.activate(newTemplateName);
+//        await TaskTemplateMaintenance.copy(newTemplateName);
+//        await expect($('//label[normalize-space()="Copy - ' + newTemplateName + '"]')).toBeExisting();
+//    });
+
+//    //it('tc002 Verify that user can select any of the available task template to delete', async () => {
+//    //    await TaskTemplateMaintenance.deletecopy(newTemplateName);
+//    //    await expect($('//label[normalize-space()="Copy - ' + newTemplateName + '"]')).not.toBeExisting();
+//    //});
+
+//    it('tc004 Verify that user can add new a step by clicking Create button', async () => {
+//        //Pre-condition: TC001 - Create a new task template
+//        await TaskTemplateMaintenance.activate(newTemplateName);
+//        await TaskTemplateMaintenance.createStep("Step 1", "Simple");
+//        await TaskTemplateMaintenance.createStep("Step 2", "Text Box");
+//        await TaskTemplateMaintenance.createStep("Step 3", "Reassign");
+//        await TaskTemplateMaintenance.createStep("Step 4", "Email");
+//        await TaskTemplateMaintenance.createStep("Step 5", "Open Template");
+//        await expect($('//mat-list-item[descendant::label[contains(.,"Step 1")] and descendant::label[contains(.,"Simple")]]')).toBeExisting();
+//        await expect($('//mat-list-item[descendant::label[contains(.,"Step 2")] and descendant::label[contains(.,"Text Box")]]')).toBeExisting();
+//        await expect($('//mat-list-item[descendant::label[contains(.,"Step 3")] and descendant::label[contains(.,"Reassign")]]')).toBeExisting();
+//        await expect($('//mat-list-item[descendant::label[contains(.,"Step 4")] and descendant::label[contains(.,"Email")]]')).toBeExisting();
+//        await expect($('//mat-list-item[descendant::label[contains(.,"Step 5")] and descendant::label[contains(.,"Open Template")]]')).toBeExisting();
+//    });
+
+//    it('tc005 Verify that user can select any of the available Step to edit/ delete', async () => {
+//        await TaskTemplateMaintenance.activate(newTemplateName);
+//        //Pre-condition: TC004 - Steps already have been added in Task Template
+//        //Delete step 4
+//        await TaskTemplateMaintenance.deleteStep("Step 4");
+//        await expect($('//label[contains(.,"Step 4")]')).not.toBeExisting();
+//        //Edit step 5 => step 4
+//        await TaskTemplateMaintenance.editStep("Step 5", "Step 4", "Email");
+//        await expect($('//mat-list-item[descendant::label[contains(.,"Step 4")] and descendant::label[contains(.,"Email")]]')).toBeExisting();
+//    });
+
+//    it('tc006 Verify that user can select any of the available Step to move up/down', async () => {
+//        //Pre-condition: TC004 - Steps already have been added in Task Template
+//        //Re-order all steps: 4 > 3 > 2 > 1
+//        await TaskTemplateMaintenance.activate(newTemplateName);
+//        await TaskTemplateMaintenance.moveStep("Step 1", "Down");
+//        await TaskTemplateMaintenance.moveStep("Step 1", "Down");
+//        await TaskTemplateMaintenance.moveStep("Step 1", "Down");
+//        await TaskTemplateMaintenance.moveStep("Step 4", "Up");
+//        await TaskTemplateMaintenance.moveStep("Step 2", "Down");
+//        await TaskTemplateMaintenance.moveStep("Step 3", "Up");
+//        //Verify
+//        await expect($('(//*[@title="Steps"]//label[contains(.,"Step")])[1]')).toHaveTextContaining('Step 4');
+//        await expect($('(//*[@title="Steps"]//label[contains(.,"Step")])[2]')).toHaveTextContaining('Step 3');
+//        await expect($('(//*[@title="Steps"]//label[contains(.,"Step")])[3]')).toHaveTextContaining('Step 2');
+//        await expect($('(//*[@title="Steps"]//label[contains(.,"Step")])[4]')).toHaveTextContaining('Step 1');
+//    });
+
+//    it('tc007 Verify that user can add new custom fields', async () => {
+//        //Pre-condition: TC004 - Steps already have been added in Task Template
+//        await TaskTemplateMaintenance.activate(newTemplateName);
+//        await TaskTemplateMaintenance.manageField();
+//        await TaskTemplateMaintenance.addField("Field 1", "Text", true);
+//        await TaskTemplateMaintenance.addField("Field 2", "Date", false);
+//        await TaskTemplateMaintenance.addField("Field 3", "New Field", true);
+//        await TaskTemplateMaintenance.saveAndClose();
+//        //Bypass due to saving issue
+//        //await TaskTemplateMaintenance.focusOn("My Template");
+//        //await TaskTemplateMaintenance.focusOn(tp);
+//        //Verify
+//        await expect($('//label[normalize-space()="Field 1"]')).toBeExisting();
+//        await expect($('//label[normalize-space()="Field 2"]')).toBeExisting();
+//        await expect($('//label[normalize-space()="Field 3"]')).toBeExisting();
+//    });
+
+//    it('tc008 Verify that the task field will display in end of the task list column when user tick show in grid checkbox', async () => {
+//        await LoginPage.reload();
+//        await TaskPage.open();
+//        await expect($('//div[contains(text(),"Field 3")]')).toBeExisting();
+       
+//    });
+
+//    it('tc002 Verify that user can select any of the available task template to delete', async () => {
+//        await LoginPage.reload();
+//        await TaskTemplateMaintenance.open();
+//        await TaskTemplateMaintenance.delete(newTemplateName);
+//        await expect($('//label[normalize-space()="' + newTemplateName + '"]')).not.toBeExisting();
+//    });
+    
+//});

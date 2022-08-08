@@ -25,7 +25,57 @@ class TaskPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
         //Entity
         await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').setValue("Automation");
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await $('(//div[@role="option"])[1]').click();
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//a[.="Business"]').click();
+        //Progress
+        await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//a[.="Task Subject 01"]').click();
+    }
+
+    /**
+     * create and fill information of task
+     */
+    async createTaskwithField(categoryname) {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Entity
+        await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').setValue("Automation");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('(//div[@role="option"])[1]').click();
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//a[.="'+categoryname+'"]').click();
+        //Progress
+        await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//a[.="Task Subject 01"]').click();
+        await $('//label[normalize-space()="Field 1"]').click();
+    }
+
+     /**
+     * create task at cabinet (not contain filling Entity or Client)
+     */
+    async createTask2() {
         //Category
         await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
         await $('//a[.="Business"]').click();
@@ -217,7 +267,27 @@ class TaskPage extends Page {
         await $('//span[normalize-space()="Clear All"]').click();
         await new Promise(resolve => setTimeout(resolve, 2000));
     }
-    
+
+     /**
+     * click on Attach button and switch to new window
+     */
+    async selectExistingTask(task, status) {
+        await $('(//mat-dialog-container//container-element[contains(.,"Automation") and contains(.,"Business")])[1]').click();
+        await $('//span[.="Attach"]').click();
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        let today = ("0" + (new Date().getDate())).slice(-2) + '/' + ("0" + (new Date().getMonth() + 1)).slice(-2) + '/' + new Date().getFullYear();
+        await browser.switchWindow(task + today + status);
+        //Task: Automation -- Business -- 03/08/2022 -- Complete
+        await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+
+    /**
+     * switch among tabs: Note, Attachments, Audit
+     */
+    async switchTab(tabName) {
+        await $('//li//span[contains(.,"' + tabName + '")]').click();
+    }
+
     /**
      * open the Cabinet page
      */

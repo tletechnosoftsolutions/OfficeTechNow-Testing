@@ -106,29 +106,11 @@ class CabinetPage extends Page {
         await ks.sendText(filename);
         await new Promise(resolve => setTimeout(resolve, 1000));
         await ks.sendKey('enter');
-        await new Promise(resolve => setTimeout(resolve, 10000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
         //await clibboardy.writeSync(filename);
         //await browser.keys(['C:\\OTNow\\test\\testdata\\testfile_xlsx_1.7MB.xlsx']);
         //await browser.keys(['Enter']);
        
-
-        ////[Khúc này chưa chạy được - Upload file]
-        ///* Select file */
-        ////await $('//button//*[.="add_circle"]').click();
-        //const filePath = "C:/OTNow/test/testdata/" + filename;
-        ////const remotePath = browser.uploadFile(filePath);
-        ////await fileLocateButton = $('//input[@type="file"]');
-        //const fileLocateButton = await $('//input[@type="file"]');
-        //browser.execute((e1) => e1.style.display = 'block', $('//input[@type="file"]'));
-        //console.log("DEBUGGGGGGGGGGGGGGGGGGGGGGG 1");
-        //await fileLocateButton.waitForDisplayed();
-        //await new Promise(resolve => setTimeout(resolve, 1000));
-        //await fileLocateButton.setValue(filePath);
-        //console.log("DEBUGGGGGGGGGGGGGGGGGGGGGGG 2");
-        //await new Promise(resolve => setTimeout(resolve, 20000));
-        
-        
-        //[Khúc này chạy được rồi - Điền textbox và ấn nút]
         /* Fill mandatory */
         await $('//label[.="Type"]/following-sibling::*//span[@class="ng-arrow-wrapper"]').click();
         await $('//span[.="fn - File Note"]').click();
@@ -138,10 +120,9 @@ class CabinetPage extends Page {
 
         /* Click Upload button then Close */
         await $('//button/span[.="Upload"]').click();
-        await new Promise(resolve => setTimeout(resolve, 15000));
+        await new Promise(resolve => setTimeout(resolve, 10000));
         await $('//button[.="Close"]').click();
         await new Promise(resolve => setTimeout(resolve, 2000));
-        
     }
 
     /**
@@ -169,6 +150,23 @@ class CabinetPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//textarea').setValue('testing reason for deleting');
         await $('//button[.="Delete"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+     /**
+     * tick on file
+     */
+    async tickOnFile(fileName) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//span[contains(.,"' + fileName + '")]/ancestor::td').click();
+    }
+
+     /**
+     * send to task - typeOfTask: "New Task" or "Existing Task"
+     */
+    async sendToTask(typeOfTask) {
+        await $('button[mattooltip = "Send To Task"]').click();
+        await $('//span[.="' + typeOfTask + '"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
