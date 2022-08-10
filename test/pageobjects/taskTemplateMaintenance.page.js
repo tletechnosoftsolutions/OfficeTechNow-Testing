@@ -130,7 +130,7 @@ class TaskTemplateMaintenance extends Page {
      * activate a task template
      */
     async activate(taskname) {
-        await $('//label[contains(.,"' + taskname + '")]').click();
+        await $('(//label[contains(.,"' + taskname + '")])[1]').click();
         await new Promise(resolve => setTimeout(resolve, 1000)); 
     }
 
@@ -140,7 +140,7 @@ class TaskTemplateMaintenance extends Page {
      */
     async copy(taskname) {
         await new Promise(resolve => setTimeout(resolve, 2000));
-        await $('//label[contains(.,"' + taskname + '")]/parent::div/following-sibling::div/button[2]').click();
+        await $('(//label[contains(.,"' + taskname + '")]/parent::div/following-sibling::div/button[2])[1]').click();
         await $('//label[contains(.,"New Template Name")]').click();
         await new Promise(resolve => setTimeout(resolve, 2000));
         await browser.keys(['Tab']);
@@ -155,7 +155,8 @@ class TaskTemplateMaintenance extends Page {
      */
     async delete(taskname) {
         await new Promise(resolve => setTimeout(resolve, 2000));
-        await $('//label[contains(.,"' + taskname + '")]/parent::div/following-sibling::div/button[1]').click();
+        let script = "function getElementByXpath(path) { return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;}; getElementByXpath('//label[contains(.,\""+taskname+"\")]/parent::div/following-sibling::div/button[1]').click();";
+        await browser.execute(script);
         await new Promise(resolve => setTimeout(resolve, 2000));
         await browser.keys(['Tab']);
         await browser.keys(['Tab']);
@@ -168,7 +169,8 @@ class TaskTemplateMaintenance extends Page {
      */
     async deletecopy(taskname) {
         await new Promise(resolve => setTimeout(resolve, 2000));
-        await $('//label[contains(.,"Copy - ' + taskname + '")]/parent::div/following-sibling::div/button[1]').click();
+        let script = "function getElementByXpath(path) { return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;}; getElementByXpath('//label[contains(.,\"Copy - "+taskname+"\")]/parent::div/following-sibling::div/button[1]').click();";
+        await browser.execute(script);
         await new Promise(resolve => setTimeout(resolve, 2000));
         await browser.keys(['Tab']);
         await browser.keys(['Tab']);

@@ -450,10 +450,10 @@ describe('Login', () => {
 //        await expect($('//label[normalize-space()="Copy - ' + newTemplateName + '"]')).toBeExisting();
 //    });
 
-//    //it('tc002 Verify that user can select any of the available task template to delete', async () => {
-//    //    await TaskTemplateMaintenance.deletecopy(newTemplateName);
-//    //    await expect($('//label[normalize-space()="Copy - ' + newTemplateName + '"]')).not.toBeExisting();
-//    //});
+//    it('tc002 Verify that user can select any of the available task template to delete', async () => {
+//        await TaskTemplateMaintenance.deletecopy(newTemplateName);
+//        await expect($('//label[normalize-space()="Copy - ' + newTemplateName + '"]')).not.toBeExisting();
+//    });
 
 //    it('tc004 Verify that user can add new a step by clicking Create button', async () => {
 //        //Pre-condition: TC001 - Create a new task template
