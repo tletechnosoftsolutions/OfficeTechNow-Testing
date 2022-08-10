@@ -8,6 +8,7 @@ const CabinetAccessControlPage = require('../pageobjects/cabinetAccessControl.pa
 const CabinetSettingsPage = require('../pageobjects/cabinetSettings.page');
 const TaskPage = require('../pageobjects/task.page');
 const TaskTemplateMaintenance = require('../pageobjects/taskTemplateMaintenance.page');
+const { exec } = require('node:child_process');
 
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
@@ -36,6 +37,35 @@ describe('Login', () => {
         await expect($('//span[text()="Home"]')).toBeExisting();
     });
 });
+
+
+//describe('MS Applications Integration', () => {
+//    it('tc001 Verify that user can open a new MS word document, The system should open MS applications with blank page(s) instead of template(s)', async () => {
+//        let app = "C:\\Sikuli\\sikulixide-2.0.5-win.jar -r C:\\Sikuli\\word.sikuli -f C:\\Sikuli\\word.log"
+//        await exec(app, (error, stdout, stderr) => {
+//          if (error) {
+//            console.error(`exec error: ${error}`);
+//            return;
+//          }
+//          console.log(`stdout: ${stdout}`);
+//          //console.error(`stderr: ${stderr}`);
+//        });
+//        await new Promise(resolve => setTimeout(resolve, 10000));
+//    });
+
+//    it('tc002 Verify that user can open a new MS excel document, The system should open MS applications with blank page(s) instead of template(s)', async () => {
+//        let app = "C:\\Sikuli\\sikulixide-2.0.5-win.jar -r C:\\Sikuli\\excel.sikuli -f C:\\Sikuli\\excel.log"
+//        await exec(app, (error, stdout, stderr) => {
+//          if (error) {
+//            console.error(`exec error: ${error}`);
+//            return;
+//          }
+//          console.log(`stdout: ${stdout}`);
+//          //console.error(`stderr: ${stderr}`);
+//        });
+//        await new Promise(resolve => setTimeout(resolve, 10000));
+//    });
+//});
 
 // describe('File', () => {
 
@@ -378,7 +408,7 @@ describe('Login', () => {
 //			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
 //		}
 //    });
-    
+
 //     it('tc002 Verify that user can select one or multiple task(s) in the Task list to delete', async () => {
 //        //Pre-condition: create 01 task
 //        await TaskPage.createTask();
@@ -436,14 +466,14 @@ describe('Login', () => {
 //});
 
 //describe('Task Template Maintenance', () => {
- 
+
 //    it('tc001 Verify the user can see and access the Task Template Maintenance page to add a new task template', async () => {
 //        await TaskTemplateMaintenance.open();
 //        await TaskTemplateMaintenance.createTaskTemplate(newTemplateName);
 //        await expect($('//label[normalize-space()="' + newTemplateName + '"]')).toBeExisting();
 //    });
 
-    
+
 //    it('tc003 Verify that user can select any of the available task template to copy the copied task template will copy all task steps, step setting and task field of the selected template to copy', async () => {
 //        await TaskTemplateMaintenance.activate(newTemplateName);
 //        await TaskTemplateMaintenance.copy(newTemplateName);
@@ -519,7 +549,7 @@ describe('Login', () => {
 //        await LoginPage.reload();
 //        await TaskPage.open();
 //        await expect($('//div[contains(text(),"Field 3")]')).toBeExisting();
-       
+
 //    });
 
 //    it('tc002 Verify that user can select any of the available task template to delete', async () => {
@@ -528,5 +558,5 @@ describe('Login', () => {
 //        await TaskTemplateMaintenance.delete(newTemplateName);
 //        await expect($('//label[normalize-space()="' + newTemplateName + '"]')).not.toBeExisting();
 //    });
-    
+
 //});
