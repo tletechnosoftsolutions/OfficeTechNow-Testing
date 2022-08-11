@@ -76,6 +76,31 @@ class CabinetPage extends Page {
     }
 
     /**
+    * a method to create task
+    */
+    async createNewTask(categoryname) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button//i[.="add"]').click();
+        await $('//button//i[.="add_task"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));       
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//a[.="'+categoryname+'"]').click();
+        //Progress
+        await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('//span[contains(.,"Save & Close")]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+       
+    }
+
+    /**
    * a method to create quick note
    */
     async createQuickNote() {
@@ -87,6 +112,77 @@ class CabinetPage extends Page {
         await expect($('//div[contains(text(),"Create QuickNote")]')).toBeExisting();
         await $('//button[.="Cancel"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    /**
+   * a method to create quick note
+   */
+    async createNewQuickNote(title,note, comments) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button//i[.="add"]').click();
+         await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button//i[.="note_add"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await expect($('//div[contains(text(),"Create QuickNote")]')).toBeExisting();
+        await $('//input[@id="formly_9_input_title_0"]').click();
+        await $('//input[@id="formly_9_input_title_0"]').setValue("Cancellation");
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Tab']);
+        await browser.keys(['Note']);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        /* Fill mandatory */
+        //await $('//select[@id="formly_14_select_fileTypePrefix_0"]').click();
+         await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('//option[contains(.,"fn - File Note")]').click();
+        //await $('//input[@class="combobox-input ng-touched ng-dirty ng-valid"]').setValue("Cancellation");
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//app-subject-chooser-field[@id="formly_14_subject-chooser_subject_2"]').click();
+         await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//a[contains(.,"Subject A")]').click();
+         await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//input[@id="formly_14_input_author_3"]').click();
+         await new Promise(resolve => setTimeout(resolve, 1000));
+        await browser.keys(['Tab']);
+         await new Promise(resolve => setTimeout(resolve, 1000));
+        await browser.keys(['Note']);
+         await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button/span[.="Save & Close"]').click();
+        await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+
+     async deleteNewQuickNote(note) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+         await $('(//span[contains(.,"' + note + '")])[last()]').click();
+         await $('//span[contains(.,"delete")]').click();
+         await $('//textarea').setValue('testing reason for deleting');
+         await $('//button[.="Delete"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    async copyQuickNoteToPDF(note) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+         await $('//span[contains(.,"' + note + '")]').click();
+        await $('(//button[@aria-label="File option"])[last()]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//span[contains(.,"Open")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button/span[.="Copy to PDF"]').click();
+         await new Promise(resolve => setTimeout(resolve, 10000));
+        await $('//button/span[.="Save & Close"]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('//button/span/mat-icon[.="sync_problem"]').click();
+       
     }
 
     /**

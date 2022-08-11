@@ -9,6 +9,9 @@ const CabinetAccessControlPage = require('../pageobjects/cabinetAccessControl.pa
 const CabinetSettingsPage = require('../pageobjects/cabinetSettings.page');
 const TaskPage = require('../pageobjects/task.page');
 const TaskTemplateMaintenance = require('../pageobjects/taskTemplateMaintenance.page');
+const GroupPermissionMaintenancePage = require('../pageobjects/groupPermissionMaintenance.page');
+const SystemAdminWizardPage = require('../pageobjects/systemAdminWizard.page');
+const { exec } = require('node:child_process');
 
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
@@ -117,6 +120,7 @@ describe('File', () => {
 		await CabinetPage.collapCabinet('Clients');
 	});
 
+	//issue can't change status 
 	it('tc002 Verify the Upload File(s) popup will display when clicking on Floating button > Upload button', async () => {
         //Cabinet
         await CabinetPage.open();
@@ -125,7 +129,7 @@ describe('File', () => {
 		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
 		await CabinetPage.expandCabinet('2021');
 		await CabinetPage.uploadFileSystem('testfile.xlsx');
-        await expect($('(//span[contains(.,"testfile_xlsx")])[1]')).toBeExisting();
+        await expect($('(//span[contains(.,"testfile.xlsx")])[last()]')).toBeExisting();
       
     });
 });
@@ -560,6 +564,88 @@ describe('Task Template Maintenance', () => {
     });
     
 });
+
+
+
+describe('Cabinet list', () => {
+
+	it('tc001 Verify that user can see Cabinet list', async () => {
+		//Cabinet
+		await CabinetPage.open();
+		await expect($('button[aria-label= "toggle Clients"]')).toBeExisting();
+		await expect($('button[aria-label= "toggle Development Cabinet"]')).toBeExisting();
+		await CabinetPage.expandCabinet("Clients");
+		await expect($('button[aria-label="toggle A"]')).toBeExisting();
+	});
+
+    //Defect in Description
+	it('tc002 Verify that user can create quicknote file when clicking Floating > Create quicknote button, the data should display correctly after created quicknote successfully', async () => {
+		//Cabinet
+        let note="Note" + new Date().getTime();
+		await LoginPage.reload();
+		await CabinetPage.open();
+		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet("A")
+		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		await CabinetPage.expandCabinet('2021');
+        await CabinetPage.createNewQuickNote(note, note, note)
+        await expect($('//span[contains(.,"Cancellation")]')).toBeExisting();
+    });
+
+    it('tc002 Verify that on the quicknote detail user can select a Copy to PDF  button, The PDF document is created and saved to the same location as the original quicknote', async () => {
+		//Cabinet
+        let note = "Cancellation";
+        await CabinetPage.copyQuickNoteToPDF(note)
+        await expect($('//span[contains(.,".pdf")]')).toBeExisting();
+    });
+
+	it('tc002 Delete quick note', async () => {
+        await CabinetPage.deleteNewQuickNote("Cancellation.oqn")
+        await CabinetPage.deleteNewQuickNote("Cancellation.pdf")
+	});
+
+    //issue can't change status 
+	it('tc004 Verify that user can create a new task when clicking Floating >  Create new task button, the data should display correctly after create new task successfully', async () => {
+		//Cabinet
+		await CabinetPage.open();
+		await CabinetPage.uploadFileSystem('testfile.xlsx');
+        await expect($('(//span[contains(.,"testfile.xlsx")])[last()]')).toBeExisting();
+        //await CabinetPage.deleteNewQuickNote("testfile.xlsx")
+
+    });
+
+    //issue unable to create task
+	it('tc005 Verify that user can upload a file when clicking Floating >  Upload button, the data should display correctly afterupload file successfully', async () => {
+		await CabinetPage.createNewTask("Claim")
+
+	});
+});
+
+
+describe('System Admin Wizard', () => {
+    it('tc001 Verify that user A can access to System Admin Wizard page', async () => {
+        let accountUserA = "tssadmin4"; //Should be replaced by other user's account
+        let group="AutomationGroup" + new Date().getTime();
+        await GroupPermissionMaintenancePage.open();
+        await GroupPermissionMaintenancePage.createGroup(group);
+        await GroupPermissionMaintenancePage.tickOn(accountUserA);
+        await GroupPermissionMaintenancePage.tickOn("System Admin Wizard");
+        await GroupPermissionMaintenancePage.save();
+
+        await LoginPage.logout();
+        await LoginPage.login(accountUserA, password);
+
+        await SystemAdminWizardPage.open();
+        await expect($('button[title="System Admin Wizard"]')).toBeExisting();
+
+        await LoginPage.logout();
+        await LoginPage.login(superadmin, password);
+        ////await GroupPermissionMaintenancePage.open();
+        ////await GroupPermissionMaintenancePage.deleteGroup("Automation Test");
+    });
+
+});
+
 
 describe('Logout', () => {
 	it('should logout', async () => {
