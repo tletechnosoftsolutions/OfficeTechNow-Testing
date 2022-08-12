@@ -161,6 +161,37 @@ class CabinetPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 5000));
     }
 
+     /**
+   * a method to create quick note
+   */
+    async scan() {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button//i[.="add"]').click();
+         await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button//i[.="scanner"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await expect($('//div[contains(text(),"Scan Document")]')).toBeExisting();     
+        await $('//button[.="Cancel"]').click();
+        
+    }
+
+     /**
+   * a method to set folder color
+   */
+    async setFolderColor() {
+        await $('//span[normalize-space()="Set Folder Colour"]').click();
+        await $('[title=Macaroni]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+   /**
+   * a method to add new template
+   */
+    async rightclickFolder(folder) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//span[text()=" ' + folder + '"]').click({ button: 'right' });        
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
      async deleteNewQuickNote(note) {
         await new Promise(resolve => setTimeout(resolve, 1000));
          await $('(//span[contains(.,"' + note + '")])[last()]').click();
