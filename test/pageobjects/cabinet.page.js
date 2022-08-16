@@ -36,6 +36,7 @@ class CabinetPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
         //await $('button[aria-label="toggle ' + folder + '"]').click();
         await $('//span[text()=" ' + folder + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
     }
 
     /**
@@ -57,6 +58,7 @@ class CabinetPage extends Page {
     */
     async collapCabinet(folder) {
         await $('button[aria-label="toggle ' + folder + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
     }
 
     /**
@@ -285,7 +287,7 @@ class CabinetPage extends Page {
      */
     async tickOnFile(fileName) {
         await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//span[contains(.,"' + fileName + '")]/ancestor::td').click();
+        await $('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]').click();
     }
 
      /**
@@ -294,6 +296,38 @@ class CabinetPage extends Page {
     async sendToTask(typeOfTask) {
         await $('button[mattooltip = "Send To Task"]').click();
         await $('//span[.="' + typeOfTask + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    /**
+     * copy file to new directory
+     */
+    async copyTo() {
+        await $('[mattooltip="Copy To"]').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('app-dialog-folder-browser [aria-label="toggle 2022"]').click();
+        await $('(//app-dialog-folder-browser//button/span[contains(.,"Emails")])[2]').click();
+        await $('//button/span[.="Select"]').click();
+        await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+
+    /**
+     * delete file
+     */
+    async deleteFile() {
+        await $('[mattooltip="Delete"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//textarea').setValue("Automation test deleting");
+        await $('//button[.="Delete"]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
+    /**
+     * focus on folder
+     */
+    async focusOn(folderName) {
+        await $('//button/span[normalize-space()="' + folderName + '"]').scrollIntoView();
+        await $('//button/span[normalize-space()="' + folderName + '"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
 

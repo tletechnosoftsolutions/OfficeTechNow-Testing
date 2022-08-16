@@ -11,6 +11,9 @@ const TaskTemplateMaintenancePage = require('../pageobjects/taskTemplateMaintena
 const GroupPermissionMaintenancePage = require('../pageobjects/groupPermissionMaintenance.page');
 const SystemAdminWizardPage = require('../pageobjects/systemAdminWizard.page');
 const HomePageMaintenancePage = require('../pageobjects/homepagemaintenance.page');
+const AuditTrailPage = require('../pageobjects/auditTrail.page');
+const FavoritePage = require('../pageobjects/favourites.page');
+const IntrayPage = require('../pageobjects/intray.page');
 const { exec } = require('node:child_process');
 
 const templatename = "AutomationTemplate" + new Date().getTime();
@@ -589,7 +592,7 @@ describe('Login', () => {
 //        ////await GroupPermissionMaintenancePage.open();
 //        ////await GroupPermissionMaintenancePage.deleteGroup("Automation Test");
 //    });
-    
+
 //    it('tc002 Verify that user A can create a new task category, status, priority, task subject, file description, file subject, naming convention', async () => {
 //        await SystemAdminWizardPage.open();
 //        //Create new task category
@@ -827,3 +830,193 @@ describe('Login', () => {
 
 
 
+//describe('Audit Trail', () => {
+//    it('tc001 Verify that user can access to Administration > Audit Trail', async () => {
+//        let accountUserA = "tssadmin4"; //Should be replaced by other user's account
+//        let group = "AutomationGroup" + new Date().getTime();
+//        let today = new Date().toLocaleDateString(); //DD/MM/YYYY
+
+//        await GroupPermissionMaintenancePage.open();
+//        await GroupPermissionMaintenancePage.createGroup(group);
+//        await GroupPermissionMaintenancePage.tickOn(accountUserA);
+//        await GroupPermissionMaintenancePage.tickOn("Audit Trail Individual");
+//        await GroupPermissionMaintenancePage.save();
+
+//        await LoginPage.logout();
+//        await LoginPage.login(accountUserA, password);
+
+//        await AuditTrailPage.openIndividual();
+//        await expect($('[id="Audit Trail"]')).toBeExisting();
+
+//        await AuditTrailPage.clickOnSelectUser();
+//        await AuditTrailPage.tickOn(accountUserA);
+//        await AuditTrailPage.fillDate("01/07/2022", today);
+//        await AuditTrailPage.refresh();
+//        //Verify something here
+
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);  
+//    });
+
+//    it('tc002 Verify that user can access to Invidual Audit Trail when user has "Audit Trail Individual " permission checked on the Group & Permission Maintenance', async () => {
+//        //Merge with TC001
+//    });
+
+//    it('tc003 Verify that user can see System Wizard Audit Trail, User & Group Maintenance, Authentication Management, CAC Audit, IAC Audit, Team Maintenance, Task Template, Structure Maintenance when user has "Audit Trail Individual " permission', async () => {
+//        let accountUserA = "tssadmin4"; //Should be replaced by other user's account
+//        let group = "AutomationGroup" + new Date().getTime();
+
+//        await GroupPermissionMaintenancePage.open();
+//        await GroupPermissionMaintenancePage.createGroup(group);
+//        await GroupPermissionMaintenancePage.tickOn(accountUserA);
+//        await GroupPermissionMaintenancePage.tickOn("User & Group Maintenance");
+//        await GroupPermissionMaintenancePage.tickOn("CAC Managers");
+//        await GroupPermissionMaintenancePage.tickOn("IAC Managers");
+//        await GroupPermissionMaintenancePage.tickOn("Structure Maintenance");
+//        await GroupPermissionMaintenancePage.tickOn("Task Template Manager");
+//        await GroupPermissionMaintenancePage.tickOn("System Admin Wizard");
+//        await GroupPermissionMaintenancePage.tickOn("System Admin Users");
+//        await GroupPermissionMaintenancePage.save();
+
+//        await LoginPage.logout();
+//        await LoginPage.login(accountUserA, password);
+
+//        await AuditTrailPage.open();
+//        await expect($('button[title="System Wizard Audit Trail"]')).toBeExisting();
+//        await expect($('button[title="User & Group Maintenance Audit Trail"]')).toBeExisting();
+//        await expect($('button[title="Authentication Management Audit Trail"]')).toBeExisting();
+//        await expect($('button[title="CAC Audit Audit Trail"]')).toBeExisting();
+//        await expect($('button[title="IAC Audit Audit Trail"]')).toBeExisting();
+//        await expect($('button[title="Task Template Audit Trail"]')).toBeExisting();
+//        await expect($('button[title="Structure Maintenance Audit Trail"]')).toBeExisting();
+
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);  
+//    });
+
+//    it('tc005 Verify that user can see search results when searching by User/ Action dropdown', async () => {
+//        await AuditTrailPage.open();
+//        await AuditTrailPage.goToUserGroupMaintenance();
+//        await AuditTrailPage.clickOnSelectUser();
+//        await AuditTrailPage.tickOn(superadmin);
+//        await AuditTrailPage.clickOnSelectAction();
+//        await AuditTrailPage.tickOn("Select All");
+//        await AuditTrailPage.refresh();
+//        //Verify something here
+//    });
+
+//    it('tc006 Verify that user can export search results by clicking Export button', async () => {
+//        //Pre-condition: TC005
+//        await AuditTrailPage.export();
+//        const download_path = "C:/Users/TLe/Downloads/";
+//        const download_fileName = "exported.xlsx";
+//        const fs = require('fs');
+//        let isExist = fs.existsSync(download_path + download_fileName);
+//        await expect(isExist).toEqual(true);
+//    });
+//});
+
+describe('CAC/IAC', () => {
+    let groupName = "Automation" + new Date().getTime();
+    let accountA = "tssadmin4";
+
+    it('tc004 Verify that user can see Copy, New Email, Send to task and do it (except Copy file) ', async () => {
+        //Pre-condition: create new group with permission = Read
+        await CabinetAccessControlPage.open();
+        await CabinetAccessControlPage.createNewGroup(groupName);
+        await CabinetAccessControlPage.focusOn(groupName);
+        await CabinetAccessControlPage.checkCabinet(accountA); //tick on user to grant permission
+        await CabinetAccessControlPage.checkCabinet("Read"); //tick on Read permission
+        await CabinetAccessControlPage.checkCabinet("Clients"); // tick on Cabinet
+        await CabinetAccessControlPage.save();
+        await LoginPage.logout();
+        await LoginPage.login(accountA, password);
+
+        await CabinetPage.open();
+        await CabinetPage.expandCabinet("Clients");
+        await CabinetPage.expandCabinet("A");
+        await CabinetPage.expandCabinet("Automation");
+        await CabinetPage.expandCabinet("2021");
+        await CabinetPage.expandCabinet("Emails");
+        await CabinetPage.tickOnFile("Business"); //tick on the 1st file
+        //await expect(await $('[mattooltip="Copy To"]').isClickable()).toEqual(false); //[FAILED] verify cannot copy (non-admin account)
+        await expect(await $('[mattooltip="New Email"]').isClickable()).toEqual(true); //verify can add New Email
+        await expect(await $('[mattooltip="Send To Task"]').isClickable()).toEqual(true); //verify can Send to task
+
+        //Post-condition: login back to main account
+        await LoginPage.logout();
+        await LoginPage.login(superadmin, password);
+    });
+
+    it('tc005 Verify that user can see/ copy file into Cabinet list in Home/ Favourite of the Folder Browser when user belongs to group that has Write permission checked CAC page', async () => {
+        //Pre-condition: set automation group with permission = Write
+        await CabinetAccessControlPage.open();
+        await CabinetAccessControlPage.focusOn(groupName);
+        await CabinetAccessControlPage.checkCabinet("Write");
+        await CabinetAccessControlPage.save();
+        await LoginPage.logout();
+        await LoginPage.login(accountA, password);
+
+        //Check file can be copied from Cabinet
+        await CabinetPage.open();
+        await CabinetPage.expandCabinet("Clients");
+        await CabinetPage.expandCabinet("A");
+        await CabinetPage.expandCabinet("Automation");
+        await CabinetPage.expandCabinet("2021");
+        await CabinetPage.focusOn("Emails");
+        await CabinetPage.tickOnFile("Business"); //tick on the 1st file
+        await CabinetPage.copyTo(); //Copy to folder: Cabinet/Automation/2022/Emails
+        await CabinetPage.collapCabinet("2021");
+        await CabinetPage.expandCabinet("2022");
+        await CabinetPage.expandCabinet("Emails");
+        //verify file successfully copied
+        await expect($('(//span[contains(.,"Business")]/ancestor::td)[1]')).toBeExisting();
+
+        //Check file can be copied from Favorite
+        await FavoritePage.open();
+        await FavoritePage.expandFavourites("A New Client Aug 2016-1152"); //should be change to Automation folder
+        await FavoritePage.expandFavourites("2021");
+        await FavoritePage.focusOn("Business");
+        await FavoritePage.tickOnFile("Endorsement");
+        await FavoritePage.copyTo();
+        await FavoritePage.collapFavourites("2021");
+        await FavoritePage.expandFavourites("2022");
+        await FavoritePage.focusOn("Business");
+        //verify file successfully copied
+        await expect($('(//span[contains(.,"Endorsement")]/ancestor::td)[1]')).toBeExisting();
+
+        //Post-condition: login back to main account
+        await LoginPage.logout();
+        await LoginPage.login(superadmin, password);
+    });
+
+    it('tc006 Verify that user can see/ move file into Cabinet list in Home/ Favourite/ Intray of the Folder Browser when user belongs to group that has Delete permission checked.', async () => {
+        //Pre-condition: set automation group with permission = Delete, exist copies of documents in TC005
+        await CabinetAccessControlPage.open();
+        await CabinetAccessControlPage.focusOn(groupName);
+        await CabinetAccessControlPage.checkCabinet("Delete"); //tick on Read permission
+        await CabinetAccessControlPage.save();
+        await LoginPage.logout();
+        await LoginPage.login(accountA, password);
+
+        //Check file can be deleted in Cabinet
+        await CabinetPage.open();
+        await CabinetPage.expandCabinet("Clients");
+        await CabinetPage.expandCabinet("A");
+        await CabinetPage.expandCabinet("Automation");
+        await CabinetPage.expandCabinet("2022");
+        await CabinetPage.focusOn("Emails");
+        await CabinetPage.tickOnFile("Business"); //tick on the 1st file
+        await CabinetPage.deleteFile();
+        await expect($('(//span[contains(.,"Business")]/ancestor::td)[1]')).not.toBeExisting();
+
+        //Check file can be deleted in Favorite
+        await FavoritePage.open();
+        await FavoritePage.expandFavourites("A New Client Aug 2016-1152"); //should be change to Automation folder
+        await FavoritePage.expandFavourites("2022");
+        await FavoritePage.focusOn("Business");
+        await FavoritePage.tickOnFile("Endorsement");
+        await FavoritePage.deleteFile();
+        await expect($('(//span[contains(.,"Endorsement")]/ancestor::td)[1]')).not.toBeExisting();
+    });
+});
