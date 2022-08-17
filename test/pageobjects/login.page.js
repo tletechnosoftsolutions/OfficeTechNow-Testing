@@ -56,7 +56,8 @@ class LoginPage extends Page {
      */
     async reload () {
         await browser.url(`https://officetechnow-develop.azurewebsites.net`);
-        $('(//button[@aria-label="Close"])').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('(//button[@aria-label="Close"])').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
     }
 }

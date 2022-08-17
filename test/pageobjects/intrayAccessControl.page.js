@@ -61,6 +61,8 @@ class IntrayAccessControlPage extends Page {
         await $('[id*="input_groupName"]').clearValue();
         await $('[id*="input_groupName"]').setValue(groupName);
         await $('//span[.="Create"]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        await $('//span[.="Create"]').click();
         await new Promise(resolve => setTimeout(resolve, 2000));
     }
 

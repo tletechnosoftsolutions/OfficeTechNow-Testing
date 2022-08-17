@@ -1,7 +1,6 @@
 const LoginPage = require('../pageobjects/login.page');
 const CabinetPage = require('../pageobjects/cabinet.page');
 const FavouritesPage = require('../pageobjects/favourites.page');
-const InTraysPage = require('../pageobjects/intray.page');
 const ClientMaintenancePage = require('../pageobjects/ClientMaintenance.page');
 const StructureMaintenance = require('../pageobjects/structureMaintenance.page');
 const CabinetAccessControlPage = require('../pageobjects/cabinetAccessControl.page');
@@ -15,6 +14,7 @@ const AuditTrailPage = require('../pageobjects/auditTrail.page');
 const FavoritePage = require('../pageobjects/favourites.page');
 const IntrayPage = require('../pageobjects/intray.page');
 const { exec } = require('node:child_process');
+const IntrayAccessControlPage = require('../pageobjects/intrayAccessControl.page');
 
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
@@ -916,107 +916,214 @@ describe('Login', () => {
 //    });
 //});
 
-describe('CAC/IAC', () => {
-    let groupName = "Automation" + new Date().getTime();
-    let accountA = "tssadmin4";
+//describe('CAC/IAC', () => {
+//    let groupName = "Automation" + new Date().getTime();
+//    let accountA = "tssadmin4";
 
-    it('tc004 Verify that user can see Copy, New Email, Send to task and do it (except Copy file) ', async () => {
-        //Pre-condition: create new group with permission = Read
-        await CabinetAccessControlPage.open();
-        await CabinetAccessControlPage.createNewGroup(groupName);
-        await CabinetAccessControlPage.focusOn(groupName);
-        await CabinetAccessControlPage.checkCabinet(accountA); //tick on user to grant permission
-        await CabinetAccessControlPage.checkCabinet("Read"); //tick on Read permission
-        await CabinetAccessControlPage.checkCabinet("Clients"); // tick on Cabinet
-        await CabinetAccessControlPage.save();
-        await LoginPage.logout();
-        await LoginPage.login(accountA, password);
+//    it('tc004 Verify that user can see Copy, New Email, Send to task and do it (except Copy file) ', async () => {
+//        //Pre-condition: create new group with permission = Read
+//        await CabinetAccessControlPage.open();
+//        await CabinetAccessControlPage.createNewGroup(groupName);
+//        await CabinetAccessControlPage.focusOn(groupName);
+//        await CabinetAccessControlPage.checkCabinet(accountA); //tick on user to grant permission
+//        await CabinetAccessControlPage.checkCabinet("Read"); //tick on Read permission
+//        await CabinetAccessControlPage.checkCabinet("Clients"); // tick on Cabinet
+//        await CabinetAccessControlPage.save();
+//        await LoginPage.logout();
+//        await LoginPage.login(accountA, password);
 
-        await CabinetPage.open();
-        await CabinetPage.expandCabinet("Clients");
-        await CabinetPage.expandCabinet("A");
-        await CabinetPage.expandCabinet("Automation");
-        await CabinetPage.expandCabinet("2021");
-        await CabinetPage.expandCabinet("Emails");
-        await CabinetPage.tickOnFile("Business"); //tick on the 1st file
-        //await expect(await $('[mattooltip="Copy To"]').isClickable()).toEqual(false); //[FAILED] verify cannot copy (non-admin account)
-        await expect(await $('[mattooltip="New Email"]').isClickable()).toEqual(true); //verify can add New Email
-        await expect(await $('[mattooltip="Send To Task"]').isClickable()).toEqual(true); //verify can Send to task
+//        await CabinetPage.open();
+//        await CabinetPage.expandCabinet("Clients");
+//        await CabinetPage.expandCabinet("A");
+//        await CabinetPage.expandCabinet("Automation");
+//        await CabinetPage.expandCabinet("2021");
+//        await CabinetPage.expandCabinet("Emails");
+//        await CabinetPage.tickOnFile("Business"); //tick on the 1st file
+//        //await expect(await $('[mattooltip="Copy To"]').isClickable()).toEqual(false); //[FAILED] verify cannot copy (non-admin account)
+//        await expect(await $('[mattooltip="New Email"]').isClickable()).toEqual(true); //verify can add New Email
+//        await expect(await $('[mattooltip="Send To Task"]').isClickable()).toEqual(true); //verify can Send to task
 
-        //Post-condition: login back to main account
-        await LoginPage.logout();
-        await LoginPage.login(superadmin, password);
-    });
+//        //Post-condition: login back to main account
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);
+//    });
 
-    it('tc005 Verify that user can see/ copy file into Cabinet list in Home/ Favourite of the Folder Browser when user belongs to group that has Write permission checked CAC page', async () => {
-        //Pre-condition: set automation group with permission = Write
-        await CabinetAccessControlPage.open();
-        await CabinetAccessControlPage.focusOn(groupName);
-        await CabinetAccessControlPage.checkCabinet("Write");
-        await CabinetAccessControlPage.save();
-        await LoginPage.logout();
-        await LoginPage.login(accountA, password);
+//    it('tc005 Verify that user can see/ copy file into Cabinet list in Home/ Favourite of the Folder Browser when user belongs to group that has Write permission checked CAC page', async () => {
+//        //Pre-condition: set automation group with permission = Write
+//        await CabinetAccessControlPage.open();
+//        await CabinetAccessControlPage.focusOn(groupName);
+//        await CabinetAccessControlPage.checkCabinet("Write");
+//        await CabinetAccessControlPage.save();
+//        await LoginPage.logout();
+//        await LoginPage.login(accountA, password);
 
-        //Check file can be copied from Cabinet
-        await CabinetPage.open();
-        await CabinetPage.expandCabinet("Clients");
-        await CabinetPage.expandCabinet("A");
-        await CabinetPage.expandCabinet("Automation");
-        await CabinetPage.expandCabinet("2021");
-        await CabinetPage.focusOn("Emails");
-        await CabinetPage.tickOnFile("Business"); //tick on the 1st file
-        await CabinetPage.copyTo(); //Copy to folder: Cabinet/Automation/2022/Emails
-        await CabinetPage.collapCabinet("2021");
-        await CabinetPage.expandCabinet("2022");
-        await CabinetPage.expandCabinet("Emails");
-        //verify file successfully copied
-        await expect($('(//span[contains(.,"Business")]/ancestor::td)[1]')).toBeExisting();
+//        //Check file can be copied from Cabinet
+//        await CabinetPage.open();
+//        await CabinetPage.expandCabinet("Clients");
+//        await CabinetPage.expandCabinet("A");
+//        await CabinetPage.expandCabinet("Automation");
+//        await CabinetPage.expandCabinet("2021");
+//        await CabinetPage.focusOn("Emails");
+//        await CabinetPage.tickOnFile("Business"); //tick on the 1st file
+//        await CabinetPage.copyTo(); //Copy to folder: Cabinet/Automation/2022/Emails
+//        await CabinetPage.collapCabinet("2021");
+//        await CabinetPage.expandCabinet("2022");
+//        await CabinetPage.expandCabinet("Emails");
+//        //verify file successfully copied
+//        await expect($('(//span[contains(.,"Business")]/ancestor::td)[1]')).toBeExisting();
 
-        //Check file can be copied from Favorite
-        await FavoritePage.open();
-        await FavoritePage.expandFavourites("A New Client Aug 2016-1152"); //should be change to Automation folder
-        await FavoritePage.expandFavourites("2021");
-        await FavoritePage.focusOn("Business");
-        await FavoritePage.tickOnFile("Endorsement");
-        await FavoritePage.copyTo();
-        await FavoritePage.collapFavourites("2021");
-        await FavoritePage.expandFavourites("2022");
-        await FavoritePage.focusOn("Business");
-        //verify file successfully copied
-        await expect($('(//span[contains(.,"Endorsement")]/ancestor::td)[1]')).toBeExisting();
+//        //Check file can be copied from Favorite
+//        await FavoritePage.open();
+//        await FavoritePage.expandFavourites("A New Client Aug 2016-1152"); //should be change to Automation folder
+//        await FavoritePage.expandFavourites("2021");
+//        await FavoritePage.focusOn("Business");
+//        await FavoritePage.tickOnFile("Endorsement");
+//        await FavoritePage.copyTo();
+//        await FavoritePage.collapFavourites("2021");
+//        await FavoritePage.expandFavourites("2022");
+//        await FavoritePage.focusOn("Business");
+//        //verify file successfully copied
+//        await expect($('(//span[contains(.,"Endorsement")]/ancestor::td)[1]')).toBeExisting();
 
-        //Post-condition: login back to main account
-        await LoginPage.logout();
-        await LoginPage.login(superadmin, password);
-    });
+//        //Post-condition: login back to main account
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);
+//    });
 
-    it('tc006 Verify that user can see/ move file into Cabinet list in Home/ Favourite/ Intray of the Folder Browser when user belongs to group that has Delete permission checked.', async () => {
-        //Pre-condition: set automation group with permission = Delete, exist copies of documents in TC005
-        await CabinetAccessControlPage.open();
-        await CabinetAccessControlPage.focusOn(groupName);
-        await CabinetAccessControlPage.checkCabinet("Delete"); //tick on Read permission
-        await CabinetAccessControlPage.save();
-        await LoginPage.logout();
-        await LoginPage.login(accountA, password);
+//    it('tc006 Verify that user can see/ move file into Cabinet list in Home/ Favourite/ Intray of the Folder Browser when user belongs to group that has Delete permission checked.', async () => {
+//        //Pre-condition: set automation group with permission = Delete, exist copies of documents in TC005
+//        await CabinetAccessControlPage.open();
+//        await CabinetAccessControlPage.focusOn(groupName);
+//        await CabinetAccessControlPage.checkCabinet("Delete"); //tick on Read permission
+//        await CabinetAccessControlPage.save();
+//        await LoginPage.logout();
+//        await LoginPage.login(accountA, password);
 
-        //Check file can be deleted in Cabinet
-        await CabinetPage.open();
-        await CabinetPage.expandCabinet("Clients");
-        await CabinetPage.expandCabinet("A");
-        await CabinetPage.expandCabinet("Automation");
-        await CabinetPage.expandCabinet("2022");
-        await CabinetPage.focusOn("Emails");
-        await CabinetPage.tickOnFile("Business"); //tick on the 1st file
-        await CabinetPage.deleteFile();
-        await expect($('(//span[contains(.,"Business")]/ancestor::td)[1]')).not.toBeExisting();
+//        //Check file can be deleted in Cabinet
+//        await CabinetPage.open();
+//        await CabinetPage.expandCabinet("Clients");
+//        await CabinetPage.expandCabinet("A");
+//        await CabinetPage.expandCabinet("Automation");
+//        await CabinetPage.expandCabinet("2022");
+//        await CabinetPage.focusOn("Emails");
+//        await CabinetPage.tickOnFile("Business"); //tick on the 1st file
+//        await CabinetPage.deleteFile();
+//        await expect($('(//span[contains(.,"Business")]/ancestor::td)[1]')).not.toBeExisting();
 
-        //Check file can be deleted in Favorite
-        await FavoritePage.open();
-        await FavoritePage.expandFavourites("A New Client Aug 2016-1152"); //should be change to Automation folder
-        await FavoritePage.expandFavourites("2022");
-        await FavoritePage.focusOn("Business");
-        await FavoritePage.tickOnFile("Endorsement");
-        await FavoritePage.deleteFile();
-        await expect($('(//span[contains(.,"Endorsement")]/ancestor::td)[1]')).not.toBeExisting();
-    });
-});
+//        //Check file can be deleted in Favorite
+//        await FavoritePage.open();
+//        await FavoritePage.expandFavourites("A New Client Aug 2016-1152"); //should be change to Automation folder
+//        await FavoritePage.expandFavourites("2022");
+//        await FavoritePage.focusOn("Business");
+//        await FavoritePage.tickOnFile("Endorsement");
+//        await FavoritePage.deleteFile();
+//        await expect($('(//span[contains(.,"Endorsement")]/ancestor::td)[1]')).not.toBeExisting();
+//    });
+
+//describe('Intray', () => {
+//    let accountA = superadmin2;
+//    let fileName = "testfile.xlsx";
+
+//    it('tc001 Verify that the current users Intray will be highlighted by default and displayed at the top in Intray/ Folder Browser/ File Browser/ Save form', async () => {
+//        await IntrayPage.open();
+//        let isActive = await $('//span[normalize-space()="' + superadmin + '"]/parent::button').getAttribute("class");
+//        await expect(isActive.includes("active")).toEqual(true);
+//    });
+
+//    it('tc002 Verify that the current user login can do all default action of a file on his own In-tray', async () => {
+//        //Pre-condition: Upload 02 files in intray
+//        await IntrayPage.uploadFileSystem(fileName);
+//        await IntrayPage.uploadFileSystem(fileName);
+
+//        //Verify copy file
+//        await IntrayPage.tickOnFile(fileName);
+//        await IntrayPage.copyTo(accountA);
+//        await IntrayPage.goToUserIntray(accountA);
+//        await expect($('(//span[contains(.,' + fileName + ')]/ancestor::td)[1]')).toBeExisting();
+
+//        //Verify move file
+//        await IntrayPage.goToUserIntray(superadmin);
+//        await IntrayPage.tickOnFile(fileName);
+//        await IntrayPage.moveTo(accountA);
+//        await IntrayPage.goToUserIntray(accountA);
+//        await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).toBeExisting();
+
+//        //Verify new email
+//        await IntrayPage.goToUserIntray(superadmin);
+//        await IntrayPage.tickOnFile(fileName);
+//        await IntrayPage.newEmail();
+//        await expect($('app-email-attachments')).toBeExisting();
+//        await $('//button[.="Cancel"]').click();
+
+//        //Verify send to task
+//        await IntrayPage.sendToTask("Existing");
+//        await expect($('app-dialog-existing-task')).toBeExisting();
+//        await $('//button[.="Cancel"]').click();
+//        await IntrayPage.sendToTask("New");
+//        await expect($('app-create-task')).toBeExisting();
+//        await $('//button[.="Cancel"]').click();
+//        await ks.sendKey('enter');
+
+//        //Verify delete file
+//        await IntrayPage.delete();
+//        //await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).not.toBeExisting();
+//    });
+
+//    it('tc003 Verify that user can view peoples intray if user has Read/ Write/Delete permission checked in the IAC', async () => {
+//        let groupName = "Automation" + date;
+//        //Pre-condition: Upload 02 files in intray
+//        await IntrayPage.uploadFileSystem(fileName);
+//        await IntrayPage.uploadFileSystem(fileName);
+
+//        //Verify Read permission (No move/delete permission)
+//        await IntrayAccessControlPage.open();
+//        await IntrayAccessControlPage.createNewGroup(groupName);
+//        await IntrayAccessControlPage.focusOn(groupName);
+//        await IntrayAccessControlPage.tickOnUser(accountA);
+//        await IntrayAccessControlPage.tickOnPermission("Read");
+//        await IntrayAccessControlPage.tickOnIntray(superadmin);
+//        await IntrayAccessControlPage.save();
+//        await LoginPage.logout();
+
+//        await LoginPage.login(accountA, password);
+//        await IntrayPage.open();
+//        await IntrayPage.goToUserIntray(superadmin);
+//        //await expect($('[mattooltip="Delete"]')).not.toBeExisting();
+//        //await expect($('[mattooltip="Move To"]')).not.toBeExisting();
+//        await LoginPage.logout();
+
+//        //Verify Write permission (Can move, no delete permission)
+//        await LoginPage.login(superadmin, password);
+//        await IntrayAccessControlPage.open();
+//        await IntrayAccessControlPage.focusOn(groupName);
+//        await IntrayAccessControlPage.tickOnPermission("Write");
+//        await IntrayAccessControlPage.save();
+//        await LoginPage.logout();
+
+//        await LoginPage.login(accountA, password);
+//        await IntrayPage.open();
+//        await IntrayPage.goToUserIntray(superadmin);
+//        //await expect($('[mattooltip="Delete"]')).not.toBeExisting(); //File cannot be deleted
+//        await expect($('[mattooltip="Move To"]')).toBeExisting(); //File can be moved
+//        await IntrayPage.tickOnFile(fileName);
+//        await IntrayPage.moveTo(accountA);
+//        await IntrayPage.goToUserIntray(accountA);
+//        await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).toBeExisting();
+//        await LoginPage.logout();
+
+//        //Verify Delete permission (Can delete files)
+//        await LoginPage.login(superadmin, password);
+//        await IntrayAccessControlPage.open();
+//        await IntrayAccessControlPage.focusOn(groupName);
+//        await IntrayAccessControlPage.tickOnPermission("Delete");
+//        await IntrayAccessControlPage.save();
+//        await LoginPage.logout();
+
+//        await LoginPage.login(accountA, password);
+//        await IntrayPage.open();
+//        await IntrayPage.goToUserIntray(superadmin);
+//        await IntrayPage.tickOnFile(fileName);
+//        await IntrayPage.delete();
+//        //await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).not.toBeExisting();
+//    });
+//});

@@ -219,9 +219,8 @@ class CabinetPage extends Page {
     }
 
     /**
-    * a method to create quick note
+    * a method to upload file
     */
-
     async uploadFileSystem(filename) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button//i[.="add"]').click();
@@ -307,8 +306,9 @@ class CabinetPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 2000));
         await $('app-dialog-folder-browser [aria-label="toggle 2022"]').click();
         await $('(//app-dialog-folder-browser//button/span[contains(.,"Emails")])[2]').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
         await $('//button/span[.="Select"]').click();
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 7000));
     }
 
     /**
