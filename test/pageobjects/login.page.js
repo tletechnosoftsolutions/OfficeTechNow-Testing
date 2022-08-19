@@ -51,6 +51,25 @@ class LoginPage extends Page {
         await browser.url(`https://officetechnow-develop.azurewebsites.net`);
          await new Promise(resolve => setTimeout(resolve, 3000));
     }
+
+    /**
+     * overwrite specific options to adapt it to page object
+     */
+    async opensite (sitename) {
+        await browser.url(sitename);
+         await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
+     /**
+     * overwrite specific options to adapt it to page object
+     */
+    async reloadsite (sitename) {
+        await browser.url(sitename);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('(//button[@aria-label="Close"])').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
     /**
      * overwrite specific options to adapt it to page object
      */

@@ -18,73 +18,165 @@ class UserAuthenticationMaintenancePage extends Page {
         return $('button[title="User & Authentication Maintenance"]');
     }
 
-
     /**
-    * a method to expand folder
-    */
-    async expandCabinet(folder) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        //await $('button[aria-label="toggle ' + folder + '"]').click();
-        await $('//span[text()=" ' + folder + '"]').click();
-    }
-
-    /**
-   * a method to expand folder to the 4th child
-   */
-    async expandCabinetToChild(folder) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        //await $('button[aria-label="toggle ' + folder + '"]').click();
-        await $('//span[text()=" ' + folder + '"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('(//*[@aria-level="2"]/button/span)[1]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('(//*[@aria-level="3"]/button/span)[1]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('(//*[@aria-level="4"]/button/span)[1]').click();
-    }
-
-    /**
-    * a method to collap folder
-    */
-    async collapCabinet(folder) {
-        await $('button[aria-label="toggle ' + folder + '"]').click();
-    }
-
-    /**
-    * a method to create task
-    */
-    async createTask() {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//button//i[.="add"]').click();
-        await $('//button//i[.="add_task"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await expect($('//div[contains(text(),"Create New Task")]')).toBeExisting();
-        await $('//button[.="Cancel"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        //await browser.keys(['Enter']);
-        await browser.acceptAlert();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-
-    /**
-   * a method to create quick note
-   */
-    async createQuickNote() {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//button//i[.="add"]').click();
-        await $('//button//i[.="note_add"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await expect($('//div[contains(text(),"Create QuickNote")]')).toBeExisting();
-        await $('//button[.="Cancel"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-
-    /**
-     * open the Cabinet page
+     * open the User Authentication Maintenance page
      */
     async open() {
         await this.btnAdministration.click();
         await this.btnUserAuthenticationMaintenance.click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    /**
+     * create user
+     */
+    async inviteNewUser(user) {
+        await $('//span[contains(text(), "Invite")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Info
+        await $('//input[@placeholder="Enter Email"]').setValue(user + "@gmail.com");
+        await $('//input[@placeholder="Enter First Name"]').setValue("Automation");
+        await $('//input[@placeholder="Enter Last Name"]').setValue(user);
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('(//span[text()="Invite"])').click();
+    }
+    
+    /**
+     * edit user
+     */
+    async editUser(user) {
+        await $('//p[text()="'+user+'@gmail.com"]/parent::div/parent::td//parent::tr/td[4]//button[text()="Edit"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Info
+        //await $('//input[@placeholder="Enter Email"]').setValue(user + "@gmail.com");
+        await $('//input[@placeholder="Enter First Name"]').setValue("EditAutomation");
+        await $('//input[@placeholder="Enter Last Name"]').setValue(user);
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('(//span[text()="Save"])').click();
+        
+    }
+
+    /**
+     * admin edit user
+     */
+    async admineditUser(user) {
+        await $('//p[text()="'+user+'@gmail.com"]/parent::div/parent::td//parent::tr/td[4]//button[text()="Edit"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Info
+        await $('//input[@placeholder="Enter Email"]').setValue(user + "@gmail.com");
+        await $('//input[@placeholder="Enter First Name"]').setValue("EditAutomation");
+        await $('//input[@placeholder="Enter Last Name"]').setValue(user);
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('(//span[contains(text(),"Save & Resend")])').click();
+        
+    }
+
+    /**
+     * edit and resend user
+     */
+    async editAndResendUser(user) {
+        await $('//p[text()="'+user+'@gmail.com"]/parent::div/parent::td//parent::tr/td[4]//button[text()="Edit"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Info
+        //await $('//input[@placeholder="Enter Email"]').setValue(user + "@gmail.com");
+        await $('//input[@placeholder="Enter First Name"]').setValue("EditAutomation");
+        await $('//input[@placeholder="Enter Last Name"]').setValue(user);
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('(//span[contains(text(),"Save & Resend")])').click();
+    }
+
+    /**
+     * deactivate user
+     */
+    async deactivateUser(userName) {
+        await $('//p[normalize-space()="' + userName + '"]/ancestor::tr//button[contains(.,"Deactivate")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button/span[.="Yes"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    /**
+     * activate user
+     */
+    async activateUser(userName) {
+        await $('//p[normalize-space()="' + userName + '"]/ancestor::tr//button[contains(.,"Activate")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button/span[.="Yes"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+     /**
+     * disable CamUser
+     */
+    async disableCamUser(userName) {
+        await $('//p[normalize-space()="' + userName + '"]/ancestor::tr//button[contains(.,"Disable Check CAM")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button/span[.="Yes"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+     /**
+     * enable CamUser
+     */
+    async enableCamUser(userName) {
+        await $('//p[normalize-space()="' + userName + '"]/ancestor::tr//button[contains(.,"Enable Check CAM")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button/span[.="Yes"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    /**
+     * verify popup message
+     */
+    async isPopupExist(message) {
+        return await $('(//snack-bar-container//*[contains(.,"' + message + '")])[last()]').isExisting();
+    }
+
+    /**
+     * clear all search bars
+     */
+    async clearSearchBars() {
+        await $('#textSearch').clearValue();
+        //Clear if existing "X" button
+        let statusBar = await $('#status [title="Clear all"]');
+        let faBar = await $('[formcontrolname="twoFactorStatus"] [title="Clear all"]');
+        if (await statusBar.isExisting()) await statusBar.click();
+        if (await faBar.isExisting()) await faBar.click();
+    }
+
+    /**
+     * searchType and attribute: User (name), Status (Active, Pending, Migrated, Inactive), 2FA (Yes, No, Request)
+     */
+    async search(searchType, attribute) {
+        switch (searchType) {
+            case "2FA": {
+                await $('[formcontrolname="twoFactorStatus"]').click();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await $('//ng-dropdown-panel//label[contains(.,"' + attribute + '")]').click();
+                break;
+            }
+
+            case "Status": {
+                await $('#status').click();
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await $('//ng-dropdown-panel//label[contains(.,"' + attribute + '")]').click();
+                break;
+            }
+
+            case "User": {
+                await $('#textSearch').setValue(attribute);
+                await new Promise(resolve => setTimeout(resolve, 500));
+                break;
+            }
+        }
+    }
+
+    /**
+     * export all users in table
+     */
+    async export() {
+        await $('//button/span[contains(normalize-space(),"Export")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
     }
 }
 
