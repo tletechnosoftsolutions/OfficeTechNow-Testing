@@ -312,6 +312,19 @@ class CabinetPage extends Page {
     }
 
     /**
+     * copy file to new directory
+     */
+    async copyToFolder(folder) {
+        await $('[mattooltip="Copy To"]').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('app-dialog-folder-browser [aria-label="toggle 2023"]').click();
+        await $('(//app-dialog-folder-browser//button/span[contains(.,"'+folder+'")])[2]').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('//button/span[.="Select"]').click();
+        await new Promise(resolve => setTimeout(resolve, 7000));
+    }
+
+    /**
      * delete file
      */
     async deleteFile() {
