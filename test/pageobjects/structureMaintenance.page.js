@@ -125,6 +125,17 @@ class StructureMaintenancePage extends Page {
        
     }
 
+    async apply1Cabinet(templatename, cabinet1){ 
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//label[contains(.,"' + templatename + '")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//div[contains(.,"' + cabinet1 + '") and @class="d-flex row-item ng-star-inserted"]/div/mat-checkbox').click();
+        //await $('//div[contains(.,"' + cabinet2 + '") and @class="d-flex row-item ng-star-inserted"]/div/mat-checkbox').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button[.="Save"]').click();
+       
+    }
+
    /**
    * a method to add new template
    */

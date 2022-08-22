@@ -139,91 +139,92 @@ describe('Login', () => {
 //    });
 //});
 
-///above testcases were ready
 
 
 
-describe('Client Maintenance', () => {
 
-	it('tc001 Verify the user can see and access the Client Maintenance page to Add a new client', async () => {
-		await LoginPage.reloadsite(sitename);
-		//open Client Maintenance Page
-		await ClientMaintenancePage.open();
-		await expect($('//button//i[.="person_add"]')).toBeExisting();
-	});
+//describe('Client Maintenance', () => {
 
-	it('tc002 Verify that user can input client name or Client code, All name/code that has those letters appear in the client list without clicking any button', async () => {
-		//open Client Maintenance Page
-		clientname = "Automation" + new Date().getTime();
-		clientcode = new Date().getTime();
-		await ClientMaintenancePage.open();
-		await ClientMaintenancePage.createClientWithStructure(clientname, clientcode, structure);
-		await expect($('//td[contains(.,"' + clientname + '")]')).toBeExisting();
-		await ClientMaintenancePage.deleteClient(clientname);
-	});
+//	it('tc001 Verify the user can see and access the Client Maintenance page to Add a new client', async () => {
+//		await LoginPage.reloadsite(sitename);
+//		//open Client Maintenance Page
+//		await ClientMaintenancePage.open();
+//		await expect($('//button//i[.="person_add"]')).toBeExisting();
+//	});
 
-	it('tc003 Verify that user can apply Folder Structure for the client folder, It should display correct all folder structure applied', async () => {
-		//open Client Maintenance Page
-		clientname = "Automation" + new Date().getTime();
-		clientcode = new Date().getTime();
-		await ClientMaintenancePage.open();
-		await ClientMaintenancePage.createClient(clientname, clientcode);
-		await expect($('//td[contains(.,"' + clientname + '")]')).toBeExisting();
-		await ClientMaintenancePage.addStructure(clientname, structure);
-		//Verify the folder structure of the created client
-		await CabinetPage.open();
-		await CabinetPage.openQuickFind(clientname);
-		//await expect($('(//span[contains(text(),"2021")])')).toBeExisting();
-		await expect($('(//span[contains(text(),"2022")])')).toBeExisting();
-	});
+//	it('tc002 Verify that user can input client name or Client code, All name/code that has those letters appear in the client list without clicking any button', async () => {
+//		//open Client Maintenance Page
+//		clientname = "Automation" + new Date().getTime();
+//		clientcode = new Date().getTime();
+//		await ClientMaintenancePage.open();
+//		await ClientMaintenancePage.createClientWithStructure(clientname, clientcode, structure);
+//		await expect($('//td[contains(.,"' + clientname + '")]')).toBeExisting();
+//		await ClientMaintenancePage.deleteClient(clientname);
+//	});
+
+//	it('tc003 Verify that user can apply Folder Structure for the client folder, It should display correct all folder structure applied', async () => {
+//		//open Client Maintenance Page
+//		clientname = "Automation" + new Date().getTime();
+//		clientcode = new Date().getTime();
+//		await ClientMaintenancePage.open();
+//		await ClientMaintenancePage.createClient(clientname, clientcode);
+//		await expect($('//td[contains(.,"' + clientname + '")]')).toBeExisting();
+//		await ClientMaintenancePage.addStructure(clientname, structure);
+//		//Verify the folder structure of the created client
+//		await CabinetPage.open();
+//		await CabinetPage.openQuickFind(clientname);
+//		//await expect($('(//span[contains(text(),"2021")])')).toBeExisting();
+//		await expect($('(//span[contains(text(),"2022")])')).toBeExisting();
+//	});
 
 
-	it('tc003 Verify that user can delete the client', async () => {
-		//open Client Maintenance Page
-		clientname = "Automation" + new Date().getTime();
-		clientcode = new Date().getTime();
-		await ClientMaintenancePage.open();
-		await ClientMaintenancePage.createClientWithStructure(clientname, clientcode, structure);
-		await expect($('//td[contains(.,"' + clientname + '")]')).toBeExisting();
-		await ClientMaintenancePage.deleteClient(clientname);
-		//await expect($('//td[contains(.,"' + clientname + '")]')).not.toBeExisting();
-		//let deleted = await $('//td[contains(.,"' + clientname + '")]').isExisting();
-	});
+//	it('tc003 Verify that user can delete the client', async () => {
+//		//open Client Maintenance Page
+//		clientname = "Automation" + new Date().getTime();
+//		clientcode = new Date().getTime();
+//		await ClientMaintenancePage.open();
+//		await ClientMaintenancePage.createClientWithStructure(clientname, clientcode, structure);
+//		await expect($('//td[contains(.,"' + clientname + '")]')).toBeExisting();
+//		await ClientMaintenancePage.deleteClient(clientname);
+//		//await expect($('//td[contains(.,"' + clientname + '")]')).not.toBeExisting();
+//		//let deleted = await $('//td[contains(.,"' + clientname + '")]').isExisting();
+//	});
 
-	it('tc004 Verify that user can rename the client folder, Client folder is renamed will update in the Client Maintenance/ Cabinet list/ Enity/ Client field', async () => {
-		//create client
-		clientname = "Automation" + new Date().getTime();
-		clientcode = new Date().getTime();
-		await ClientMaintenancePage.open();
-		await ClientMaintenancePage.createClientWithStructure(clientname, clientcode, structure);
-		//rename folder
-		await CabinetPage.open();
-		await CabinetPage.openQuickFind(clientname);
-		await CabinetPage.expandCabinet('2022');
-		await CabinetPage.renameFolder('Emails', 'Renamed Emails');
-		await expect($('(//span[contains(.,"Renamed Emails")])[1]')).toBeExisting();
-		await CabinetPage.open();
-		await CabinetPage.expandCabinet('Clients');
-		await CabinetPage.expandCabinet('A');
-		await CabinetPage.expandCabinet(clientname);
-		await CabinetPage.expandCabinet('2022');
-		await expect($('(//span[contains(.,"Renamed Emails")])[1]')).toBeExisting();
-	});
+//	it('tc004 Verify that user can rename the client folder, Client folder is renamed will update in the Client Maintenance/ Cabinet list/ Enity/ Client field', async () => {
+//		//create client
+//		clientname = "Automation" + new Date().getTime();
+//		clientcode = new Date().getTime();
+//		await ClientMaintenancePage.open();
+//		await ClientMaintenancePage.createClientWithStructure(clientname, clientcode, structure);
+//		//rename folder
+//		await CabinetPage.open();
+//		await CabinetPage.openQuickFind(clientname);
+//		await CabinetPage.expandCabinet('2022');
+//		await CabinetPage.renameFolder('Emails', 'Renamed Emails');
+//		await expect($('(//span[contains(.,"Renamed Emails")])[1]')).toBeExisting();
+//		await CabinetPage.open();
+//		await CabinetPage.expandCabinet('Clients');
+//		await CabinetPage.expandCabinet('A');
+//		await CabinetPage.expandCabinet(clientname);
+//		await CabinetPage.expandCabinet('2022');
+//		await expect($('(//span[contains(.,"Renamed Emails")])[1]')).toBeExisting();
+//	});
 
-	it('tc005 Verify that user can delete the client folder, Client folder is deleted will not display in the Client Maintenance/ Cabinet list/ Enity/ Client field', async () => {
-		//create client
-		clientname = "Automation" + new Date().getTime();
-		clientcode = new Date().getTime();
-		await ClientMaintenancePage.open();
-		await ClientMaintenancePage.createClientWithStructure(clientname, clientcode, structure);
-		//delete folder
-		await CabinetPage.open();
-		await CabinetPage.openQuickFind(clientname);
-		await CabinetPage.expandCabinet('2022');
-		await CabinetPage.deleteFolder('2022');
-		await expect($('(//span[contains(.,"2022")])[1]')).not.toBeExisting();
-	});
-});
+//	it('tc005 Verify that user can delete the client folder, Client folder is deleted will not display in the Client Maintenance/ Cabinet list/ Enity/ Client field', async () => {
+//		//create client
+//		clientname = "Automation" + new Date().getTime();
+//		clientcode = new Date().getTime();
+//		await ClientMaintenancePage.open();
+//		await ClientMaintenancePage.createClientWithStructure(clientname, clientcode, structure);
+//		//delete folder
+//		await CabinetPage.open();
+//		await CabinetPage.openQuickFind(clientname);
+//		await CabinetPage.expandCabinet('2022');
+//		await CabinetPage.deleteFolder('2022');
+//		await expect($('(//span[contains(.,"2022")])[1]')).not.toBeExisting();
+//	});
+//});
+
 
 
 //describe('Search quick find', () => {
@@ -260,6 +261,8 @@ describe('Client Maintenance', () => {
 
 //});
 
+
+
 //describe('Structure Maintenance', () => {
 //	//TC001->TC004->TC003->TC005
 //	it('tc001 Verify the user can see and access the Structure Maintenance page to add a new template when user has “Structure Maintenance” permission checked on the Group & Permission Maintenance', async () => {
@@ -294,10 +297,12 @@ describe('Client Maintenance', () => {
 //	it('tc005 Verify that user can apply one or multiple cabinets to the Structure template ', async () => {
 //		await LoginPage.reloadsite(sitename);
 //		await StructureMaintenance.open();
-//		await StructureMaintenance.applyCabinets(newTemplatename, "Clients", "Prospects");
+//		await StructureMaintenance.apply1Cabinet(newTemplatename, "Clients");
 //		await expect($('//span[contains(.,"Change(s) on mapping the structure to cabinet(s) has been updated successfully")]')).toBeExisting();
 //	});
 //});
+
+
 
 
 
@@ -306,7 +311,7 @@ describe('Client Maintenance', () => {
 //		await LoginPage.reloadsite(sitename);
 //		await CabinetSettingsPage.open();
 //        await expect($('//td[normalize-space()="Clients"]')).toBeExisting();
-//        await expect($('//td[normalize-space()="Prospects"]')).toBeExisting();
+//        //await expect($('//td[normalize-space()="Prospects"]')).toBeExisting();
 //    });
 
 
@@ -385,18 +390,18 @@ describe('Client Maintenance', () => {
 //    it('tc001 Verify that user can create a new task by clicking Create Task button', async () => {
 //		await LoginPage.reloadsite(sitename);
 //		await TaskPage.open();
-//        await TaskPage.createTask();
+//        await TaskPage.createClaimTask();
 //        await TaskPage.saveAndClose();
-//        expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeExisting();
+//        expect($('//container-element[contains(.,"Automation") and contains(.,"Claim")]')).toBeExisting();
 //    });
 
 //	it('tc003 Verify that user can select one or multiple the task(s) to reassign to another user in the Task list', async () => {
 //		if (isSuperadmin) { 
 //			let assignee = superadmin2;
 //			//Pre-condition: create 02 tasks
-//			await TaskPage.createTask();
+//			await TaskPage.createClaimTask();
 //			await TaskPage.saveAndClose();
-//			await TaskPage.createTask();
+//			await TaskPage.createClaimTask();
 //			await TaskPage.saveAndClose();
 //			//Reassign
 //			await TaskPage.tickOnTasks();
@@ -405,7 +410,7 @@ describe('Client Maintenance', () => {
 //			await LoginPage.logout();
 //			await LoginPage.login(assignee, "Abc@12345");
 //			await TaskPage.open();
-//			expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeElementsArrayOfSize(2);
+//			expect($('//container-element[contains(.,"Automation") and contains(.,"Claim")]')).toBeElementsArrayOfSize(2);
 //			//Post-condition: relog to current account
 //			await LoginPage.logout();
 //			await LoginPage.login(superadmin, "Abc@12345");
@@ -415,59 +420,59 @@ describe('Client Maintenance', () => {
 //    it('tc004 Verify that user can create a new task by clicking Create Task button', async () => {
 //        //Pre-condition: create 01 task
 //        await TaskPage.open();
-//        await TaskPage.createTask();
+//        await TaskPage.createClaimTask();
 //        await TaskPage.saveAndClose();
-//        await TaskPage.goToClient();
+//        await TaskPage.goToClaimClient();
 //        expect($('[aria-label="toggle Automation"]')).toBeExisting();
 //    });
 
 //    it('tc005 Verify that the data in task filtered will deleted when Clicking on Clear All button on Task list', async () => {
 //		if (isSuperadmin) {
 //			await TaskPage.open();
-//			await TaskPage.fulfilldata();
+//			await TaskPage.fulfillClaimdata();
 //			await TaskPage.clearAll();
 //			let isZero = await TaskPage.isEmptyFields();
 //			await expect(isNaN(isZero) ? true : false).toEqual(true);
 //		}
 //    });
 
-//    /*need to fix subjet dropdown list*/
-//    it('tc007 Verify that the ott file will be created in the selected location when user complete a task', async () => {
-//        //Pre-condition: create 01 completed task
-//        await LoginPage.reloadsite(sitename);
-//        await TaskPage.open();
-//        await TaskPage.createTask();
-//        await TaskPage.saveAndClose();
-//        await TaskPage.changeStatus("Complete");
-//        await TaskPage.openTask('Task: Automation -- Business -- ',' -- Complete');
-//        await TaskPage.saveAndClose();
-//        await TaskPage.saveToOfficeNow();
-//        let today = new Date().getFullYear()+'.'+ ("0" + (new Date().getMonth() + 1)).slice(-2)+'.'+("0" + (new Date().getDate())).slice(-2);
-//        await expect($('//span[contains(.,"Business.ott") and contains(.,"'+today+'")]')).toBeExisting();      
-//        await TaskPage.switchWindow('OTNOW-Develop');
-//        if (isSuperadmin) {
-//            await LoginPage.reloadsite(sitename);
-//            await TaskPage.open();
-//			await TaskPage.search();
-//			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
-//		}
-//    });
+//  //  /*need to fix subjet dropdown list*/
+//  //  it('tc007 Verify that the ott file will be created in the selected location when user complete a task', async () => {
+//  //      //Pre-condition: create 01 completed task
+//  //      await LoginPage.reloadsite(sitename);
+//  //      await TaskPage.open();
+//  //      await TaskPage.createClaimTask();
+//  //      await TaskPage.saveAndClose();
+//  //      await TaskPage.changeClaimStatus("Complete");
+//  //      await TaskPage.openTask('Task: Automation -- Claim -- ',' -- Complete');
+//  //      await TaskPage.saveAndClose();
+//  //      await TaskPage.saveToOfficeNow();
+//  //      let today = new Date().getFullYear()+'.'+ ("0" + (new Date().getMonth() + 1)).slice(-2)+'.'+("0" + (new Date().getDate())).slice(-2);
+//  //      await expect($('//span[contains(.,"Claim.ott") and contains(.,"'+today+'")]')).toBeExisting();      
+//  //      await TaskPage.switchWindow('OTNOW-Develop');
+//  //      if (isSuperadmin) {
+//  //          await LoginPage.reloadsite(sitename);
+//  //          await TaskPage.open();
+//		//	await TaskPage.search();
+//		//	await expect($('(//td[contains(.,"Automation -- Claim")])[1]')).toBeExisting();
+//		//}
+//  //  });
 
 //    it('tc005 Verify that user can search task when entering data search all task fields', async () => {
 //        if (isSuperadmin) {
 //            await LoginPage.reloadsite(sitename);
 //            await TaskPage.open();
-//            await TaskPage.createTask();
+//            await TaskPage.createClaimTask();
 //            await TaskPage.saveAndClose();
-//			await TaskPage.fulfilldata();
+//			await TaskPage.fulfillClaimdata();
 //			await TaskPage.search();
-//			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
+//			await expect($('(//td[contains(.,"Automation -- Claim")])[1]')).toBeExisting();
 //		}
 //    });
     
 //     it('tc002 Verify that user can select one or multiple task(s) in the Task list to delete', async () => {
 //        //Pre-condition: create 01 task
-//        await TaskPage.createTask();
+//        await TaskPage.createClaimTask();
 //        await TaskPage.saveAndClose();
 //        //Delete selected tasks
 //        await TaskPage.tickOnTasks();
@@ -476,7 +481,7 @@ describe('Client Maintenance', () => {
 //    });
 //});
 
-
+////above testcases were ready
 
 //describe('Task Template Maintenance', () => {
  

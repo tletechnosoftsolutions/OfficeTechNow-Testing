@@ -20,6 +20,7 @@ const UserAuthenticationMaintenancePage = require('../pageobjects/UserAuthentica
 const SystemConfigurationPage = require('../pageobjects/systemConfiguration.page');
 const UserProfilePage = require('../pageobjects/userProfile.page');
 const { exec } = require('node:child_process');
+const { group } = require('node:console');
 
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
@@ -275,6 +276,84 @@ describe('User Authentication Maintenance', () => {
         await UserAuthenticationMaintenancePage.search("User", superadmin);
         await expect($('//p[contains(.,"' + userEmail + '")]')).toBeExisting();
         await expect($('//p[contains(.,"' + userFirstName + ' ' + userLastName + '")]')).toBeExisting();
+    });
+});
+
+
+describe('Group & Permission Maintenance', () => {
+    it('tc001 Verify the user can see and access the Group & Permission Maintenance page when that user has “User & Group Maintenance” permission ', async () => {
+        await GroupPermissionMaintenancePage.open();
+        let existUrl = await browser.getUrl();
+        expect(existUrl).toHaveTextContaining("group-management");
+    });
+
+    it('tc002 Verify the user can add a new group', async () => {
+        await GroupPermissionMaintenancePage.createGroup(templatename);
+        await expect($('//label[normalize-space()="' + templatename + '"]')).toBeExisting();
+    });
+
+    it('tc005 Verify the user can search groups on the search bar', async () => {
+        await GroupPermissionMaintenancePage.search("Group", templatename);
+        await expect($('//label[normalize-space()="' + templatename + '"]')).toBeExisting();
+    });
+
+    it('tc006 Verify that the message pop-up: "There are some unsaved changes. Are you sure you want to leave?" will be displayed when the user doesnt save change on a group then switch to another group', async () => {
+        await LoginPage.reload();
+        await GroupPermissionMaintenancePage.open();
+        await GroupPermissionMaintenancePage.focusOn(templatename);
+        await GroupPermissionMaintenancePage.tickOn(superadmin2);
+        await GroupPermissionMaintenancePage.focusOn("Admin");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        let isExist = await GroupPermissionMaintenancePage.isMessageExist("There are some unsaved changes. Are you sure you want to leave?");
+        await expect(isExist).toEqual(true);
+        await $('//button[.="No"]').click();
+        await GroupPermissionMaintenancePage.focusOn("Admin");
+        await expect(isExist).toEqual(true);
+        await $('//button[.="Yes"]').click();
+    });
+
+    it('tc007 Verify the user check permission for other users', async () => {
+        await GroupPermissionMaintenancePage.focusOn(templatename);
+        await GroupPermissionMaintenancePage.tickOn(superadmin);
+        await GroupPermissionMaintenancePage.tickOn(superadmin2);
+        await GroupPermissionMaintenancePage.tickOn("Home Page Maintenance");
+        await GroupPermissionMaintenancePage.tickOn("Template Maintenance");
+        await GroupPermissionMaintenancePage.tickOn("User & Group Maintenance");
+        await GroupPermissionMaintenancePage.save();
+        await GroupPermissionMaintenancePage.isPopupExist("Update Group & Permission successfully");
+        
+    });
+
+    it('tc008 Verify that the user list displays all users except Deleted users', async () => {
+        //Count users in [Group & Permission Maintenance] then compared with users number in [User & Authentication Maintenance]
+        let numOfUser_1 = await $$('//*[@title="Users"]//div[@body]//label').length;
+        await UserAuthenticationMaintenancePage.open();
+        let numOfUser_2 = await $$('//tbody/tr').length;
+        await expect(numOfUser_1).toEqual(numOfUser_2);
+    });
+
+    it('tc009 Verify the user can search users and permissions', async () => {
+        let searchPermission = "Task Template Manager";
+        await GroupPermissionMaintenancePage.open();
+        //Search user
+        await GroupPermissionMaintenancePage.search("User", superadmin2);
+        await expect($('//div[normalize-space()="' + superadmin2 + '"]')).toBeExisting();
+        await expect($$('//*[@title="Users"]//div[@body]//label')).toBeElementsArrayOfSize(1);
+        //Search Permission
+        await GroupPermissionMaintenancePage.search("Permission", searchPermission);
+        await expect($('//div[normalize-space()="' + searchPermission + '"]')).toBeExisting();
+        await expect($$('//*[@title="Permissions"]//div[@body]//label')).toBeElementsArrayOfSize(1);
+    });
+
+    it('tc003 Verify the user can rename the group', async () => {
+        await GroupPermissionMaintenancePage.focusOn(templatename);
+        await GroupPermissionMaintenancePage.renameGroup(templatename);
+        await expect($('//label[normalize-space()="Edited ' + templatename + '"]')).toBeExisting();
+    });
+
+    it('tc004 Verify the user can delete the group', async () => {
+        await GroupPermissionMaintenancePage.deleteGroup("Edited " + templatename);
+        await expect($('//label[normalize-space()="Edited ' + templatename + '"]')).not.toBeExisting();
     });
 });
 

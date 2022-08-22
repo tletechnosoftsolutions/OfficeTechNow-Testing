@@ -2,6 +2,7 @@ const LoginPage = require('../pageobjects/login.page');
 const UserProfilePage = require('../pageobjects/userProfile.page');
 const UserAuthenticationMaintenancePage = require('../pageobjects/UserAuthenticationMaintenance.page');
 const SystemConfigurationPage = require('../pageobjects/systemConfiguration.page');
+const GroupPermissionMaintenancePage = require('../pageobjects/groupPermissionMaintenance.page');
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
 const superadmin = 'tssadmin3';
@@ -27,16 +28,18 @@ describe('Login', () => {
 
 
 describe('User Profile', () => {
-    //let user = "Thanh 1 Vo";
-    it('tc021 Verify that User Profile will display information the same User information created in the User & Authentication page', async () => {
-        await UserProfilePage.open();
-        let userEmail = await $('input[id*=email]').getValue();
-        let userFirstName = await $('input[id*=firstName]').getValue();
-        let userLastName = await $('input[id*=lastName]').getValue();
+    let templatename = "AutomationTemplate1660926084642";
 
-        await UserAuthenticationMaintenancePage.open();
-        await UserAuthenticationMaintenancePage.search("User", superadmin);
-        await expect($('//p[contains(.,"' + userEmail + '")]')).toBeExisting();
-        await expect($('//p[contains(.,"' + userFirstName + ' ' + userLastName + '")]')).toBeExisting();
+    it('tc009 Verify the user can search users and permissions', async () => {
+        let searchPermission = "Task Template Manager";
+        await GroupPermissionMaintenancePage.open();
+        //Search user
+        await GroupPermissionMaintenancePage.search("User", superadmin2);
+        await expect($('//div[normalize-space()="' + superadmin2 + '"]')).toBeExisting();
+        await expect($$('//*[@title="Users"]//div[@body]//label')).toBeElementsArrayOfSize(1);
+        //Search Permission
+        await GroupPermissionMaintenancePage.search("Permission", searchPermission);
+        await expect($('//div[normalize-space()="' + searchPermission + '"]')).toBeExisting();
+        await expect($$('//*[@title="Permissions"]//div[@body]//label')).toBeElementsArrayOfSize(1);
     });
 });

@@ -44,6 +44,33 @@ class TaskPage extends Page {
         await $('//a[.="Task Subject 01"]').click();
     }
 
+     /**
+     * create and fill information of task
+     */
+    async createClaimTask() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Entity
+        await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').setValue("Automation");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('(//div[@role="option"])[1]').click();
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//a[.="Claim"]').click();
+        //Progress
+        //await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        //await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        //await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+        //await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('//a[.="Task Subject 01"]').click();
+    }
+
     /**
      * create and fill information of task
      */
@@ -140,6 +167,30 @@ class TaskPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
+     async goToClaimClient() {
+        //Tick on task
+        await $('//container-element[contains(.,"Automation") and contains(.,"Claim")]/ancestor::td').click();
+        //Go to client
+        await $('button[mattooltip="Go To Client"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+     }
+
+     /**
+     * change task's status
+     */
+    async changeClaimStatus(status) {
+        //Tick on task
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('//container-element[contains(.,"Automation") and contains(.,"Claim")]/ancestor::td').click();
+        //Change status
+        await $('button[mattooltip="Set Status"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('app-task-status-chooser-field input').click();
+        await $('//ng-dropdown-panel//span[.="' + status + '"]').click();
+        await $('//button//span[.="Set"]').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
     /**
      * change task's status
      */
@@ -196,6 +247,45 @@ class TaskPage extends Page {
      async search() {
         await await $('//button[contains(.,"Search")]').click();
      }
+
+     /**
+     * fulfill data search 
+     */
+    async fulfillClaimdata() {
+        await $('//label[normalize-space()="Task Quick Find"]/following-sibling::*//input[contains(@id,"formly") and contains(@id,"input")]').setValue("Automation");
+        await $('//label[normalize-space()="Entity"]/following-sibling::*//input[@type="text"]').click();
+        await $('//label[normalize-space()="Entity"]/following-sibling::*//input[@type="text"]').setValue("Automation");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('(//div[contains(normalize-space(),"AutomationTest -- Claim")])[last()]').click();
+        await $('//label[normalize-space()="Priority"]/following-sibling::*//input[@type="text"]').click();
+        await $('//ng-dropdown-panel//span[.="Normal"]').click();
+        await $('//label[normalize-space()="Category"]/following-sibling::*//input[@type="text"]').click();
+        await $('//a[.="Claim"]').click();
+        await $('//label[normalize-space()="Status"]/following-sibling::*//input[@type="text"]').click();
+        await $('//ng-dropdown-panel//span[.="Complete"]').click();
+       // await $('//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"]').click();
+       // await $('//a[.="Task Subject 01"]').click();
+        //await $('//label[normalize-space()="Reminder For"]/following-sibling::*//input[@type="text"]').click();
+        //await $('//ng-dropdown-panel//span[normalize-space()="tssadmin3"]').click();
+        await $('//label[normalize-space()="Assigned To"]/following-sibling::*//input[@type="text"]').click();
+        await $('//ng-dropdown-panel//span[normalize-space()="tssadmin3"]').click();
+        await $('//label[normalize-space()="Assigned By"]/following-sibling::*//input[@type="text"]').click();
+        await $('//ng-dropdown-panel//span[normalize-space()="tssadmin3"]').click();
+        await $('//label[normalize-space()="Filter By Date"]/following-sibling::*//input[@type="text"]').click();
+        await $('//span[.="Created Date"]').click();
+        await $('//label[normalize-space()="From" and contains(@for,"fromDate")]/following-sibling::*//input').setValue("01/07/2022");
+        await $('//label[normalize-space()="To" and contains(@for,"toDate")]/following-sibling::*//input').setValue("01/08/2023");
+        await $('//label[normalize-space()="Step Name"]/following-sibling::*//input').click();
+        await $('//span[.="Email UW"]').click();
+        await $('//label[normalize-space()="State"]/following-sibling::*//input').click();
+        await $('//ng-dropdown-panel//span[.="Complete"]').click();
+        await $('//label[normalize-space()="Field Name"]/following-sibling::*//input').click();
+        await $('//ng-dropdown-panel//span[.="Notes"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('//label[normalize-space()="Value"]/following-sibling::*//div[@role="combobox"]').click();
+        //await $('//ng-dropdown-panel//span[.="CGU"]').click();
+        
+    }
 
     /**
      * fulfill data search 
