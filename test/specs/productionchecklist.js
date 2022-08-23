@@ -357,6 +357,85 @@ describe('Group & Permission Maintenance', () => {
     });
 });
 
+
+describe('Client Cabinet Structure Template', () => {
+    it('tc001 Verify the user can see and access the Client Maintenance page when he has “Add Client” permission', async () => {
+        //Pre-condition: grant permission "Add Client" to account
+        await GroupPermissionMaintenancePage.open();
+        await GroupPermissionMaintenancePage.createGroup("Automation " + date);
+        await GroupPermissionMaintenancePage.tickOn(superadmin2);
+        await GroupPermissionMaintenancePage.tickOn("Add Client");
+        await GroupPermissionMaintenancePage.save();
+
+        await LoginPage.logout();
+        await LoginPage.login(superadmin2, password);
+
+        await ClientMaintenancePage.open();
+        await expect($('//button//i[.="person_add"]')).toBeExisting();
+    });
+
+    it('tc002 Verify the user can add a new client', async () => {
+        await ClientMaintenancePage.createClient(clientname, clientcode);
+        await expect($('//td[normalize-space()="' + clientname + '"]')).toBeExisting();
+        await CabinetPage.openQuickFind(clientname);
+        await expect($('[aria-label="toggle ' + clientname + '"]')).toBeExisting();
+    });
+
+    it('tc004 Verify that if Client Code Required = False, the client code field is hidden when adding/editting a new client.', async () => {
+        //Pre-condition: edit Client Code Required = False in [System Configuration]
+        await SystemConfigurationPage.open();
+        await SystemConfigurationPage.editList("Client Code Required", "False");
+        await SystemConfigurationPage.save();
+
+        await LoginPage.reload();
+        await ClientMaintenancePage.open();
+        await $('//button//i[.="person_add"]').click();
+        await expect($('[formcontrolname="clientID"]')).not.toBeExisting();
+        await $('//button[normalize-space()="Cancel"]').click();
+
+        await ClientMaintenancePage.searchClient(clientname);
+        await $('//td[normalize-space()="' + clientname + '"]/parent::tr//button[@mattooltip="Rename Client"]').click();
+        await expect($('[formcontrolname="clientID"]')).not.toBeExisting();
+        await $('//button[normalize-space()="Cancel"]').click();
+    });
+
+    it('tc003 Verify that if Client Code Required = True, the Client Code field is shown and required when adding/editing a new client.', async () => {
+        //Pre-condition: edit Client Code Required = True in [System Configuration]
+        await SystemConfigurationPage.open();
+        await SystemConfigurationPage.editList("Client Code Required", "True");
+        await SystemConfigurationPage.save();
+
+        await LoginPage.reload();
+        await ClientMaintenancePage.open();
+        await $('//button//i[.="person_add"]').click();
+        await expect($('[formcontrolname="clientID"]')).toBeExisting();
+        await $('//button[normalize-space()="Cancel"]').click();
+
+        await ClientMaintenancePage.searchClient(clientname);
+        await $('//td[normalize-space()="' + clientname + '"]/parent::tr//button[@mattooltip="Rename Client"]').click();
+        await expect($('[formcontrolname="clientID"]')).toBeExisting();
+        await $('//button[normalize-space()="Cancel"]').click();
+    });
+
+    it('tc006 Verify the user cannot add/ rename a client with the name that already exists', async () => {
+        await ClientMaintenancePage.createClient(clientname, clientcode);
+        let isExist = await ClientMaintenancePage.isPopupExist("The client " + clientname + " already exists");
+        await expect(isExist).toEqual(true);
+        await $('//button[normalize-space()="Cancel"]').click();
+    });
+
+    it('tc005 Verify that user can rename a Client folder', async () => {
+        let newName = "Edited " + clientname;
+        let newCode = clientcode + "000";
+        await ClientMaintenancePage.searchClient(clientname);
+        await ClientMaintenancePage.renameClient(clientname, newName, newCode);
+        await LoginPage.reload();
+        await ClientMaintenancePage.open();
+        await ClientMaintenancePage.searchClient(newName);
+        await expect($('//td[normalize-space()="' + newName + '"]')).toBeExisting();
+        await expect($('//td[normalize-space()="' + newCode + '"]')).toBeExisting();
+    });
+});
 describe('Logout', () => {
 	it('should logout', async () => {
 		await LoginPage.reload();

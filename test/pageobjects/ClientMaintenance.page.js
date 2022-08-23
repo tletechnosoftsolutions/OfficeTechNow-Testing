@@ -18,8 +18,6 @@ class ClientMaintenancePage extends Page {
         return $('button[title="Client Maintenance"]');
     }
 
-
-
     /**
     * a method to create a client
     */
@@ -32,7 +30,6 @@ class ClientMaintenancePage extends Page {
         await $('//button[contains(text(),"Cancel")]').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
     }
-
 
     /**
     * a method to create a client with structure
@@ -71,10 +68,8 @@ class ClientMaintenancePage extends Page {
         await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
-    
-
     /**
-    * a method to create a client
+    * a method to delete a client
     */
     async deleteClient(clientname) {
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -82,6 +77,34 @@ class ClientMaintenancePage extends Page {
         await $('//textarea').setValue("delete the tested" + clientname);
         await $('//button[.="Delete"]').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
+    /**
+    * a method to search a client
+    */
+    async searchClient(clientname) {
+        await $('#search-text').setValue(clientname);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+    * a method to edit/rename a client
+    */
+    async renameClient(clientOldName, clientNewName, clientNewCode) {
+        await $('//td[normalize-space()="' + clientOldName + '"]/parent::tr//button[@mattooltip="Rename Client"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('[formcontrolname="clientName"]').setValue(clientNewName);
+        if (clientNewCode != null || clientNewCode != "")
+            await $('[formcontrolname="clientID"]').setValue(clientNewCode);
+        await $('//button/span[.="Rename"]').click();
+        await new Promise(resolve => setTimeout(resolve, 5000));
+    }
+
+    /**
+     * verify popup message
+     */
+    async isPopupExist(message) {
+        return await $('(//snack-bar-container//*[contains(.,"' + message + '")])[last()]').isExisting();
     }
 
     /**
