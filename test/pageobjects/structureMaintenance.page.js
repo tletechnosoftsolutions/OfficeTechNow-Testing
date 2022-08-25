@@ -80,7 +80,7 @@ class StructureMaintenancePage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
-     /**
+    /**
    * a method to add new template
    */
     async selectTemplate(templatename) {
@@ -96,9 +96,7 @@ class StructureMaintenancePage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//input[contains(@placeholder,"Enter Name")]').setValue(newTemplatename);
         await $('(//button[contains(.,"Rename")])[2]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        
+        await new Promise(resolve => setTimeout(resolve, 1000)); 
     }
 
     /**
@@ -110,8 +108,8 @@ class StructureMaintenancePage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//span[normalize-space()="' + mainFolderName + '"]/parent::button').click({ button: 'right' });
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        
+
+
     }
 
     async applyCabinets(templatename, cabinet1, cabinet2){ 
@@ -140,10 +138,11 @@ class StructureMaintenancePage extends Page {
    * a method to add new template
    */
     async addNewTemplate(templatename) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//*[contains(.,"New template")]/parent::button').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await $('input[id*=input_templateName]').setValue(templatename);
         await $('//span[.="Create"]').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
         /*
         //Check folder's function
         this.addFolders("New Folder");
@@ -181,11 +180,27 @@ class StructureMaintenancePage extends Page {
     }
 
     /**
+     * focus on template
+     */
+    async focusOnTemplate(templatename) {
+        await $('//label[normalize-space()="'+templatename+'"]').click();
+        await new Promise(resolve => setTimeout(resolve, 200));
+    }
+
+    /**
+     * verify popup message
+     */
+    async isPopupExist(message) {
+        return await $('(//snack-bar-container//*[contains(.,"' + message + '")])[last()]').isExisting();
+    }
+
+    /**
      * open the Cabinet page
      */
     async open() {
         await this.btnTools.click();
         await this.btnStructureMaintenance.click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
     }
 }
 

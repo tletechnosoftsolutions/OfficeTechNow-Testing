@@ -211,9 +211,10 @@ class CabinetPage extends Page {
         await $('//span[contains(.,"Open")]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button/span[.="Copy to PDF"]').click();
-         await new Promise(resolve => setTimeout(resolve, 10000));
+        await new Promise(resolve => setTimeout(resolve, 10000));
+        await new Promise(resolve => setTimeout(resolve, 10000));
         await $('//button/span[.="Save & Close"]').click();
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
         await $('//button/span/mat-icon[.="sync_problem"]').click();
        
     }

@@ -47,7 +47,7 @@ class LoginPage extends Page {
     /**
      * overwrite specific options to adapt it to page object
      */
-    async open () {
+    async open() {
         await browser.url(`https://officetechnow-develop.azurewebsites.net`);
          await new Promise(resolve => setTimeout(resolve, 3000));
     }

@@ -74,7 +74,7 @@ class ClientMaintenancePage extends Page {
     async deleteClient(clientname) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button//i[.="delete"]').click();
-        await $('//textarea').setValue("delete the tested" + clientname);
+        await $('//textarea').setValue("delete the tested " + clientname);
         await $('//button[.="Delete"]').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
     }

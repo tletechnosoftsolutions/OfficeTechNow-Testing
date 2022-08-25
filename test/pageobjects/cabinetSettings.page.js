@@ -20,7 +20,7 @@ class CabinetSettingsPage extends Page {
      /**
      * add the Cabinet. Param indexType: None, Alphabetic, Numeric, Alpha-Numeric
      */
-    async addCabinet(cabinetName, indexType, isSuperadmin) {
+    async addCabinet(cabinetName, indexType, isSuperadmin, yesNo) {
         await $('//span[normalize-space()="Add Cabinet"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('input[id*=input_folderName]').clearValue();
@@ -32,7 +32,8 @@ class CabinetSettingsPage extends Page {
         if (isSuperadmin)  { await $('//label[normalize-space()="Enable DCM"]').click();}
         await $('//span[.="Create"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//button[.="No"]').click();
+        if (!(yesNo == "" || yesNo == null))
+            await $('//button[.="' + yesNo + '"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
@@ -78,7 +79,9 @@ class CabinetSettingsPage extends Page {
      */
     async getStringOfSubFolders() {
         await new Promise(resolve => setTimeout(resolve, 1000));
-        return await $$('//mat-tree-node[@aria-level="2"]//span[@class="danger"]').map(e => e.getText()).join('');
+        let subfolders_elements = $$('//mat-tree-node[@aria-level="2"]//span[@class="danger"]');
+        let subfolders = await subfolders_elements.map(e => e.getText()).join('');
+        return subfolders;
     }
 
     /**

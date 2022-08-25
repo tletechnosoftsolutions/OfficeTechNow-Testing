@@ -358,9 +358,11 @@ describe('Group & Permission Maintenance', () => {
 });
 
 
+
 describe('Client Cabinet Structure Template', () => {
     it('tc001 Verify the user can see and access the Client Maintenance page when he has “Add Client” permission', async () => {
         //Pre-condition: grant permission "Add Client" to account
+        await LoginPage.reload();
         await GroupPermissionMaintenancePage.open();
         await GroupPermissionMaintenancePage.createGroup("Automation " + date);
         await GroupPermissionMaintenancePage.tickOn(superadmin2);
@@ -424,9 +426,37 @@ describe('Client Cabinet Structure Template', () => {
         await $('//button[normalize-space()="Cancel"]').click();
     });
 
+    it('tc007 Verify that user can add Client Structure for a client', async () => {
+        //Pre-condition: grant Add Client Structure permission
+        await LoginPage.logout();
+        await LoginPage.login(superadmin, password);
+        await GroupPermissionMaintenancePage.open();
+        await GroupPermissionMaintenancePage.focusOn("Automation " + date);
+        await GroupPermissionMaintenancePage.tickOn("Add Client Structure");
+        await GroupPermissionMaintenancePage.save();
+        await LoginPage.logout();
+
+        await LoginPage.login(superadmin2, password);
+        await ClientMaintenancePage.open();
+        await ClientMaintenancePage.searchClient(clientname);
+        await $('//button//i[.="account_tree"]').click();
+        //Verify client name and client code are disabled
+        await expect($('[formcontrolname="clientName"]')).toHaveAttr('disabled');
+        await expect($('[formcontrolname="clientID"]')).toHaveAttr('disabled');
+        await $('//button[normalize-space()="Cancel"]').click();
+        //Verify user can change client's structure
+        await ClientMaintenancePage.addStructure(clientname, "DO NOT delete - Automation Template");
+        let isExist = await ClientMaintenancePage.isPopupExist("Add client structure successfully");
+        await expect(isExist).toEqual(true);
+
+        await CabinetPage.openQuickFind(clientname);
+        await expect($('//span[normalize-space()="Automation Folder"]')).toBeExisting();
+    });
+
     it('tc005 Verify that user can rename a Client folder', async () => {
         let newName = "Edited " + clientname;
         let newCode = clientcode + "000";
+        await ClientMaintenancePage.open();
         await ClientMaintenancePage.searchClient(clientname);
         await ClientMaintenancePage.renameClient(clientname, newName, newCode);
         await LoginPage.reload();
@@ -435,7 +465,72 @@ describe('Client Cabinet Structure Template', () => {
         await expect($('//td[normalize-space()="' + newName + '"]')).toBeExisting();
         await expect($('//td[normalize-space()="' + newCode + '"]')).toBeExisting();
     });
+
+    it('tc008 Verify that user can delete the client folder', async () => {
+        //Pre-condition: grant Delete Client permission
+        await LoginPage.logout();
+        await LoginPage.login(superadmin, password);
+        await GroupPermissionMaintenancePage.open();
+        await GroupPermissionMaintenancePage.focusOn("Automation " + date);
+        await GroupPermissionMaintenancePage.tickOn("Delete Client");
+        await GroupPermissionMaintenancePage.save();
+        await LoginPage.logout();
+
+        await LoginPage.login(superadmin2, password);
+        await ClientMaintenancePage.open();
+        await ClientMaintenancePage.searchClient(clientname);
+        await ClientMaintenancePage.deleteClient(clientname);
+        let isExist = await ClientMaintenancePage.isPopupExist("Delete successfully");
+        await expect(isExist).toEqual(true);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('//input[@placeholder="Quick Find"]').setValue(clientname);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await expect($('//span[contains(text(),"' + clientname + '")]')).not.toBeExisting();
+    });
+
+    it('tc009 Verify that user cannot delete a client if there is any task that is assigned to that client', async () => {
+        //Precondition 1: create a new client
+        //Precondition 2: create a task and in Entity field, select client in Precondition 1
+        let clientname = "A New Client Aug 2016-1152";
+        let errorMessage = "Cannot delete the client \"" + clientname + "\" because it is assigned to one or more tasks.";
+        await LoginPage.reload();
+        await ClientMaintenancePage.open();
+        await ClientMaintenancePage.searchClient(clientname);
+        await $('//button//i[.="delete"]').click();
+        await expect($("//p[contains(text(),'" + errorMessage + "')]")).toBeExisting();
+    });
+
+    it('tc010 Verify the user can see and access the Cabinet Setting page to add a new cabinet when user has “CAC Manager” permission', async () => {
+        //Precondition: grant CAC Managers permission to account under test
+        await LoginPage.reload();
+        await LoginPage.logout();
+        await LoginPage.login(superadmin, password);
+        await GroupPermissionMaintenancePage.open();
+        await GroupPermissionMaintenancePage.focusOn("Automation " + date);
+        await GroupPermissionMaintenancePage.tickOn("CAC Managers");
+        await GroupPermissionMaintenancePage.save();
+        await LoginPage.logout();
+
+        await LoginPage.login(superadmin2, password);
+        await CabinetAccessControlPage.open();
+        await expect($('button[title="Cabinet Access Control"]')).toBeExisting();
+        await CabinetSettingsPage.open();
+        await expect($('button[title="Cabinet Settings"]')).toBeExisting();
+    });
+
+    it('tc011 Verify the user can add a new cabinet', async () => {
+        let message1 = "The cabinet \'" + cabinet_name + "\' has been created.";
+        let message2 = "Please apply access permissions for this cabinet via 'Administration - Cabinet Access Control'.";
+        let message3 = "This cabinet is not available to users until permissions are applied. Would you like to set Cabinet Access Control permission for '" + cabinet_name + "' now?";
+        
+        await CabinetSettingsPage.addCabinet(cabinet_name, "None");
+        await expect($('//p[contains(.,"' + message1 + '")]')).toBeExisting();
+        await expect($('//p[contains(.,"' + message2 + '")]')).toBeExisting();
+        await expect($('//p[contains(normalize-space(),"' + message3 + '")]')).toBeExisting();
+        await $('//button[.="No"]').click();
+    });
 });
+
 describe('Logout', () => {
 	it('should logout', async () => {
 		await LoginPage.reload();

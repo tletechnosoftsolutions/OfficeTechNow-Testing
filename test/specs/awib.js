@@ -20,12 +20,12 @@ const { exec } = require('node:child_process');
 
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
-const superadmin = 'tssadmin3';
-const superadmin2='tssadmin4';
+const superadmin = 'tssadmin1';
+const superadmin2='tssadmin';
 const user = 'tle@technosoftsolutions.com.au';
 const password = 'Abc@12345';
 const isSuperadmin = true;
-
+const sitename = 'https://awib.officetechnow.com.au/';
 var clientname = "Automation" + new Date().getTime();
 var clientcode = new Date().getTime();
 var structure = "01. Standard Client";
@@ -36,7 +36,7 @@ var date = new Date().getTime();
 
 describe('Login', () => {
 	it('should login with valid credentials', async () => {
-		await LoginPage.open();
+		await LoginPage.opensite(sitename);
 		if (isSuperadmin) {
 			await LoginPage.login(superadmin, password);
 		} else await LoginPage.login(user, password);
@@ -54,7 +54,7 @@ describe('Cabinets/ Favourites page', () => {
 		//Cabinet
 		await CabinetPage.open();
 		await expect($('button[aria-label= "toggle Clients"]')).toBeExisting();
-		await expect($('button[aria-label= "toggle Development Cabinet"]')).toBeExisting();
+		//await expect($('button[aria-label= "toggle Development Cabinet"]')).toBeExisting();
 		await CabinetPage.expandCabinet("Clients");
 		await expect($('button[aria-label="toggle A"]')).toBeExisting();
 
@@ -71,45 +71,31 @@ describe('Cabinets/ Favourites page', () => {
 		await CabinetPage.open();
 
 		//1.Create tasks folder Clients
-		await CabinetPage.expandCabinet('Clients');
+        await CabinetPage.expandCabinet('Clients');
+        await CabinetPage.expandCabinet("A")
+        await CabinetPage.expandCabinet("AutomationTest")
 		await CabinetPage.createTask()
 		//Create tasks Clients - folder A
-		await CabinetPage.expandCabinet("A")
+
 		//await CabinetPage.createTask()
 		//Collap All cabinets
+        await CabinetPage.collapCabinet("AutomationTest")
 		await CabinetPage.collapCabinet('A');
-		await CabinetPage.collapCabinet('Clients');
+        await CabinetPage.collapCabinet('Clients');
 
-
-		//2.Create tasks folder Development Cabinet
-		await CabinetPage.expandCabinet('Development Cabinet');
-		await CabinetPage.createTask()
-		//Collap All cabinets
-		await CabinetPage.collapCabinet('Development Cabinet');
-
-
-		//3.Create tasks folder Prospects
-		await CabinetPage.expandCabinet('Prospects');
-		await CabinetPage.createTask()
-		//Create tasks Clients - folder A
-		await CabinetPage.expandCabinet("A")
-		//await CabinetPage.createTask()
-		//Collap All cabinets
-		await CabinetPage.collapCabinet('A');
-		await CabinetPage.collapCabinet('Prospects');
     });
 
-    
+
     it('tc003 - Verify the user can see the Client/ Prospect details and the Client/ Prospect folder name in the Recent section when selecting Client/ Prospect folder and its normal folder', async () => {
 		//open Cabinet
-        await LoginPage.reload();
+        await LoginPage.reloadsite(sitename);
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
 		await CabinetPage.expandCabinet("A")
-		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
-        await CabinetPage.expandCabinet('2021');
-        await expect($('//div[contains(text(),"A New Client Aug 2016-1152")]')).toBeExisting();
-		
+		await CabinetPage.expandCabinet('AutomationTest');
+        await CabinetPage.expandCabinet('2022');
+        await expect($('//span[contains(text(),"Aviation")]')).toBeExisting();
+
 	});
 });
 
@@ -118,7 +104,7 @@ describe('Intrays page', () => {
 
 	it('tc001 Verify that the user can access In-Trays page in the Home tab and the current users Intray will be highlighted by default and displayed at the top in Intray / Folder Browser / File Browser / Save form', async () => {
 		//Intrays
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await InTraysPage.open();
 		await expect($('//span[text()= " Tuyen Le"]')).toBeExisting();
 
@@ -129,12 +115,12 @@ describe('Intrays page', () => {
 describe('File', () => {
 	it('tc001 Verify the Create QuickNote popup will display when clicking on Floating button > Create quicknote button', async () => {
 		//Cabinet
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
 		await CabinetPage.expandCabinet("A")
-		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
-		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.expandCabinet('AutomationTest');
+		await CabinetPage.expandCabinet('2022');
 		await CabinetPage.createQuickNote()
 		await CabinetPage.collapCabinet('Clients');
 	});
@@ -145,18 +131,22 @@ describe('File', () => {
         await CabinetPage.open();
         await CabinetPage.expandCabinet('Clients');
 		await CabinetPage.expandCabinet("A");
-		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
-		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.expandCabinet('AutomationTest');
+		await CabinetPage.expandCabinet('2022');
 		await CabinetPage.uploadFileSystem('testfile.xlsx');
         await expect($('(//span[contains(.,"testfile.xlsx")])[last()]')).toBeExisting();
-      
+
     });
 });
+
+
+
+
 
 describe('Client Maintenance', () => {
 
 	it('tc001 Verify the user can see and access the Client Maintenance page to Add a new client', async () => {
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		//open Client Maintenance Page
 		await ClientMaintenancePage.open();
 		await expect($('//button//i[.="person_add"]')).toBeExisting();
@@ -183,7 +173,7 @@ describe('Client Maintenance', () => {
 		//Verify the folder structure of the created client
 		await CabinetPage.open();
 		await CabinetPage.openQuickFind(clientname);
-		await expect($('(//span[contains(text(),"2021")])')).toBeExisting();
+		//await expect($('(//span[contains(text(),"2021")])')).toBeExisting();
 		await expect($('(//span[contains(text(),"2022")])')).toBeExisting();
 	});
 
@@ -209,14 +199,14 @@ describe('Client Maintenance', () => {
 		//rename folder
 		await CabinetPage.open();
 		await CabinetPage.openQuickFind(clientname);
-		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.expandCabinet('2022');
 		await CabinetPage.renameFolder('Emails', 'Renamed Emails');
 		await expect($('(//span[contains(.,"Renamed Emails")])[1]')).toBeExisting();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
 		await CabinetPage.expandCabinet('A');
 		await CabinetPage.expandCabinet(clientname);
-		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.expandCabinet('2022');
 		await expect($('(//span[contains(.,"Renamed Emails")])[1]')).toBeExisting();
 	});
 
@@ -236,9 +226,10 @@ describe('Client Maintenance', () => {
 });
 
 
+
 describe('Search quick find', () => {
 	it('tc001 Verify that user can see search quick find field on all pages', async () => {
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		for (let i = 1; i <= 7; i++) {
 			await $('(//*[@id="Home"]//button[contains(@class,"toolbar")])[' + i + ']').click();
 			await new Promise(resolve => setTimeout(resolve, 1000));
@@ -270,10 +261,12 @@ describe('Search quick find', () => {
 
 });
 
+
+
 describe('Structure Maintenance', () => {
 	//TC001->TC004->TC003->TC005
 	it('tc001 Verify the user can see and access the Structure Maintenance page to add a new template when user has “Structure Maintenance” permission checked on the Group & Permission Maintenance', async () => {
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await StructureMaintenance.open();
 		await StructureMaintenance.addNewTemplate(templatename);
 		await StructureMaintenance.saveTemplate();
@@ -281,7 +274,7 @@ describe('Structure Maintenance', () => {
 	});
 
 	it('tc004 Verify that user can see list of the action in contextual menu: Set Folder Colour, Add Folder, Add Sub Folder, Clone Folder, Delete Folder, Rename Folder and do it when right-clicking a Folder structure', async () => {
-        await LoginPage.reload();
+       await LoginPage.reloadsite(sitename);
         await StructureMaintenance.open();
 		await StructureMaintenance.checkFolderFunctions(templatename, "New Folder");
 		await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
@@ -294,7 +287,7 @@ describe('Structure Maintenance', () => {
 
 
 	it('tc003 Verify that user can select any of available template structure to rename ', async () => {
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await StructureMaintenance.open();
 		await StructureMaintenance.renameTemplate(templatename, newTemplatename);
 		await expect($('//label[contains(.,"' + newTemplatename + '")]')).toBeExisting();
@@ -302,28 +295,29 @@ describe('Structure Maintenance', () => {
 
 
 	it('tc005 Verify that user can apply one or multiple cabinets to the Structure template ', async () => {
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await StructureMaintenance.open();
-		await StructureMaintenance.applyCabinets(newTemplatename, "Clients", "Prospects");
+		await StructureMaintenance.apply1Cabinet(newTemplatename, "Clients");
 		await expect($('//span[contains(.,"Change(s) on mapping the structure to cabinet(s) has been updated successfully")]')).toBeExisting();
 	});
 });
 
 
 
+
+
 describe('Cabinet Settings', () => {
     it('tc001 Verify the user can see and access the Cabinet Setting page to add a new cabinet', async () => {
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await CabinetSettingsPage.open();
         await expect($('//td[normalize-space()="Clients"]')).toBeExisting();
-        await expect($('//td[normalize-space()="Prospects"]')).toBeExisting();
+        //await expect($('//td[normalize-space()="Prospects"]')).toBeExisting();
     });
 
 
     it('tc002 Verify that user can see created cabinet in Cabinet list, Cabinet Settings after user apllied Read permission for it on the CAC page', async () => {
         await CabinetSettingsPage.open();
         await CabinetSettingsPage.addCabinet(cabinet_name, "None", isSuperadmin);
-        await LoginPage.reload();
 
         await CabinetAccessControlPage.open();
         await CabinetAccessControlPage.checkCabinet(cabinet_name);
@@ -335,9 +329,8 @@ describe('Cabinet Settings', () => {
         await CabinetSettingsPage.open();
         await expect($('//td[normalize-space()="' + cabinet_name + '"]')).toBeExisting();
     });
-    
+
     it('tc005 Verify that user can select any of the available cabinet name to apply index type', async () => {
-        
         await CabinetSettingsPage.open();
         await CabinetSettingsPage.changeIndexType(cabinet_name, "Alphabetic");
 
@@ -393,15 +386,112 @@ describe('Cabinet Settings', () => {
 
 
 
+describe('Task', () => {
+    it('tc001 Verify that user can create a new task by clicking Create Task button', async () => {
+		await LoginPage.reloadsite(sitename);
+		await TaskPage.open();
+        await TaskPage.createClaimTask();
+        await TaskPage.saveAndClose();
+        expect($('//container-element[contains(.,"Automation") and contains(.,"Claim")]')).toBeExisting();
+    });
+
+	it('tc003 Verify that user can select one or multiple the task(s) to reassign to another user in the Task list', async () => {
+		if (isSuperadmin) { 
+			let assignee = superadmin2;
+			//Pre-condition: create 02 tasks
+			await TaskPage.createClaimTask();
+			await TaskPage.saveAndClose();
+			await TaskPage.createClaimTask();
+			await TaskPage.saveAndClose();
+			//Reassign
+			await TaskPage.tickOnTasks();
+			await TaskPage.reassignTask(assignee);
+			expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
+			await LoginPage.logout();
+			await LoginPage.login(assignee, "Abc@12345");
+			await TaskPage.open();
+			expect($('//container-element[contains(.,"Automation") and contains(.,"Claim")]')).toBeElementsArrayOfSize(2);
+			//Post-condition: relog to current account
+			await LoginPage.logout();
+			await LoginPage.login(superadmin, "Abc@12345");
+		}
+    });
+
+    it('tc004 Verify that user can create a new task by clicking Create Task button', async () => {
+        //Pre-condition: create 01 task
+        await TaskPage.open();
+        await TaskPage.createClaimTask();
+        await TaskPage.saveAndClose();
+        await TaskPage.goToClaimClient();
+        expect($('[aria-label="toggle Automation"]')).toBeExisting();
+    });
+
+    it('tc005 Verify that the data in task filtered will deleted when Clicking on Clear All button on Task list', async () => {
+		if (isSuperadmin) {
+			await TaskPage.open();
+			await TaskPage.fulfillClaimdata();
+			await TaskPage.clearAll();
+			let isZero = await TaskPage.isEmptyFields();
+			await expect(isNaN(isZero) ? true : false).toEqual(true);
+		}
+    });
+
+  //  /*need to fix subjet dropdown list*/
+  //  it('tc007 Verify that the ott file will be created in the selected location when user complete a task', async () => {
+  //      //Pre-condition: create 01 completed task
+  //      await LoginPage.reloadsite(sitename);
+  //      await TaskPage.open();
+  //      await TaskPage.createClaimTask();
+  //      await TaskPage.saveAndClose();
+  //      await TaskPage.changeClaimStatus("Complete");
+  //      await TaskPage.openTask('Task: Automation -- Claim -- ',' -- Complete');
+  //      await TaskPage.saveAndClose();
+  //      await TaskPage.saveToOfficeNow();
+  //      let today = new Date().getFullYear()+'.'+ ("0" + (new Date().getMonth() + 1)).slice(-2)+'.'+("0" + (new Date().getDate())).slice(-2);
+  //      await expect($('//span[contains(.,"Claim.ott") and contains(.,"'+today+'")]')).toBeExisting();      
+  //      await TaskPage.switchWindow('OTNOW-Develop');
+  //      if (isSuperadmin) {
+  //          await LoginPage.reloadsite(sitename);
+  //          await TaskPage.open();
+		//	await TaskPage.search();
+		//	await expect($('(//td[contains(.,"Automation -- Claim")])[1]')).toBeExisting();
+		//}
+  //  });
+
+    it('tc005 Verify that user can search task when entering data search all task fields', async () => {
+        if (isSuperadmin) {
+            await LoginPage.reloadsite(sitename);
+            await TaskPage.open();
+            await TaskPage.createClaimTask();
+            await TaskPage.saveAndClose();
+			await TaskPage.fulfillClaimdata();
+			await TaskPage.search();
+			await expect($('(//td[contains(.,"Automation -- Claim")])[1]')).toBeExisting();
+		}
+    });
+
+     it('tc002 Verify that user can select one or multiple task(s) in the Task list to delete', async () => {
+        //Pre-condition: create 01 task
+        await TaskPage.createClaimTask();
+        await TaskPage.saveAndClose();
+        //Delete selected tasks
+        await TaskPage.tickOnTasks();
+        await TaskPage.deleteTask();
+        expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
+    });
+});
+
+
+
 describe('Task Template Maintenance', () => {
- 
+
     it('tc001 Verify the user can see and access the Task Template Maintenance page to add a new task template', async () => {
         await TaskTemplateMaintenance.open();
         await TaskTemplateMaintenance.createTaskTemplate(newTemplateName);
         await expect($('//label[normalize-space()="' + newTemplateName + '"]')).toBeExisting();
     });
 
-    
+
     it('tc003 Verify that user can select any of the available task template to copy the copied task template will copy all task steps, step setting and task field of the selected template to copy', async () => {
         await TaskTemplateMaintenance.activate(newTemplateName);
         await TaskTemplateMaintenance.copy(newTemplateName);
@@ -462,7 +552,7 @@ describe('Task Template Maintenance', () => {
         await TaskTemplateMaintenance.manageField();
         await TaskTemplateMaintenance.addField("Field 1", "Text", true);
         await TaskTemplateMaintenance.addField("Field 2", "Date", false);
-        await TaskTemplateMaintenance.addField("Field 3", "New Field", true);
+        await TaskTemplateMaintenance.addField("Field 3", "Date", true);
         await TaskTemplateMaintenance.saveAndClose();
         //Bypass due to saving issue
         //await TaskTemplateMaintenance.focusOn("My Template");
@@ -474,19 +564,19 @@ describe('Task Template Maintenance', () => {
     });
 
     it('tc008 Verify that the task field will display in end of the task list column when user tick show in grid checkbox', async () => {
-        await LoginPage.reload();
+        await LoginPage.reloadsite(sitename);
         await TaskPage.open();
         await expect($('//div[contains(text(),"Field 3")]')).toBeExisting();
-       
+
     });
 
     it('tc002 Verify that user can select any of the available task template to delete', async () => {
-        await LoginPage.reload();
+        await LoginPage.reloadsite(sitename);
         await TaskTemplateMaintenance.open();
         await TaskTemplateMaintenance.delete(newTemplateName);
         await expect($('//label[normalize-space()="' + newTemplateName + '"]')).not.toBeExisting();
     });
-    
+
 });
 
 
@@ -497,7 +587,7 @@ describe('Cabinet list', () => {
 		//Cabinet
 		await CabinetPage.open();
 		await expect($('button[aria-label= "toggle Clients"]')).toBeExisting();
-		await expect($('button[aria-label= "toggle Development Cabinet"]')).toBeExisting();
+		//await expect($('button[aria-label= "toggle Development Cabinet"]')).toBeExisting();
 		await CabinetPage.expandCabinet("Clients");
 		await expect($('button[aria-label="toggle A"]')).toBeExisting();
 	});
@@ -506,12 +596,12 @@ describe('Cabinet list', () => {
 	it('tc002 Verify that user can create quicknote file when clicking Floating > Create quicknote button, the data should display correctly after created quicknote successfully', async () => {
 		//Cabinet
         let note="Note" + new Date().getTime();
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
 		await CabinetPage.expandCabinet("A")
-		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
-		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.expandCabinet('AutomationTest');
+		await CabinetPage.expandCabinet('2022');
         await CabinetPage.createNewQuickNote(note, note, note)
         await expect($('//span[contains(.,"Cancellation")]')).toBeExisting();
     });
@@ -528,37 +618,37 @@ describe('Cabinet list', () => {
         await CabinetPage.deleteNewQuickNote("Cancellation.pdf")
 	});
 
-
- //   //issue unable to create task
-	//it('tc004 Verify that user can create a new task when clicking Floating >  Create new task button, the data should display correctly after create new task successfully', async () => {		
- //       await CabinetPage.createNewTask("Claim")
- //   });
-
     //issue can't change status
-	it('tc005 Verify that user can upload a file when clicking Floating >  Upload button, the data should display correctly afterupload file successfully', async () => {
-    	//Cabinet
+	it('tc004 Verify that user can create a new task when clicking Floating >  Create new task button, the data should display correctly after create new task successfully', async () => {
+		//Cabinet
 		await CabinetPage.open();
 		await CabinetPage.uploadFileSystem('testfile.xlsx');
         await expect($('(//span[contains(.,"testfile.xlsx")])[last()]')).toBeExisting();
         //await CabinetPage.deleteNewQuickNote("testfile.xlsx")
+
+    });
+
+    //issue unable to create task
+	it('tc005 Verify that user can upload a file when clicking Floating >  Upload button, the data should display correctly afterupload file successfully', async () => {
+		await CabinetPage.createNewTask("Claim")
 
 	});
 
 
 	it('tc006 Verify that user can scan document when clicking Floating >  Scan here button', async () => {
 		//Cabinet
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
 		await CabinetPage.expandCabinet("A")
-		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
-		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.expandCabinet('AutomationTest');
+		await CabinetPage.expandCabinet('2022');
         await CabinetPage.scan()
     });
 
     it('tc008 Verify that user can see list of the action in contextual menu: Open, Set Folder Colour, Add to Favourite, Show Deleted Files when right-clicking a Clients cabinet', async () => {
 		//Cabinet
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
         await CabinetPage.rightclickFolder("Clients");
@@ -567,10 +657,10 @@ describe('Cabinet list', () => {
 		await expect($('//span[contains(.,"Remove From Favourites")]')).toBeExisting();
     });
 
-    
+
     it('tc009 Verify that user can see list of the action in contextual menu: Open, Set Folder Colour, Add to Favourite, Add Folder, Delete Cabinet, Rename Cabinet, Show Deleted files when right-clicking a Cabinet', async () => {
 		//Cabinet
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await CabinetPage.open();
         await CabinetPage.expandCabinet('Clients');
         await CabinetPage.expandCabinet("A");
@@ -583,12 +673,12 @@ describe('Cabinet list', () => {
 
      it('tc010 Verify that user can see list of the action in contextual menu: Open, Set Folder Colour, Add Folder, Add Structure, Show Deleted files when right-clicking a index folder', async () => {
 		//Cabinet
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await CabinetPage.open();
         await CabinetPage.expandCabinet('Clients');
          await CabinetPage.expandCabinet("A");
-         await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
-        await CabinetPage.rightclickFolder("A New Client Aug 2016-1152");
+         await CabinetPage.expandCabinet('AutomationTest');
+        await CabinetPage.rightclickFolder("AutomationTest");
         await expect($('//span[contains(.,"Open")]')).toBeExisting();
          await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
          await expect($('//span[contains(.,"Add To Favourites")]')).toBeExisting();
@@ -599,13 +689,13 @@ describe('Cabinet list', () => {
 
      it('tc011 Verify that user can see list of the action in contextual menu: Open, Set Folder Colour, Add to Favourite, Add Folder, Add Structure, Move Folder, Copy Folder, Delete Folder, Rename Folder, Show Deleted files and do it when right-clicking a Folder', async () => {
 		//Cabinet
-		await LoginPage.reload();
+		await LoginPage.reloadsite(sitename);
 		await CabinetPage.open();
         await CabinetPage.expandCabinet('Clients');
          await CabinetPage.expandCabinet("A");
-         await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
-          await CabinetPage.expandCabinet('2021');
-        await CabinetPage.rightclickFolder("2021");
+         await CabinetPage.expandCabinet('AutomationTest');
+          await CabinetPage.expandCabinet('2022');
+        await CabinetPage.rightclickFolder("2022");
         await expect($('//span[contains(.,"Open")]')).toBeExisting();
          await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
          await expect($('//span[contains(.,"Add To Favourites")]')).toBeExisting();
@@ -617,8 +707,8 @@ describe('Cabinet list', () => {
          await expect($('//span[contains(.,"Rename Folder")]')).toBeExisting();
          await expect($('//span[contains(.,"Show Deleted Files")]')).toBeExisting();
          await CabinetPage.setFolderColor();
-         await expect($('//span[normalize-space()="2021"]/preceding-sibling::em[contains(@style,"rgb(250, 209, 101)")]')).toBeExisting();
-        
+         await expect($('//span[normalize-space()="2022"]/preceding-sibling::em[contains(@style,"rgb(250, 209, 101)")]')).toBeExisting();
+
     });
 });
 
@@ -627,7 +717,7 @@ describe('Cabinet list', () => {
 
 describe('System Admin Wizard', () => {
     it('tc001 Verify that user A can access to System Admin Wizard page', async () => {
-        let accountUserA = "tssadmin4"; //Should be replaced by other user's account
+        let accountUserA = "tssadmin"; //Should be replaced by other user's account
         let group="AutomationGroup" + new Date().getTime();
         await GroupPermissionMaintenancePage.open();
         await GroupPermissionMaintenancePage.createGroup(group);
@@ -646,7 +736,7 @@ describe('System Admin Wizard', () => {
         ////await GroupPermissionMaintenancePage.open();
         ////await GroupPermissionMaintenancePage.deleteGroup("Automation Test");
     });
-    
+
     it('tc002 Verify that user A can create a new task category, status, priority, task subject, file description, file subject, naming convention', async () => {
         await SystemAdminWizardPage.open();
         //Create new task category
@@ -883,6 +973,7 @@ describe('System Admin Wizard', () => {
 });
 
 
+
 describe('HomePage Maintenance', () => {
 
 	it('tc001 Veify that User can access to Homepage Maintenance feature in Tools > Home Page maintenance', async () => {
@@ -899,7 +990,7 @@ describe('HomePage Maintenance', () => {
         await expect($('//p[contains(text(),"'+date+'")]')).toBeExisting();
     });
 
-    
+
 	it('tc003 Verify that User can check/uncheck the ‘Show My Task on startup’ checkbox to hide/show My task list in homepage (default: ‘Show My Task on startup’ checkbox checked)', async () => {
 		//HomePageMaintenancePage
 		await HomePageMaintenancePage.open();
@@ -922,11 +1013,10 @@ describe('HomePage Maintenance', () => {
 
 describe('CAC/IAC', () => {
     let groupName = "Automation" + new Date().getTime();
-    let accountA = "tssadmin4";
+    let accountA = "tssadmin";
 
     it('tc004 Verify that user can see Copy, New Email, Send to task and do it (except Copy file) ', async () => {
         //Pre-condition: create new group with permission = Read
-        await LoginPage.reload();
         await CabinetAccessControlPage.open();
         await CabinetAccessControlPage.createNewGroup(groupName);
         await CabinetAccessControlPage.focusOn(groupName);
@@ -941,9 +1031,9 @@ describe('CAC/IAC', () => {
         await CabinetPage.expandCabinet("Clients");
         await CabinetPage.expandCabinet("A");
         await CabinetPage.expandCabinet("AutomationTest");
-        await CabinetPage.expandCabinet("2021");
-        await CabinetPage.expandCabinet("Emails");
-        await CabinetPage.tickOnFile("sample"); //tick on the 1st file
+        await CabinetPage.expandCabinet("2022");
+        await CabinetPage.expandCabinet("Business");
+        await CabinetPage.tickOnFile("Claim"); //tick on the 1st file
         //await expect(await $('[mattooltip="Copy To"]').isClickable()).toEqual(false); //[FAILED] verify cannot copy (non-admin account)
         await expect(await $('[mattooltip="New Email"]').isClickable()).toEqual(true); //verify can add New Email
         await expect(await $('[mattooltip="Send To Task"]').isClickable()).toEqual(true); //verify can Send to task
@@ -953,7 +1043,6 @@ describe('CAC/IAC', () => {
         await LoginPage.login(superadmin, password);
     });
 
-    //issue in FavoritePage
     it('tc005 Verify that user can see/ copy file into Cabinet list in Home/ Favourite of the Folder Browser when user belongs to group that has Write permission checked CAC page', async () => {
         //Pre-condition: set automation group with permission = Write
         await CabinetAccessControlPage.open();
@@ -968,35 +1057,34 @@ describe('CAC/IAC', () => {
         await CabinetPage.expandCabinet("Clients");
         await CabinetPage.expandCabinet("A");
         await CabinetPage.expandCabinet("AutomationTest");
-        await CabinetPage.expandCabinet("2021");
-        await CabinetPage.focusOn("Emails");
-        await CabinetPage.tickOnFile("sample"); //tick on the 1st file
-        await CabinetPage.copyTo(); //Copy to folder: Cabinet/Automation/2022/Emails
-        await CabinetPage.collapCabinet("2021");
         await CabinetPage.expandCabinet("2022");
-        await CabinetPage.expandCabinet("Emails");
+        await CabinetPage.focusOn("Business");
+        await CabinetPage.tickOnFile("Claim"); //tick on the 1st file
+        await CabinetPage.copyToFolder("Business"); //Copy to folder: Cabinet/Automation/2022/Emails
+        await CabinetPage.collapCabinet("2022");
+        await CabinetPage.expandCabinet("2023");
+        await CabinetPage.expandCabinet("Business");
         //verify file successfully copied
-        await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).toBeExisting();
+        await expect($('(//span[contains(.,"Business")]/ancestor::td)[1]')).toBeExisting();
         //issue in Favorite
         //Check file can be copied from Favorite
         await FavoritePage.open();
         await FavoritePage.expandFavourites("AutomationTest"); //should be change to Automation folder
-        await FavoritePage.expandFavourites("2021");
-        await FavoritePage.focusOn("Emails");
-        await FavoritePage.tickOnFile("sample");
-        await FavoritePage.copyTo();
-        await FavoritePage.collapFavourites("2021");
         await FavoritePage.expandFavourites("2022");
         await FavoritePage.focusOn("Business");
+        await FavoritePage.tickOnFile("Claim");
+        await CabinetPage.copyToFolder("Business");
+        await FavoritePage.collapFavourites("2022");
+        await FavoritePage.expandFavourites("2023");
+        await FavoritePage.focusOn("Business");
         //verify file successfully copied
-        await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).toBeExisting();
+        await expect($('(//span[contains(.,"Claim")]/ancestor::td)[1]')).toBeExisting();
 
         //Post-condition: login back to main account
         await LoginPage.logout();
         await LoginPage.login(superadmin, password);
     });
 
-     //issue in FavoritePage
     it('tc006 Verify that user can see/ move file into Cabinet list in Home/ Favourite/ Intray of the Folder Browser when user belongs to group that has Delete permission checked.', async () => {
         //Pre-condition: set automation group with permission = Delete, exist copies of documents in TC005
         await CabinetAccessControlPage.open();
@@ -1012,21 +1100,22 @@ describe('CAC/IAC', () => {
         await CabinetPage.expandCabinet("A");
         await CabinetPage.expandCabinet("AutomationTest");
         await CabinetPage.expandCabinet("2022");
-        await CabinetPage.focusOn("Emails");
-        await CabinetPage.tickOnFile("sample"); //tick on the 1st file
+        await CabinetPage.focusOn("Business");
+        await CabinetPage.tickOnFile("Claim"); //tick on the 1st file
         await CabinetPage.deleteFile();
-        await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).not.toBeExisting();
+        await expect($('(//span[contains(.,"Claim")]/ancestor::td)[1]')).not.toBeExisting();
         //issue in Favorite
         //Check file can be deleted in Favorite
         await FavoritePage.open();
         await FavoritePage.expandFavourites("AutomationTest"); //should be change to Automation folder
         await FavoritePage.expandFavourites("2022");
         await FavoritePage.focusOn("Business");
-        await FavoritePage.tickOnFile("sample");
+        await FavoritePage.tickOnFile("Claim");
         await FavoritePage.deleteFile();
-        await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).not.toBeExisting();
+        await expect($('(//span[contains(.,"Claim")]/ancestor::td)[1]')).not.toBeExisting();
     });
 });
+
 
 
 describe('Intray', () => {
@@ -1137,107 +1226,10 @@ describe('Intray', () => {
     });
 });
 
-
-
-//Tasks blocked by issue - Create task issue
-describe('Task', () => {
-    it('tc001 Verify that user can create a new task by clicking Create Task button', async () => {
-		await LoginPage.reload();
-		await TaskPage.open();
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeExisting();
-    });
-
-	it('tc003 Verify that user can select one or multiple the task(s) to reassign to another user in the Task list', async () => {
-		if (isSuperadmin) { 
-			let assignee = superadmin2;
-			//Pre-condition: create 02 tasks
-			await TaskPage.createTask();
-			await TaskPage.saveAndClose();
-			await TaskPage.createTask();
-			await TaskPage.saveAndClose();
-			//Reassign
-			await TaskPage.tickOnTasks();
-			await TaskPage.reassignTask(assignee);
-			expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
-			await LoginPage.logout();
-			await LoginPage.login(assignee, "Abc@12345");
-			await TaskPage.open();
-			expect($('//container-element[contains(.,"Automation") and contains(.,"Business")]')).toBeElementsArrayOfSize(2);
-			//Post-condition: relog to current account
-			await LoginPage.logout();
-			await LoginPage.login(superadmin, "Abc@12345");
-		}
-    });
-
-    it('tc004 Verify that user can create a new task by clicking Create Task button', async () => {
-        //Pre-condition: create 01 task
-        await TaskPage.open();
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        await TaskPage.goToClient();
-        expect($('[aria-label="toggle Automation"]')).toBeExisting();
-    });
-
-    it('tc005 Verify that the data in task filtered will deleted when Clicking on Clear All button on Task list', async () => {
-		if (isSuperadmin) {
-			await TaskPage.open();
-			await TaskPage.fulfilldata();
-			await TaskPage.clearAll();
-			let isZero = await TaskPage.isEmptyFields();
-			await expect(isNaN(isZero) ? true : false).toEqual(true);
-		}
-    });
-
-    /*need to fix subjet dropdown list*/
-    it('tc007 Verify that the ott file will be created in the selected location when user complete a task', async () => {
-        //Pre-condition: create 01 completed task
-        await LoginPage.reload();
-        await TaskPage.open();
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        await TaskPage.changeStatus("Complete");
-        await TaskPage.openTask('Task: Automation -- Business -- ',' -- Complete');
-        await TaskPage.saveAndClose();
-        await TaskPage.saveToOfficeNow();
-        let today = new Date().getFullYear()+'.'+ ("0" + (new Date().getMonth() + 1)).slice(-2)+'.'+("0" + (new Date().getDate())).slice(-2);
-        await expect($('//span[contains(.,"Business.ott") and contains(.,"'+today+'")]')).toBeExisting();      
-        await TaskPage.switchWindow('OTNOW-Develop');
-        if (isSuperadmin) {
-            await LoginPage.reload();
-            await TaskPage.open();
-			await TaskPage.search();
-			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
-		}
-    });
-
-    it('tc005 Verify that user can search task when entering data search all task fields', async () => {
-        if (isSuperadmin) {
-            await LoginPage.reload();
-            await TaskPage.open();
-            await TaskPage.createTask();
-            await TaskPage.saveAndClose();
-			await TaskPage.fulfilldata();
-			await TaskPage.search();
-			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
-		}
-    });
-    
-     it('tc002 Verify that user can select one or multiple task(s) in the Task list to delete', async () => {
-        //Pre-condition: create 01 task
-        await TaskPage.createTask();
-        await TaskPage.saveAndClose();
-        //Delete selected tasks
-        await TaskPage.tickOnTasks();
-        await TaskPage.deleteTask();
-        expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
-    });
-});
-
 describe('Logout', () => {
 	it('should logout', async () => {
-		await LoginPage.reload();
+		await await LoginPage.reloadsite(sitename);
 		await LoginPage.logout();
 	});
 });
+////above testcases were ready

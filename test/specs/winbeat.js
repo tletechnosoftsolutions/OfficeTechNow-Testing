@@ -318,6 +318,7 @@ describe('Cabinet Settings', () => {
     it('tc002 Verify that user can see created cabinet in Cabinet list, Cabinet Settings after user apllied Read permission for it on the CAC page', async () => {
         await CabinetSettingsPage.open();
         await CabinetSettingsPage.addCabinet(cabinet_name, "None", isSuperadmin);
+        await LoginPage.reload();
 
         await CabinetAccessControlPage.open();
         await CabinetAccessControlPage.checkCabinet(cabinet_name);
@@ -618,19 +619,19 @@ describe('Cabinet list', () => {
         await CabinetPage.deleteNewQuickNote("Cancellation.pdf")
 	});
 
-    //issue can't change status
+    //issue unable to create task
 	it('tc004 Verify that user can create a new task when clicking Floating >  Create new task button, the data should display correctly after create new task successfully', async () => {
+        await CabinetPage.createNewTask("Claim")
+        
+    });
+
+    //issue can't change status
+	it('tc005 Verify that user can upload a file when clicking Floating >  Upload button, the data should display correctly afterupload file successfully', async () => {
 		//Cabinet
 		await CabinetPage.open();
 		await CabinetPage.uploadFileSystem('testfile.xlsx');
         await expect($('(//span[contains(.,"testfile.xlsx")])[last()]')).toBeExisting();
         //await CabinetPage.deleteNewQuickNote("testfile.xlsx")
-
-    });
-
-    //issue unable to create task
-	it('tc005 Verify that user can upload a file when clicking Floating >  Upload button, the data should display correctly afterupload file successfully', async () => {
-		await CabinetPage.createNewTask("Claim")
 
 	});
 
