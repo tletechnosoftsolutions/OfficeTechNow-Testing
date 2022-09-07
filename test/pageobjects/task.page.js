@@ -295,7 +295,7 @@ class TaskPage extends Page {
         await $('//label[normalize-space()="Entity"]/following-sibling::*//input[@type="text"]').click();
         await $('//label[normalize-space()="Entity"]/following-sibling::*//input[@type="text"]').setValue("Automation");
         await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('(//div[normalize-space()="Client: Automation"])[last()]').click();
+        await $('(//div[contains(text(),"Client: Automation")])[last()]').click();
         await $('//label[normalize-space()="Priority"]/following-sibling::*//input[@type="text"]').click();
         await $('//ng-dropdown-panel//span[.="Normal"]').click();
         await $('//label[normalize-space()="Category"]/following-sibling::*//input[@type="text"]').click();

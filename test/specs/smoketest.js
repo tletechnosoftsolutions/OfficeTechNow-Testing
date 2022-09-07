@@ -28,7 +28,7 @@ const isSuperadmin = true;
 
 var clientname = "Automation" + new Date().getTime();
 var clientcode = new Date().getTime();
-var structure = "01. Standard Client";
+var structure = "Standard Client";
 var cabinet_name = "Automation Testing Cabinet" +new Date().getTime();
 var new_cabinet_name = "Renamed Automation Testing Cabinet" + new Date().getTime();
 var newTemplateName = "Automation Task Template " + new Date().getTime();
@@ -153,6 +153,8 @@ describe('File', () => {
     });
 });
 
+
+
 describe('Client Maintenance', () => {
 
 	it('tc001 Verify the user can see and access the Client Maintenance page to Add a new client', async () => {
@@ -183,7 +185,7 @@ describe('Client Maintenance', () => {
 		//Verify the folder structure of the created client
 		await CabinetPage.open();
 		await CabinetPage.openQuickFind(clientname);
-		await expect($('(//span[contains(text(),"2021")])')).toBeExisting();
+		//await expect($('(//span[contains(text(),"2021")])')).toBeExisting();
 		await expect($('(//span[contains(text(),"2022")])')).toBeExisting();
 	});
 
@@ -209,14 +211,14 @@ describe('Client Maintenance', () => {
 		//rename folder
 		await CabinetPage.open();
 		await CabinetPage.openQuickFind(clientname);
-		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.expandCabinet('2022');
 		await CabinetPage.renameFolder('Emails', 'Renamed Emails');
 		await expect($('(//span[contains(.,"Renamed Emails")])[1]')).toBeExisting();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
 		await CabinetPage.expandCabinet('A');
 		await CabinetPage.expandCabinet(clientname);
-		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.expandCabinet('2022');
 		await expect($('(//span[contains(.,"Renamed Emails")])[1]')).toBeExisting();
 	});
 
@@ -403,7 +405,7 @@ describe('Task Template Maintenance', () => {
 
     
     it('tc003 Verify that user can select any of the available task template to copy the copied task template will copy all task steps, step setting and task field of the selected template to copy', async () => {
-        await TaskTemplateMaintenance.activate(newTemplateName);
+        await TaskTemplateMaintenance.focusOn(newTemplateName);
         await TaskTemplateMaintenance.copy(newTemplateName);
         await expect($('//label[normalize-space()="Copy - ' + newTemplateName + '"]')).toBeExisting();
     });
@@ -415,7 +417,7 @@ describe('Task Template Maintenance', () => {
 
     it('tc004 Verify that user can add new a step by clicking Create button', async () => {
         //Pre-condition: TC001 - Create a new task template
-        await TaskTemplateMaintenance.activate(newTemplateName);
+        await TaskTemplateMaintenance.focusOn(newTemplateName);
         await TaskTemplateMaintenance.createStep("Step 1", "Simple");
         await TaskTemplateMaintenance.createStep("Step 2", "Text Box");
         await TaskTemplateMaintenance.createStep("Step 3", "Reassign");
@@ -429,7 +431,7 @@ describe('Task Template Maintenance', () => {
     });
 
     it('tc005 Verify that user can select any of the available Step to edit/ delete', async () => {
-        await TaskTemplateMaintenance.activate(newTemplateName);
+        await TaskTemplateMaintenance.focusOn(newTemplateName);
         //Pre-condition: TC004 - Steps already have been added in Task Template
         //Delete step 4
         await TaskTemplateMaintenance.deleteStep("Step 4");
@@ -442,7 +444,7 @@ describe('Task Template Maintenance', () => {
     it('tc006 Verify that user can select any of the available Step to move up/down', async () => {
         //Pre-condition: TC004 - Steps already have been added in Task Template
         //Re-order all steps: 4 > 3 > 2 > 1
-        await TaskTemplateMaintenance.activate(newTemplateName);
+        await TaskTemplateMaintenance.focusOn(newTemplateName);
         await TaskTemplateMaintenance.moveStep("Step 1", "Down");
         await TaskTemplateMaintenance.moveStep("Step 1", "Down");
         await TaskTemplateMaintenance.moveStep("Step 1", "Down");
@@ -458,15 +460,15 @@ describe('Task Template Maintenance', () => {
 
     it('tc007 Verify that user can add new custom fields', async () => {
         //Pre-condition: TC004 - Steps already have been added in Task Template
-        await TaskTemplateMaintenance.activate(newTemplateName);
+        await TaskTemplateMaintenance.focusOn(newTemplateName);
         await TaskTemplateMaintenance.manageField();
         await TaskTemplateMaintenance.addField("Field 1", "Text", true);
         await TaskTemplateMaintenance.addField("Field 2", "Date", false);
         await TaskTemplateMaintenance.addField("Field 3", "New Field", true);
         await TaskTemplateMaintenance.saveAndClose();
         //Bypass due to saving issue
-        //await TaskTemplateMaintenance.focusOn("My Template");
-        //await TaskTemplateMaintenance.focusOn(tp);
+        await TaskTemplateMaintenance.focusOn("My Template");
+        await TaskTemplateMaintenance.focusOn(newTemplateName);
         //Verify
         await expect($('//label[normalize-space()="Field 1"]')).toBeExisting();
         await expect($('//label[normalize-space()="Field 2"]')).toBeExisting();
@@ -490,8 +492,8 @@ describe('Task Template Maintenance', () => {
 });
 
 
-
 describe('Cabinet list', () => {
+    let note = "Note" + date;
 
 	it('tc001 Verify that user can see Cabinet list', async () => {
 		//Cabinet
@@ -500,44 +502,59 @@ describe('Cabinet list', () => {
 		await expect($('button[aria-label= "toggle Development Cabinet"]')).toBeExisting();
 		await CabinetPage.expandCabinet("Clients");
 		await expect($('button[aria-label="toggle A"]')).toBeExisting();
-	});
+    });
 
     //Defect in Description
 	it('tc002 Verify that user can create quicknote file when clicking Floating > Create quicknote button, the data should display correctly after created quicknote successfully', async () => {
 		//Cabinet
-        let note="Note" + new Date().getTime();
 		await LoginPage.reload();
+		await CabinetPage.open();
+		await CabinetPage.expandCabinet('Clients');
+        await CabinetPage.expandCabinet("A");
+		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		await CabinetPage.expandCabinet('2021');
+        await CabinetPage.createNewQuickNote(note, note);
+        await expect($('//span[contains(.,"' + note + '")]')).toBeExisting();
+    });
+
+    it('tc003 Verify that on the quicknote detail user can select a Copy to PDF  button, The PDF document is created and saved to the same location as the original quicknote', async () => {
+		//Cabinet
+        await CabinetPage.copyQuickNoteToPDF(note);
+        await expect($('//span[contains(.,"' + note + '.pdf")]')).toBeExisting();
+    });
+
+    it('tc003 Delete quick note', async () => {
+        await LoginPage.reload();
+		await CabinetPage.open();
+		await CabinetPage.expandCabinet('Clients');
+        await CabinetPage.expandCabinet("A");
+		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+        await CabinetPage.expandCabinet('2021');
+        await CabinetPage.tickOnFile(note + ".oqn");
+        await CabinetPage.tickOnFile(note + ".pdf");
+        await CabinetPage.deleteFile();
+        await expect($('//span[contains(.,"' + note + '.oqn")]')).not.toBeExisting();
+        await expect($('//span[contains(.,"' + note + '.oqn")]')).not.toBeExisting();
+	});
+
+	it('tc005 Verify that user can create a new task when clicking Floating >  Create new task button, the data should display correctly after create new task successfully', async () => {		
+        await LoginPage.reload();
+        await CabinetPage.open();
+        await CabinetPage.expandCabinet('Clients');
+        await CabinetPage.expandCabinet("A");
+		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		await CabinetPage.expandCabinet('2021');
+        await CabinetPage.createNewTask("Claim")
+    });
+
+	it('tc004 Verify that user can upload a file when clicking Floating >  Upload button, the data should display correctly afterupload file successfully', async () => {
+    	//Cabinet
+        await LoginPage.reload();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
 		await CabinetPage.expandCabinet("A")
 		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
 		await CabinetPage.expandCabinet('2021');
-        await CabinetPage.createNewQuickNote(note, note, note)
-        await expect($('//span[contains(.,"Cancellation")]')).toBeExisting();
-    });
-
-    it('tc002 Verify that on the quicknote detail user can select a Copy to PDF  button, The PDF document is created and saved to the same location as the original quicknote', async () => {
-		//Cabinet
-        let note = "Cancellation";
-        await CabinetPage.copyQuickNoteToPDF(note)
-        await expect($('//span[contains(.,".pdf")]')).toBeExisting();
-    });
-
-	it('tc002 Delete quick note', async () => {
-        await CabinetPage.deleteNewQuickNote("Cancellation.oqn")
-        await CabinetPage.deleteNewQuickNote("Cancellation.pdf")
-	});
-
-
- //   //issue unable to create task
-	//it('tc004 Verify that user can create a new task when clicking Floating >  Create new task button, the data should display correctly after create new task successfully', async () => {		
- //       await CabinetPage.createNewTask("Claim")
- //   });
-
-    //issue can't change status
-	it('tc005 Verify that user can upload a file when clicking Floating >  Upload button, the data should display correctly afterupload file successfully', async () => {
-    	//Cabinet
-		await CabinetPage.open();
 		await CabinetPage.uploadFileSystem('testfile.xlsx');
         await expect($('(//span[contains(.,"testfile.xlsx")])[last()]')).toBeExisting();
         //await CabinetPage.deleteNewQuickNote("testfile.xlsx")
@@ -553,7 +570,7 @@ describe('Cabinet list', () => {
 		await CabinetPage.expandCabinet("A")
 		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
 		await CabinetPage.expandCabinet('2021');
-        await CabinetPage.scan()
+        await CabinetPage.scan();
     });
 
     it('tc008 Verify that user can see list of the action in contextual menu: Open, Set Folder Colour, Add to Favourite, Show Deleted Files when right-clicking a Clients cabinet', async () => {
@@ -623,28 +640,28 @@ describe('Cabinet list', () => {
 });
 
 
-
-
 describe('System Admin Wizard', () => {
     it('tc001 Verify that user A can access to System Admin Wizard page', async () => {
-        let accountUserA = "tssadmin4"; //Should be replaced by other user's account
-        let group="AutomationGroup" + new Date().getTime();
-        await GroupPermissionMaintenancePage.open();
-        await GroupPermissionMaintenancePage.createGroup(group);
-        await GroupPermissionMaintenancePage.tickOn(accountUserA);
-        await GroupPermissionMaintenancePage.tickOn("System Admin Wizard");
-        await GroupPermissionMaintenancePage.save();
+        if (isSuperadmin) {
+            let accountUserA = "tssadmin4"; //Should be replaced by other user's account
+            let group = "AutomationGroup" + new Date().getTime();
+            await GroupPermissionMaintenancePage.open();
+            await GroupPermissionMaintenancePage.createGroup(group);
+            await GroupPermissionMaintenancePage.tickOn(accountUserA);
+            await GroupPermissionMaintenancePage.tickOn("System Admin Wizard");
+            await GroupPermissionMaintenancePage.save();
 
-        await LoginPage.logout();
-        await LoginPage.login(accountUserA, password);
+            await LoginPage.logout();
+            await LoginPage.login(accountUserA, password);
 
-        await SystemAdminWizardPage.open();
-        await expect($('button[title="System Admin Wizard"]')).toBeExisting();
+            await SystemAdminWizardPage.open();
+            await expect($('button[title="System Admin Wizard"]')).toBeExisting();
 
-        await LoginPage.logout();
-        await LoginPage.login(superadmin, password);
-        ////await GroupPermissionMaintenancePage.open();
-        ////await GroupPermissionMaintenancePage.deleteGroup("Automation Test");
+            await LoginPage.logout();
+            await LoginPage.login(superadmin, password);
+            ////await GroupPermissionMaintenancePage.open();
+            ////await GroupPermissionMaintenancePage.deleteGroup("Automation Test");
+        }
     });
     
     it('tc002 Verify that user A can create a new task category, status, priority, task subject, file description, file subject, naming convention', async () => {
@@ -767,7 +784,7 @@ describe('System Admin Wizard', () => {
         await SystemAdminWizardPage.focusOn("Task Statuses");
         await SystemAdminWizardPage.focusOn("Edited Automation Task Status " + date);
         await SystemAdminWizardPage.moveToBottom();
-        await expect($('((//app-box-template)[2]//label)[last()]')).toHaveTextContaining("Edited Automation Task Status " + date);
+        await expect($('(//app-box-template)[2]//*[contains(@class,"list-group-item")][last()]/div[1]')).toHaveTextContaining("Edited Automation Task Status " + date);
 
         //Move to top task priority
         await SystemAdminWizardPage.focusOn("Task Priorities");
@@ -781,31 +798,30 @@ describe('System Admin Wizard', () => {
         await SystemAdminWizardPage.moveToBottom();
         await expect($('((//app-box-template)[2]//label)[last()]')).toHaveTextContaining("Edited Automation Task Subject " + date);
 
-        ////[Issue] Move to bottom file description 
-        //await SystemAdminWizardPage.focusOn("File Descriptions");
-        //await SystemAdminWizardPage.focusOn("Edited Automation File Description " + date);
-        //await SystemAdminWizardPage.moveToBottom();
-        //await expect($('((//app-box-template)[2]//label)[last()]')).toHaveTextContaining("Edited Automation File Description " + date);
+        //Move to bottom file description 
+        await SystemAdminWizardPage.focusOn("File Descriptions");
+        await SystemAdminWizardPage.focusOn("Edited Automation File Description " + date);
+        await SystemAdminWizardPage.moveToBottom();
+        await expect($('((//app-box-template)[2]//label)[last()]')).toHaveTextContaining("Edited Automation File Description " + date);
 
-        ////[Issue] Move to top subject 
-        //await SystemAdminWizardPage.focusOn("File Subjects");
-        //await SystemAdminWizardPage.focusOn("Edited Automation File Subject " + date);
-        //await SystemAdminWizardPage.moveToTop();
-        //await expect($('((//app-box-template)[2]//label)[1]')).toHaveTextContaining("Edited Automation File Subject " + date);
+        //Move to top subject 
+        await SystemAdminWizardPage.focusOn("File Subjects");
+        await SystemAdminWizardPage.focusOn("Edited Automation File Subject " + date);
+        await SystemAdminWizardPage.moveToTop();
+        await expect($('((//app-box-template)[2]//label)[1]')).toHaveTextContaining("Edited Automation File Subject " + date);
 
         //Move to top naming convention
         await SystemAdminWizardPage.focusOn("Naming Conventions");
         await SystemAdminWizardPage.focusOn("Edited Automation Naming Convention " + date);
         await SystemAdminWizardPage.moveToTop();
-        await expect($('((//app-box-template)[2]//label)[1]')).toHaveTextContaining("Edited Automation Naming Convention " + date);
+        await expect($('(//app-box-template)[2]//*[contains(@class,"list-group-item")][1]/div[2]')).toHaveTextContaining("Edited Automation Naming Convention " + date);
     });
 
     it('tc006 Verify that user A can select Task Categories, Task Statuses , Task Priorities , Task Subjects , File Descriptions , File Subjects, Naming Conventions to click on Auto Sort button, It should sort by alphabetically', async () => {
-        await SystemAdminWizardPage.open();
         //Sort task categories
         await SystemAdminWizardPage.focusOn("Task Categories");
         await expect(await SystemAdminWizardPage.compareLists()).toEqual(true);
-
+        
         //Sort task statuses
         await SystemAdminWizardPage.focusOn("Task Statuses");
         await expect(await SystemAdminWizardPage.compareLists()).toEqual(true);
@@ -829,6 +845,7 @@ describe('System Admin Wizard', () => {
         //Sort naming conventions
         await SystemAdminWizardPage.focusOn("Naming Conventions");
         await expect(await SystemAdminWizardPage.compareLists()).toEqual(true);
+        
     });
 
     it('tc004 Verify that user A can select any of the available category, status, priority, task subject, file description, file subject, naming convention to delete', async () => {
@@ -886,33 +903,27 @@ describe('System Admin Wizard', () => {
 describe('HomePage Maintenance', () => {
 
 	it('tc001 Veify that User can access to Homepage Maintenance feature in Tools > Home Page maintenance', async () => {
-		//HomePageMaintenancePage
-		await HomePageMaintenancePage.open();
-		await expect($('//span[text()="Show Tasks on Homepage"]')).toBeExisting();
+        await HomePageMaintenancePage.open();
+        await expect($('button[title="Homepage Maintenance"]')).toBeExisting();
+        await expect($('//span[text()="Show Tasks on Homepage"]')).toBeExisting();      
     });
 
     it('tc002 Verify that User can modify the homepage content in the Homepage Maintenance feature, Any changes that user already saves in Homepage Maintenance will be reflected in the Homepage', async () => {
-		//HomePageMaintenancePage
-        await HomePageMaintenancePage.open();
         await HomePageMaintenancePage.modify(date);
-        await $('//span[text()="Home"]').click();
+        await LoginPage.reload();
         await expect($('//p[contains(text(),"'+date+'")]')).toBeExisting();
     });
 
-    
 	it('tc003 Verify that User can check/uncheck the ‘Show My Task on startup’ checkbox to hide/show My task list in homepage (default: ‘Show My Task on startup’ checkbox checked)', async () => {
-		//HomePageMaintenancePage
-		await HomePageMaintenancePage.open();
-        await expect($('//span[text()="Show Tasks on Homepage"]')).toBeExisting();
-        await $('//span[text()="Show Tasks on Homepage"]').click();
+        await HomePageMaintenancePage.open();
+        await HomePageMaintenancePage.checkShowTask();
+        let isChecked = (await $('[formcontrolname="isShowMyTask"]').getAttribute('class')).includes('checked');
+        await expect(isChecked).toEqual(true);
     });
 
     it('tc004 Verify after user logins and navigated to Hompage, the user sees the task list in the Hompage contains the task assigned to him/her', async () => {
-		//HomePageMaintenancePage
-		await HomePageMaintenancePage.open();
-        await expect($('//span[text()="Show Tasks on Homepage"]')).toBeExisting();
-        await $('//span[text()="Show Tasks on Homepage"]').click();
-        await $('//span[text()="Home"]').click();
+        await LoginPage.reload();
+        await new Promise(resolve => setTimeout(resolve, 3000));
         await expect($('//div[contains(text(),"Start Date")]')).toBeExisting();
     });
 
@@ -922,109 +933,112 @@ describe('HomePage Maintenance', () => {
 
 describe('CAC/IAC', () => {
     let groupName = "Automation" + new Date().getTime();
-    let accountA = "tssadmin4";
+    let accountA = superadmin2;
 
     it('tc004 Verify that user can see Copy, New Email, Send to task and do it (except Copy file) ', async () => {
-        //Pre-condition: create new group with permission = Read
-        await LoginPage.reload();
-        await CabinetAccessControlPage.open();
-        await CabinetAccessControlPage.createNewGroup(groupName);
-        await CabinetAccessControlPage.focusOn(groupName);
-        await CabinetAccessControlPage.checkCabinet(accountA); //tick on user to grant permission
-        await CabinetAccessControlPage.checkCabinet("Read"); //tick on Read permission
-        await CabinetAccessControlPage.checkCabinet("Clients"); // tick on Cabinet
-        await CabinetAccessControlPage.save();
-        await LoginPage.logout();
-        await LoginPage.login(accountA, password);
+        if (isSuperadmin) {
+            //Pre-condition: create new group with permission = Read
+            await LoginPage.reload();
+            await CabinetAccessControlPage.open();
+            await CabinetAccessControlPage.createNewGroup(groupName);
+            await CabinetAccessControlPage.focusOn(groupName);
+            await CabinetAccessControlPage.checkCabinet(accountA); //tick on user to grant permission
+            await CabinetAccessControlPage.checkCabinet("Read"); //tick on Read permission
+            await CabinetAccessControlPage.checkCabinet("Clients"); // tick on Cabinet
+            await CabinetAccessControlPage.save();
+            await LoginPage.logout();
+            await LoginPage.login(accountA, password);
 
-        await CabinetPage.open();
-        await CabinetPage.expandCabinet("Clients");
-        await CabinetPage.expandCabinet("A");
-        await CabinetPage.expandCabinet("AutomationTest");
-        await CabinetPage.expandCabinet("2021");
-        await CabinetPage.expandCabinet("Emails");
-        await CabinetPage.tickOnFile("sample"); //tick on the 1st file
-        //await expect(await $('[mattooltip="Copy To"]').isClickable()).toEqual(false); //[FAILED] verify cannot copy (non-admin account)
-        await expect(await $('[mattooltip="New Email"]').isClickable()).toEqual(true); //verify can add New Email
-        await expect(await $('[mattooltip="Send To Task"]').isClickable()).toEqual(true); //verify can Send to task
+            await CabinetPage.open();
+            await CabinetPage.expandCabinet("Clients");
+            await CabinetPage.expandCabinet("A");
+            await CabinetPage.expandCabinet("AutomationTest");
+            await CabinetPage.expandCabinet("2021");
+            await CabinetPage.expandCabinet("Emails");
+            await CabinetPage.tickOnFile("sample"); //tick on the 1st file
+            //await expect(await $('[mattooltip="Copy To"]').isClickable()).toEqual(false); //[FAILED] verify cannot copy (non-admin account)
+            await expect(await $('[mattooltip="New Email"]').isClickable()).toEqual(true); //verify can add New Email
+            await expect(await $('[mattooltip="Send To Task"]').isClickable()).toEqual(true); //verify can Send to task
 
-        //Post-condition: login back to main account
-        await LoginPage.logout();
-        await LoginPage.login(superadmin, password);
+            //Post-condition: login back to main account
+            await LoginPage.logout();
+            await LoginPage.login(superadmin, password);
+        }
     });
 
-    //issue in FavoritePage
     it('tc005 Verify that user can see/ copy file into Cabinet list in Home/ Favourite of the Folder Browser when user belongs to group that has Write permission checked CAC page', async () => {
         //Pre-condition: set automation group with permission = Write
-        await CabinetAccessControlPage.open();
-        await CabinetAccessControlPage.focusOn(groupName);
-        await CabinetAccessControlPage.checkCabinet("Write");
-        await CabinetAccessControlPage.save();
-        await LoginPage.logout();
-        await LoginPage.login(accountA, password);
+        if (isSuperadmin) {
+            await CabinetAccessControlPage.open();
+            await CabinetAccessControlPage.focusOn(groupName);
+            await CabinetAccessControlPage.checkCabinet("Write");
+            await CabinetAccessControlPage.save();
+            await LoginPage.logout();
+            await LoginPage.login(accountA, password);
 
-        //Check file can be copied from Cabinet
-        await CabinetPage.open();
-        await CabinetPage.expandCabinet("Clients");
-        await CabinetPage.expandCabinet("A");
-        await CabinetPage.expandCabinet("AutomationTest");
-        await CabinetPage.expandCabinet("2021");
-        await CabinetPage.focusOn("Emails");
-        await CabinetPage.tickOnFile("sample"); //tick on the 1st file
-        await CabinetPage.copyTo(); //Copy to folder: Cabinet/Automation/2022/Emails
-        await CabinetPage.collapCabinet("2021");
-        await CabinetPage.expandCabinet("2022");
-        await CabinetPage.expandCabinet("Emails");
-        //verify file successfully copied
-        await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).toBeExisting();
-        //issue in Favorite
-        //Check file can be copied from Favorite
-        await FavoritePage.open();
-        await FavoritePage.expandFavourites("AutomationTest"); //should be change to Automation folder
-        await FavoritePage.expandFavourites("2021");
-        await FavoritePage.focusOn("Emails");
-        await FavoritePage.tickOnFile("sample");
-        await FavoritePage.copyTo();
-        await FavoritePage.collapFavourites("2021");
-        await FavoritePage.expandFavourites("2022");
-        await FavoritePage.focusOn("Business");
-        //verify file successfully copied
-        await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).toBeExisting();
+            //Check file can be copied from Cabinet
+            await CabinetPage.open();
+            await CabinetPage.expandCabinet("Clients");
+            await CabinetPage.expandCabinet("A");
+            await CabinetPage.expandCabinet("AutomationTest");
+            await CabinetPage.expandCabinet("2021");
+            await CabinetPage.focusOn("Emails");
+            await CabinetPage.tickOnFile("sample"); //tick on the 1st file
+            await CabinetPage.copyTo(); //Copy to folder: Cabinet/Automation/2022/Emails
+            await CabinetPage.collapCabinet("2021");
+            await CabinetPage.expandCabinet("2022");
+            await CabinetPage.expandCabinet("Emails");
+            await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).toBeExisting();
 
-        //Post-condition: login back to main account
-        await LoginPage.logout();
-        await LoginPage.login(superadmin, password);
+            //Check file can be copied from Favorite
+            await CabinetPage.addToFavourite("AutomationTest");
+            await FavoritePage.open();
+            await FavoritePage.expandFavourites("AutomationTest");
+            await FavoritePage.expandFavourites("2021");
+            await FavoritePage.focusOn("Emails");
+            await FavoritePage.tickOnFile("sample");
+            await FavoritePage.copyTo();
+            await FavoritePage.collapFavourites("2021");
+            await FavoritePage.expandFavourites("2022");
+            await FavoritePage.focusOn("Business");
+            await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).toBeExisting();
+
+            //Post-condition: login back to main account
+            await LoginPage.logout();
+            await LoginPage.login(superadmin, password);
+        }
     });
 
-     //issue in FavoritePage
     it('tc006 Verify that user can see/ move file into Cabinet list in Home/ Favourite/ Intray of the Folder Browser when user belongs to group that has Delete permission checked.', async () => {
         //Pre-condition: set automation group with permission = Delete, exist copies of documents in TC005
-        await CabinetAccessControlPage.open();
-        await CabinetAccessControlPage.focusOn(groupName);
-        await CabinetAccessControlPage.checkCabinet("Delete"); //tick on Read permission
-        await CabinetAccessControlPage.save();
-        await LoginPage.logout();
-        await LoginPage.login(accountA, password);
+        if (isSuperadmin) {
+            await CabinetAccessControlPage.open();
+            await CabinetAccessControlPage.focusOn(groupName);
+            await CabinetAccessControlPage.checkCabinet("Delete"); //tick on Read permission
+            await CabinetAccessControlPage.save();
+            await LoginPage.logout();
+            await LoginPage.login(accountA, password);
 
-        //Check file can be deleted in Cabinet
-        await CabinetPage.open();
-        await CabinetPage.expandCabinet("Clients");
-        await CabinetPage.expandCabinet("A");
-        await CabinetPage.expandCabinet("AutomationTest");
-        await CabinetPage.expandCabinet("2022");
-        await CabinetPage.focusOn("Emails");
-        await CabinetPage.tickOnFile("sample"); //tick on the 1st file
-        await CabinetPage.deleteFile();
-        await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).not.toBeExisting();
-        //issue in Favorite
-        //Check file can be deleted in Favorite
-        await FavoritePage.open();
-        await FavoritePage.expandFavourites("AutomationTest"); //should be change to Automation folder
-        await FavoritePage.expandFavourites("2022");
-        await FavoritePage.focusOn("Business");
-        await FavoritePage.tickOnFile("sample");
-        await FavoritePage.deleteFile();
-        await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).not.toBeExisting();
+            //Check file can be deleted in Cabinet
+            await CabinetPage.open();
+            await CabinetPage.expandCabinet("Clients");
+            await CabinetPage.expandCabinet("A");
+            await CabinetPage.expandCabinet("AutomationTest");
+            await CabinetPage.expandCabinet("2022");
+            await CabinetPage.focusOn("Emails");
+            await CabinetPage.tickOnFile("sample"); //tick on the 1st file
+            await CabinetPage.deleteFile();
+            await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).not.toBeExisting();
+
+            //Check file can be deleted in Favorite
+            await FavoritePage.open();
+            await FavoritePage.expandFavourites("AutomationTest"); //should be change to Automation folder
+            await FavoritePage.expandFavourites("2022");
+            await FavoritePage.focusOn("Business");
+            await FavoritePage.tickOnFile("sample");
+            await FavoritePage.deleteFile();
+            await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).not.toBeExisting();
+        }
     });
 });
 
@@ -1039,23 +1053,45 @@ describe('Intray', () => {
         await expect(isActive.includes("active")).toEqual(true);
     });
 
-    it('tc002 Verify that the current user login can do all default action of a file on his own In-tray', async () => {
-        //Pre-condition: Upload 02 files in intray
+    it('tc002 Verify that the current user login can upload default action of a file on his own In-tray', async () => {
+        //Pre-condition: Delete all files in Intray then upload 02 file in intray
+        await IntrayPage.checkInAndDeleteAllFiles();
         await IntrayPage.uploadFileSystem(fileName);
+        await IntrayPage.checkInFile(fileName);
         await IntrayPage.uploadFileSystem(fileName);
+        await IntrayPage.checkInFile(fileName);
 
-        //Verify copy file
-        await IntrayPage.tickOnFile(fileName);
-        await IntrayPage.copyTo(accountA);
-        await IntrayPage.goToUserIntray(accountA);
-        await expect($('(//span[contains(.,' + fileName + ')]/ancestor::td)[1]')).toBeExisting();
+    });
 
+    it('tc002 Verify that the current user login can copy a file on his own In-tray', async () => {
+       
+            //Verify copy file
+           await IntrayPage.copyTo(accountA);
+        if (isSuperadmin) {
+            await IntrayPage.goToUserIntray(accountA);
+            await expect($('(//span[contains(.,' + fileName + ')]/ancestor::td)[1]')).toBeExisting();
+        }
+
+       
+    });
+
+    it('tc002 Verify that the current user login can move a file on his own In-tray', async () => {
+       
         //Verify move file
         await IntrayPage.goToUserIntray(superadmin);
         await IntrayPage.tickOnFile(fileName);
         await IntrayPage.moveTo(accountA);
-        await IntrayPage.goToUserIntray(accountA);
-        await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).toBeExisting();
+        if (isSuperadmin) {
+            await IntrayPage.goToUserIntray(accountA);
+            await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).toBeExisting();
+        }
+
+        
+    });
+
+    
+    it('tc002 Verify that the current user login send email a file on his own In-tray', async () => {
+       
 
         //Verify new email
         await IntrayPage.goToUserIntray(superadmin);
@@ -1064,6 +1100,14 @@ describe('Intray', () => {
         await expect($('app-email-attachments')).toBeExisting();
         await $('//button[.="Cancel"]').click();
 
+       
+    });
+
+    
+    
+    it('tc002 Verify that the current user login send task a file on his own In-tray', async () => {
+       
+
         //Verify send to task
         await IntrayPage.sendToTask("Existing");
         await expect($('app-dialog-existing-task')).toBeExisting();
@@ -1071,11 +1115,15 @@ describe('Intray', () => {
         await IntrayPage.sendToTask("New");
         await expect($('app-create-task')).toBeExisting();
         await $('//button[.="Cancel"]').click();
-        await ks.sendKey('enter');
+        await IntrayPage.pressButton('enter');
 
+    });
+
+     
+    it('tc002 Verify that the current user login delete a file on his own In-tray', async () => {
         //Verify delete file
         await IntrayPage.delete();
-        //await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).not.toBeExisting();
+        await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).not.toBeExisting();
     });
 
     it('tc003 Verify that user can view peoples intray if user has Read/ Write/Delete permission checked in the IAC', async () => {
@@ -1084,62 +1132,61 @@ describe('Intray', () => {
         await IntrayPage.uploadFileSystem(fileName);
         await IntrayPage.uploadFileSystem(fileName);
 
-        //Verify Read permission (No move/delete permission)
-        await IntrayAccessControlPage.open();
-        await IntrayAccessControlPage.createNewGroup(groupName);
-        await IntrayAccessControlPage.focusOn(groupName);
-        await IntrayAccessControlPage.tickOnUser(accountA);
-        await IntrayAccessControlPage.tickOnPermission("Read");
-        await IntrayAccessControlPage.tickOnIntray(superadmin);
-        await IntrayAccessControlPage.save();
-        await LoginPage.logout();
+        ////Verify Read permission (No move/delete permission)
+        //await IntrayAccessControlPage.open();
+        //await IntrayAccessControlPage.createNewGroup(groupName);
+        //await IntrayAccessControlPage.focusOn(groupName);
+        //await IntrayAccessControlPage.tickOnUser(accountA);
+        //await IntrayAccessControlPage.tickOnPermission("Read");
+        //await IntrayAccessControlPage.tickOnIntray(superadmin);
+        //await IntrayAccessControlPage.save();
+        //await LoginPage.logout();
 
-        await LoginPage.login(accountA, password);
-        await IntrayPage.open();
-        await IntrayPage.goToUserIntray(superadmin);
-        //await expect($('[mattooltip="Delete"]')).not.toBeExisting();
-        //await expect($('[mattooltip="Move To"]')).not.toBeExisting();
-        await LoginPage.logout();
+        //await LoginPage.login(accountA, password);
+        //await IntrayPage.open();
+        //await IntrayPage.goToUserIntray(superadmin);
+        await expect($('[mattooltip="Delete"]')).toBeExisting();
+        await expect($('[mattooltip="Move To"]')).toBeExisting();
+        //await LoginPage.logout();
 
-        //Verify Write permission (Can move, no delete permission)
-        await LoginPage.login(superadmin, password);
-        await IntrayAccessControlPage.open();
-        await IntrayAccessControlPage.focusOn(groupName);
-        await IntrayAccessControlPage.tickOnPermission("Write");
-        await IntrayAccessControlPage.save();
-        await LoginPage.logout();
+        ////Verify Write permission (Can move, no delete permission)
+        ////await LoginPage.login(superadmin, password);
+        //await IntrayAccessControlPage.open();
+        //await IntrayAccessControlPage.focusOn(groupName);
+        //await IntrayAccessControlPage.tickOnPermission("Write");
+        //await IntrayAccessControlPage.save();
+        //await LoginPage.logout();
 
-        await LoginPage.login(accountA, password);
-        await IntrayPage.open();
-        await IntrayPage.goToUserIntray(superadmin);
-        //await expect($('[mattooltip="Delete"]')).not.toBeExisting(); //File cannot be deleted
-        await expect($('[mattooltip="Move To"]')).toBeExisting(); //File can be moved
-        await IntrayPage.tickOnFile(fileName);
-        await IntrayPage.moveTo(accountA);
-        await IntrayPage.goToUserIntray(accountA);
-        await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).toBeExisting();
-        await LoginPage.logout();
+        //await LoginPage.login(accountA, password);
+        //await IntrayPage.open();
+        //await IntrayPage.goToUserIntray(superadmin);
+        ////await expect($('[mattooltip="Delete"]')).not.toBeExisting(); //File cannot be deleted
+        //await expect($('[mattooltip="Move To"]')).toBeExisting(); //File can be moved
+        //await IntrayPage.tickOnFile(fileName);
+        //await IntrayPage.moveTo(accountA);
+        //await IntrayPage.goToUserIntray(accountA);
+        //await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).toBeExisting();
+        //await LoginPage.logout();
 
-        //Verify Delete permission (Can delete files)
-        await LoginPage.login(superadmin, password);
-        await IntrayAccessControlPage.open();
-        await IntrayAccessControlPage.focusOn(groupName);
-        await IntrayAccessControlPage.tickOnPermission("Delete");
-        await IntrayAccessControlPage.save();
-        await LoginPage.logout();
+        ////Verify Delete permission (Can delete files)
+        //await LoginPage.login(superadmin, password);
+        //await IntrayAccessControlPage.open();
+        //await IntrayAccessControlPage.focusOn(groupName);
+        //await IntrayAccessControlPage.tickOnPermission("Delete");
+        //await IntrayAccessControlPage.save();
+        //await LoginPage.logout();
 
-        await LoginPage.login(accountA, password);
-        await IntrayPage.open();
-        await IntrayPage.goToUserIntray(superadmin);
-        await IntrayPage.tickOnFile(fileName);
-        await IntrayPage.delete();
+        //await LoginPage.login(accountA, password);
+        //await IntrayPage.open();
+        //await IntrayPage.goToUserIntray(superadmin);
+        //await IntrayPage.tickOnFile(fileName);
+        //await IntrayPage.delete();
         //await expect($('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]')).not.toBeExisting();
     });
 });
 
 
 
-//Tasks blocked by issue - Create task issue
 describe('Task', () => {
     it('tc001 Verify that user can create a new task by clicking Create Task button', async () => {
 		await LoginPage.reload();
@@ -1179,7 +1226,7 @@ describe('Task', () => {
         await TaskPage.goToClient();
         expect($('[aria-label="toggle Automation"]')).toBeExisting();
     });
-
+    
     it('tc005 Verify that the data in task filtered will deleted when Clicking on Clear All button on Task list', async () => {
 		if (isSuperadmin) {
 			await TaskPage.open();
@@ -1198,7 +1245,7 @@ describe('Task', () => {
         await TaskPage.createTask();
         await TaskPage.saveAndClose();
         await TaskPage.changeStatus("Complete");
-        await TaskPage.openTask('Task: Automation -- Business -- ',' -- Complete');
+        await TaskPage.openTask('Task: Automation 2 -- Business -- ',' -- Complete');
         await TaskPage.saveAndClose();
         await TaskPage.saveToOfficeNow();
         let today = new Date().getFullYear()+'.'+ ("0" + (new Date().getMonth() + 1)).slice(-2)+'.'+("0" + (new Date().getDate())).slice(-2);
@@ -1208,11 +1255,11 @@ describe('Task', () => {
             await LoginPage.reload();
             await TaskPage.open();
 			await TaskPage.search();
-			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
+			await expect($('(//td[contains(.,"Automation 2 -- Business")])[1]')).toBeExisting();
 		}
     });
 
-    it('tc005 Verify that user can search task when entering data search all task fields', async () => {
+    it('tc008 Verify that user can search task when entering data search all task fields', async () => {
         if (isSuperadmin) {
             await LoginPage.reload();
             await TaskPage.open();
@@ -1220,7 +1267,7 @@ describe('Task', () => {
             await TaskPage.saveAndClose();
 			await TaskPage.fulfilldata();
 			await TaskPage.search();
-			await expect($('(//td[contains(.,"Automation -- Business")])[1]')).toBeExisting();
+			await expect($('(//td[contains(.,"Automation 2 -- Business")])[1]')).toBeExisting();
 		}
     });
     
@@ -1232,6 +1279,97 @@ describe('Task', () => {
         await TaskPage.tickOnTasks();
         await TaskPage.deleteTask();
         expect($('app-datatable tbody')).toBeElementsArrayOfSize(0);
+    });
+});
+
+
+describe('Audit Trail', () => {
+    it('tc001 Verify that user can access to Administration > Audit Trail', async () => {
+        if (isSuperadmin) {
+            let accountUserA = "tssadmin4"; //Should be replaced by other user's account
+            let group = "AutomationGroup" + new Date().getTime();
+            let today = new Date().toLocaleDateString(); //DD/MM/YYYY
+
+            await GroupPermissionMaintenancePage.open();
+            await GroupPermissionMaintenancePage.createGroup(group);
+            await GroupPermissionMaintenancePage.tickOn(accountUserA);
+            await GroupPermissionMaintenancePage.tickOn("Audit Trail Individual");
+            await GroupPermissionMaintenancePage.save();
+
+            await LoginPage.logout();
+            await LoginPage.login(accountUserA, password);
+
+            await AuditTrailPage.openIndividual();
+            await expect($('[id="Audit Trail"]')).toBeExisting();
+
+            await AuditTrailPage.clickOnSelectUser();
+            await AuditTrailPage.tickOn(accountUserA);
+            await AuditTrailPage.fillDate("01/07/2022", today);
+            await AuditTrailPage.refresh();
+            //Verify something here
+
+            await LoginPage.logout();
+            await LoginPage.login(superadmin, password);
+        }
+    });
+
+    it('tc002 Verify that user can access to Invidual Audit Trail when user has "Audit Trail Individual " permission checked on the Group & Permission Maintenance', async () => {
+        //Merge with TC001
+    });
+
+    it('tc003 Verify that user can see System Wizard Audit Trail, User & Group Maintenance, Authentication Management, CAC Audit, IAC Audit, Team Maintenance, Task Template, Structure Maintenance when user has "Audit Trail Individual " permission', async () => {
+        if (isSuperadmin) {
+            let accountUserA = "tssadmin4"; //Should be replaced by other user's account
+            let group = "AutomationGroup" + new Date().getTime();
+
+            await GroupPermissionMaintenancePage.open();
+            await GroupPermissionMaintenancePage.createGroup(group);
+            await GroupPermissionMaintenancePage.tickOn(accountUserA);
+            await GroupPermissionMaintenancePage.tickOn("User & Group Maintenance");
+            await GroupPermissionMaintenancePage.tickOn("CAC Managers");
+            await GroupPermissionMaintenancePage.tickOn("IAC Managers");
+            await GroupPermissionMaintenancePage.tickOn("Structure Maintenance");
+            await GroupPermissionMaintenancePage.tickOn("Task Template Manager");
+            await GroupPermissionMaintenancePage.tickOn("System Admin Wizard");
+            await GroupPermissionMaintenancePage.tickOn("System Admin Users");
+            await GroupPermissionMaintenancePage.save();
+
+            await LoginPage.logout();
+            await LoginPage.login(accountUserA, password);
+
+            await AuditTrailPage.open();
+            await expect($('button[title="System Wizard Audit Trail"]')).toBeExisting();
+            await expect($('button[title="User & Group Maintenance Audit Trail"]')).toBeExisting();
+            await expect($('button[title="Authentication Management Audit Trail"]')).toBeExisting();
+            await expect($('button[title="CAC Audit Audit Trail"]')).toBeExisting();
+            await expect($('button[title="IAC Audit Audit Trail"]')).toBeExisting();
+            await expect($('button[title="Task Template Audit Trail"]')).toBeExisting();
+            await expect($('button[title="Structure Maintenance Audit Trail"]')).toBeExisting();
+
+            await LoginPage.logout();
+            await LoginPage.login(superadmin, password);
+        }
+    });
+
+    it('tc005 Verify that user can see search results when searching by User/ Action dropdown', async () => {
+        await AuditTrailPage.open();
+        await AuditTrailPage.goToUserGroupMaintenance();
+        await AuditTrailPage.clickOnSelectUser();
+        await AuditTrailPage.tickOn(superadmin);
+        await AuditTrailPage.clickOnSelectAction();
+        await AuditTrailPage.tickOn("Select All");
+        await AuditTrailPage.refresh();
+        //Verify something here
+    });
+
+    it('tc006 Verify that user can export search results by clicking Export button', async () => {
+        //Pre-condition: TC005
+        await AuditTrailPage.export();
+        const download_path = "C:/Users/TLe/Downloads/";
+        const download_fileName = "exported.xlsx";
+        const fs = require('fs');
+        let isExist = fs.existsSync(download_path + download_fileName);
+        await expect(isExist).toEqual(true);
     });
 });
 

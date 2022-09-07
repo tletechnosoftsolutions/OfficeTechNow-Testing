@@ -36,6 +36,7 @@ class TaskTemplateMaintenance extends Page {
     async focusOn(templateName) {
         await $('//label[normalize-space()="' + templateName + '"]').scrollIntoView();
         await $('//label[normalize-space()="' + templateName + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 500)); 
     }
 
      /**
@@ -126,14 +127,6 @@ class TaskTemplateMaintenance extends Page {
     }
 
     
-    /**
-     * activate a task template
-     */
-    async activate(taskname) {
-        await $('(//label[contains(.,"' + taskname + '")])[1]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000)); 
-    }
-
      
     /**
      * copy a task template

@@ -1,5 +1,6 @@
 ﻿
 const Page = require('./page');
+const ks = require('node-key-sender');
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -19,12 +20,12 @@ class StructureMaintenancePage extends Page {
    /**
    * a method to add a folder or sub-folder
    */
-    async addFolder(mainFolderName, isSubFolder, newFolderIndex) {
+    async addFolder(mainFolderName, isSubFolder, newFolderIndex, folderName = " Folder ") {
         let temp = isSubFolder ? "Sub " : "";
         await $('//span[normalize-space()="' + mainFolderName + '"]/parent::button').click({ button: 'right' });
         await $('//span[contains(.,"Add ' + temp + 'Folder")]/parent::button').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('#folderName').setValue(isSubFolder + " Folder " + newFolderIndex);
+        await $('#folderName').setValue(temp + folderName + newFolderIndex);
         await $('//span[.="Create"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
@@ -51,9 +52,10 @@ class StructureMaintenancePage extends Page {
     /**
    * a method to clone folder
    */
-    async cloneFolder(mainFolderName) {
+    async cloneFolder(mainFolderName, newFolderName) {
         await $('//span[normalize-space()="' + mainFolderName + '"]/parent::button').click({ button: 'right' });
         await $('//span[normalize-space()="Clone Folder"]').click();
+        if (newFolderName != null || newFolderName != "") await $('#folderName').setValue(newFolderName);
         await $('//span[.="Clone"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
@@ -81,6 +83,13 @@ class StructureMaintenancePage extends Page {
     }
 
     /**
+    * press ESC
+    */
+    async pressEsc() {
+        await ks.sendKey('escape');
+    }
+
+   /**
    * a method to add new template
    */
     async selectTemplate(templatename) {
@@ -88,10 +97,8 @@ class StructureMaintenancePage extends Page {
         await $('//label[contains(.,"'+templatename+'")]').click();
     }
 
-    async renameTemplate(templatename, newTemplatename) { 
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//label[contains(.,"' + templatename + '")]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
+    async renameTemplate(templatename, newTemplatename) {
+        this.focusOnTemplate(templatename);
         await $('//button[contains(.,"Rename")]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//input[contains(@placeholder,"Enter Name")]').setValue(newTemplatename);
@@ -183,8 +190,8 @@ class StructureMaintenancePage extends Page {
      * focus on template
      */
     async focusOnTemplate(templatename) {
-        await $('//label[normalize-space()="'+templatename+'"]').click();
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await $('//label[normalize-space()="' + templatename + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 300));
     }
 
     /**
@@ -192,6 +199,30 @@ class StructureMaintenancePage extends Page {
      */
     async isPopupExist(message) {
         return await $('(//snack-bar-container//*[contains(.,"' + message + '")])[last()]').isExisting();
+    }
+
+    /**
+     * delete template
+     */
+    async deleteTemplate(templatename) {
+        this.focusOnTemplate(templatename);
+        await $('//span[contains(.,"Delete")]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        await $('[formcontrolname=reason]').setValue("Testing deleting structure template");
+        await $('//button[.="Delete"]').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * copy template
+     */
+    async copyTemplate(templatename, newTemplatename) {
+        await $('//label[normalize-space()="' + templatename + '"]/ancestor::mat-list-item//button[@mattooltip="Copy"]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        if (newTemplatename != "" || newTemplatename != null)
+            await $('//input[contains(@placeholder,"Enter Name")]').setValue(newTemplatename);
+        await $('//span[.="Copy"]').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
     /**

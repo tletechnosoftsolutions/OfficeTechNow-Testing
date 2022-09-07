@@ -21,8 +21,9 @@ class InTraysPage extends Page {
      */
     async copyTo(desUserIntrayFolder) {
         await $('[mattooltip="Copy To"]').click();
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
         await $('//app-dialog-folder-browser//button/span[normalize-space()="' + desUserIntrayFolder + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
         await $('//button/span[.="Select"]').click();
         await new Promise(resolve => setTimeout(resolve, 7000));
     }
@@ -32,15 +33,21 @@ class InTraysPage extends Page {
      */
     async tickOnFile(fileName) {
         await $('(//span[contains(.,"' + fileName + '")]/ancestor::td)[1]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 200));
+    }
+    
+    async tickAllFiles() {
+        await $('th label').click();
+        await new Promise(resolve => setTimeout(resolve, 200));
     }
 
     /**
      * go to user's intray
      */
     async goToUserIntray(userName) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
         await $('//button/span[normalize-space()="' + userName + '"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
     /**
@@ -49,7 +56,9 @@ class InTraysPage extends Page {
     async moveTo(desUserIntrayFolder) {
         await $('[mattooltip="Move To"]').click();
         await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('//app-dialog-folder-browser//button/span[normalize-space()="' + desUserIntrayFolder + '"]').scrollIntoView();
         await $('//app-dialog-folder-browser//button/span[normalize-space()="' + desUserIntrayFolder + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 200));
         await $('//button/span[.="Select"]').click();
         await new Promise(resolve => setTimeout(resolve, 7000));
     }
@@ -59,7 +68,7 @@ class InTraysPage extends Page {
      */
     async delete() {
         await $('[mattooltip="Delete"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
         await $('//textarea').setValue("Automation testing delete");
         await $('//button[.="Delete"]').click();
         await new Promise(resolve => setTimeout(resolve, 7000));
@@ -93,12 +102,12 @@ class InTraysPage extends Page {
         await $('//button//i[.="file_upload"]').click();
         await new Promise(resolve => setTimeout(resolve, 2000));
         await $('//button//*[.="add_circle"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
         await ks.sendText(filename);
         await new Promise(resolve => setTimeout(resolve, 1000));
         await ks.sendKey('enter');
         await new Promise(resolve => setTimeout(resolve, 5000));
-        
+
         /* Fill mandatory */
         await $('//label[.="Type"]/following-sibling::*//span[@class="ng-arrow-wrapper"]').click();
         await $('//span[.="fn - File Note"]').click();
@@ -108,13 +117,57 @@ class InTraysPage extends Page {
 
         /* Click Upload button then Close */
         await $('//button/span[.="Upload"]').click();
-        await new Promise(resolve => setTimeout(resolve, 10000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
         await $('//button[.="Close"]').click();
         await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
     /**
-     * open the Cabinet page
+    * a method to check in file to grant Move and Delete permission
+    */
+    async checkInFile(filename) {
+        let isCheckable = await $('//span[contains(.,"' + filename + '")]/ancestor::tr//td[contains(@class,"status")]//span').isExisting();
+        if (isCheckable) {
+            await $('//span[contains(.,"' + filename + '")]/ancestor::tr//button').click();
+            await new Promise(resolve => setTimeout(resolve, 200));
+            await $('//span[.="Check in"]').click();
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
+
+    async checkInAllFiles() {
+        let loopTime = await $$('td[class*=status] span').length;
+        for (let i = 0; i < loopTime; i++) {
+            await $('(//td[contains(@class,"status")]//span)[1]/ancestor::tr//button').click();
+            await new Promise(resolve => setTimeout(resolve, 200));
+            await $('//span[.="Check in"]').click();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            if (i == loopTime - 1) {
+                await this.tickAllFiles();
+                await this.tickAllFiles();
+            }
+        }
+    }
+
+    async checkInAndDeleteAllFiles() {
+        await this.checkInAllFiles();
+        await this.tickAllFiles();
+        let isDisabled = (await $('[mattooltip="Delete"]').getAttribute('class')).includes('disabled');
+        if (!isDisabled) await this.delete();
+        else await this.tickAllFiles();
+    }
+
+    /**
+     * open the Intray page
+     */
+    async pressButton(buttonName) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+        await ks.sendKey(buttonName);
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+    /**
+     * open the Intray page
      */
     async open() {
         await this.btnHome.click();

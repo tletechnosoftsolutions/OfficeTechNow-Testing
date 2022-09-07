@@ -28,7 +28,7 @@ const isSuperadmin = true;
 
 var clientname = "Automation" + new Date().getTime();
 var clientcode = new Date().getTime();
-var structure = "01. Standard Client";
+var structure = "Standard Client";
 var cabinet_name = "Automation Testing Cabinet" +new Date().getTime();
 var new_cabinet_name = "Renamed Automation Testing Cabinet" + new Date().getTime();
 var newTemplateName = "Automation Task Template " + new Date().getTime();
@@ -48,8 +48,54 @@ describe('Login', () => {
 });
 
 
+describe('Task', () => {
+    
 
+    it('tc005 Verify that the data in task filtered will deleted when Clicking on Clear All button on Task list', async () => {
+		if (isSuperadmin) {
+			await TaskPage.open();
+			await TaskPage.fulfilldata();
+			await TaskPage.clearAll();
+			let isZero = await TaskPage.isEmptyFields();
+			await expect(isNaN(isZero) ? true : false).toEqual(true);
+		}
+    });
 
+    /*need to fix subjet dropdown list*/
+    it('tc007 Verify that the ott file will be created in the selected location when user complete a task', async () => {
+        //Pre-condition: create 01 completed task
+        await LoginPage.reload();
+        await TaskPage.open();
+        await TaskPage.createTask();
+        await TaskPage.saveAndClose();
+        await TaskPage.changeStatus("Complete");
+        await TaskPage.openTask('Task: Automation 2 -- Business -- ',' -- Complete');
+        await TaskPage.saveAndClose();
+        await TaskPage.saveToOfficeNow();
+        let today = new Date().getFullYear()+'.'+ ("0" + (new Date().getMonth() + 1)).slice(-2)+'.'+("0" + (new Date().getDate())).slice(-2);
+        await expect($('//span[contains(.,"Business.ott") and contains(.,"'+today+'")]')).toBeExisting();      
+        await TaskPage.switchWindow('OTNOW-Develop');
+        if (isSuperadmin) {
+            await LoginPage.reload();
+            await TaskPage.open();
+			await TaskPage.search();
+			await expect($('(//td[contains(.,"Automation 2 -- Business")])[1]')).toBeExisting();
+		}
+    });
+
+    it('tc008 Verify that user can search task when entering data search all task fields', async () => {
+        if (isSuperadmin) {
+            await LoginPage.reload();
+            await TaskPage.open();
+            await TaskPage.createTask();
+            await TaskPage.saveAndClose();
+			await TaskPage.fulfilldata();
+			await TaskPage.search();
+			await expect($('(//td[contains(.,"Automation 2 -- Business")])[1]')).toBeExisting();
+		}
+    });
+    
+});
 
 
 describe('Logout', () => {

@@ -359,10 +359,10 @@ describe('Group & Permission Maintenance', () => {
 
 
 
+
 describe('Client Cabinet Structure Template', () => {
     it('tc001 Verify the user can see and access the Client Maintenance page when he has “Add Client” permission', async () => {
         //Pre-condition: grant permission "Add Client" to account
-        await LoginPage.reload();
         await GroupPermissionMaintenancePage.open();
         await GroupPermissionMaintenancePage.createGroup("Automation " + date);
         await GroupPermissionMaintenancePage.tickOn(superadmin2);
@@ -528,6 +528,95 @@ describe('Client Cabinet Structure Template', () => {
         await expect($('//p[contains(.,"' + message2 + '")]')).toBeExisting();
         await expect($('//p[contains(normalize-space(),"' + message3 + '")]')).toBeExisting();
         await $('//button[.="No"]').click();
+    });
+
+    it('tc012 Verify that user can see the cabinets in Cabinets/ Favourites list, Cabinet Settings page, Quickfind after applying Read permission for it on the CAC page', async () => {
+        //Precondition: grant Read Cabinet permission
+        await LoginPage.logout();
+        await LoginPage.login(superadmin, password);
+        await CabinetAccessControlPage.open();
+        await CabinetAccessControlPage.createNewGroup("Automation " + date);
+        await CabinetAccessControlPage.focusOn("Automation " + date);
+        await CabinetAccessControlPage.tickOnUser(superadmin2);
+        await CabinetAccessControlPage.tickOnPermission("Read");
+        await CabinetAccessControlPage.tickOnCabinet(cabinet_name);
+        await CabinetAccessControlPage.save();
+        await LoginPage.logout();
+
+        //Verify in Cabinet
+        await LoginPage.login(superadmin2, password);
+        await CabinetPage.open();
+        await expect($('//span[normalize-space()="' + cabinet_name + '"]')).toBeExisting();
+
+        //Verify in Favourite (issue: admin account cannot add to Favourite)
+        //await CabinetPage.addToFavourite(cabinet_name);
+        //await FavouritesPage.open();
+        //await expect($('//span[normalize-space(text())="' + cabinet_name + '"]')).toBeExisting();
+
+        //Verify in Quick Find
+        await $('//input[@placeholder="Quick Find"]').setValue(cabinet_name);
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await expect($('(//span[contains(text(),"' + cabinet_name + '")])')).toBeExisting();
+
+        //Verify in Cabinet Setting
+        await CabinetSettingsPage.open();
+        await expect($('//td[normalize-space()="' + cabinet_name + '"]')).toBeExisting();
+    });
+
+    it('tc014 Verify the user can not add/ rename a cabinet with the name that already exists', async () => {
+        //Precondition: grant Write Cabinet permission
+        let newCabinetName = "Clients";
+        let errorMessage = "The cabinet " + newCabinetName + " already exist";
+
+        await LoginPage.logout();
+        await LoginPage.login(superadmin, password);
+        await CabinetAccessControlPage.open();
+        await CabinetAccessControlPage.focusOn("Automation " + date);
+        await CabinetAccessControlPage.tickOnPermission("Write");
+        await CabinetAccessControlPage.save();
+        await LoginPage.logout();
+
+        await LoginPage.login(superadmin2, password);
+        await CabinetSettingsPage.open();
+        await CabinetSettingsPage.renameCabinet(cabinet_name, newCabinetName);
+        let isExist = await CabinetSettingsPage.isPopupExist(errorMessage);
+        await expect(isExist).toEqual(true);
+    });
+
+    it('tc013 Verify that user can select any of the available cabinet name to rename', async () => {
+        let newCabinetName = "Renamed " + cabinet_name;
+        await CabinetSettingsPage.renameCabinet(cabinet_name, newCabinetName);
+        await expect($('//td[normalize-space()="' + newCabinetName + '"]')).toBeExisting();
+    });
+
+    it('tc015 Verify that user can select any of the available cabinet name to delete', async () => {
+        //Precondition: grant Delete Cabinet permission
+        await LoginPage.logout();
+        await LoginPage.login(superadmin, password);
+        await CabinetAccessControlPage.open();
+        await CabinetAccessControlPage.focusOn("Automation " + date);
+        await CabinetAccessControlPage.tickOnPermission("Delete");
+        await CabinetAccessControlPage.save();
+        await LoginPage.logout();
+
+        await LoginPage.login(superadmin2, password);
+        await CabinetSettingsPage.open();
+        await CabinetSettingsPage.deleteCabinet("Renamed " + cabinet_name);
+        await expect($('//td[normalize-space()="' + "Renamed " + cabinet_name + '"]')).not.toBeExisting();
+    });
+
+    //task issue - update late
+    it('tc016 Verify the user cannot disable/ delete a DCM cabinet if there is any task that is assigned to a DCM folder in that DCM cabinet', async () => {
+        //Precondition: create task and attach in cabinet folder
+        let cabinetUnderTest = "Clients";
+
+        //await CabinetSettingsPage.open();
+        await $('//td[normalize-space()="' + cabinetUnderTest + '"]/following-sibling::*//i[.="create"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await expect($('//label[normalize-space()="Enable DCM"]/preceding-sibling::input')).not.toBeExisting();
+        //Postcondition for TC017
+        await $('//button[.="Cancel"]').click();
+        await LoginPage.logout();
     });
 });
 

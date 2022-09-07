@@ -85,6 +85,13 @@ class CabinetSettingsPage extends Page {
     }
 
     /**
+     * verify popup message
+     */
+    async isPopupExist(message) {
+        return await $('(//snack-bar-container//*[contains(.,"' + message + '")])[last()]').isExisting();
+    }
+
+    /**
      * open the Cabinet page
      */
     async open() {

@@ -78,6 +78,24 @@ class CabinetAccessControlPage extends Page {
     }
 
     /**
+     * check/uncheck in intray/permissions/users
+     */
+    async tickOnUser(userName) {
+        await $('//*[@title="Users"]//div[normalize-space()="' + userName + '"]/preceding-sibling::div//input/parent::span').scrollIntoView();
+        await $('//*[@title="Users"]//div[normalize-space()="' + userName + '"]/preceding-sibling::div//input/parent::span').click();
+    }
+
+    async tickOnCabinet(cabinetName) {
+        await $('//div[normalize-space()="Cabinets"]/following-sibling::*//div[normalize-space()="' + cabinetName + '"]').scrollIntoView();
+        await $('//div[normalize-space()="Cabinets"]/following-sibling::*//div[normalize-space()="' + cabinetName + '"]').click();
+    }
+
+    async tickOnPermission(permissionName) {
+        await $('//*[@title="Permissions"]//div[normalize-space()="' + permissionName + '"]/preceding-sibling::div//input/parent::span').scrollIntoView();
+        await $('//*[@title="Permissions"]//div[normalize-space()="' + permissionName + '"]/preceding-sibling::div//input/parent::span').click();
+    }
+
+    /**
      * open the Cabinet page
      */
     async open() {

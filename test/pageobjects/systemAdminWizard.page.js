@@ -89,10 +89,10 @@ class SystemAdminWizardPage extends Page {
      * Move object up to top. Must to focus on the object before using this method
      */
     async moveToTop() {
-        let num = $$('(//app-box-template)[2]//*[contains(@class,"list-group-item")][contains(@class,"d active")]/preceding-sibling::*').length;
+        let num = await $$('(//app-box-template)[2]//*[contains(@class,"list-group-item")][contains(@class,"d active") or contains(@class,"active ng")]/preceding-sibling::*').length;
         for (let i = 0; i < num; i++) {
-            this.clickOnButton("Up");
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await this.clickOnButton("Up");
+            await new Promise(resolve => setTimeout(resolve, 1000));
         }
     }
 
@@ -100,10 +100,10 @@ class SystemAdminWizardPage extends Page {
      * Move object down to bottom. Must to focus on the object before using this method
      */
     async moveToBottom() {
-        let num = $$('(//app-box-template)[2]//*[contains(@class,"list-group-item")][contains(@class,"d active")]/following-sibling::*').length;
+        let num = await $$('(//app-box-template)[2]//*[contains(@class,"list-group-item")][contains(@class,"d active") or contains(@class,"active ng")]/following-sibling::*').length;
         for (let i = 0; i < num; i++) {
-            this.clickOnButton("Down");
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await this.clickOnButton("Down");
+            await new Promise(resolve => setTimeout(resolve, 1000));
         }
     }
 
@@ -121,7 +121,7 @@ class SystemAdminWizardPage extends Page {
         //Get list before sorting
         let listItems_before = (await this.getListItems()).split(',').sort();
         //Get list after sorting
-        this.clickOnButton("Auto Sort");
+        await this.clickOnButton("Auto Sort");
         let listItems_after = await this.getListItems();
         console.log("DEBUGGGGGGGGGGGGGGGGGGGGGGG before: " + listItems_before);
         console.log("DEBUGGGGGGGGGGGGGGGGGGGGGGG after: " + listItems_after);

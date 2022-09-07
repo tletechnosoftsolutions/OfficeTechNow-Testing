@@ -23,12 +23,12 @@ class HomePageMaintenancePage extends Page {
     /**
      * open the Cabinet page
      */
-    async open () {
+    async open() {
         await this.btnTools.click();
         await this.btnHomePageMaintenance.click();
     }
 
-     /**
+    /**
     * a method to create a client
     */
     async modify(text) {
@@ -58,6 +58,32 @@ class HomePageMaintenancePage extends Page {
         await $('//button/span[contains(text(),"Save")]').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
     }
+
+    /**
+     * uncheck Show Tasks if it has been checked
+     */
+    async uncheckShowTask() {
+        let isChecked = (await $('[formcontrolname="isShowMyTask"]').getAttribute('class')).includes('checked');
+        if (isChecked) {
+            await $('//span[text()="Show Tasks on Homepage"]').click();
+            await $('//button/span[contains(text(),"Save")]').click();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    }
+
+    /**
+     * check Show Tasks if it has been unchecked
+     */
+    async checkShowTask() {
+        let isChecked = (await $('[formcontrolname="isShowMyTask"]').getAttribute('class')).includes('checked');
+        if (!isChecked) {
+            await $('//span[text()="Show Tasks on Homepage"]').click();
+            await $('//button/span[contains(text(),"Save")]').click();
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+
+    }
+
 }
 
 module.exports = new HomePageMaintenancePage();

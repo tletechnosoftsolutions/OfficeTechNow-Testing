@@ -2,7 +2,7 @@ const LoginPage = require('../pageobjects/login.page');
 const CabinetPage = require('../pageobjects/cabinet.page');
 const FavouritesPage = require('../pageobjects/favourites.page');
 const ClientMaintenancePage = require('../pageobjects/ClientMaintenance.page');
-const StructureMaintenance = require('../pageobjects/structureMaintenance.page');
+const StructureMaintenancePage = require('../pageobjects/structureMaintenance.page');
 const CabinetAccessControlPage = require('../pageobjects/cabinetAccessControl.page');
 const CabinetSettingsPage = require('../pageobjects/cabinetSettings.page');
 const TaskPage = require('../pageobjects/task.page');
@@ -15,8 +15,11 @@ const FavoritePage = require('../pageobjects/favourites.page');
 const IntrayPage = require('../pageobjects/intray.page');
 const IntrayAccessControlPage = require('../pageobjects/intrayAccessControl.page');
 const UserAuthenticationMaintenancePage = require('../pageobjects/UserAuthenticationMaintenance.page');
+const TemplateMaintenancePage = require('../pageobjects/templateMaintenance.page');
 const SystemConfigurationPage = require('../pageobjects/systemConfiguration.page');
 const UserProfilePage = require('../pageobjects/userProfile.page');
+const SearchPage = require('../pageobjects/search.page');
+
 const { exec } = require('node:child_process');
 const { group } = require('node:console');
 
@@ -1544,173 +1547,399 @@ describe('Login', () => {
 //    });
 //});
 
-describe('Client Cabinet Structure Template', () => {
-    it('tc001 Verify the user can see and access the Client Maintenance page when he has “Add Client” permission', async () => {
-        //Pre-condition: grant permission "Add Client" to account
-        await GroupPermissionMaintenancePage.open();
-        await GroupPermissionMaintenancePage.createGroup("Automation " + date);
-        await GroupPermissionMaintenancePage.tickOn(superadmin2);
-        await GroupPermissionMaintenancePage.tickOn("Add Client");
-        await GroupPermissionMaintenancePage.save();
+//describe('Client Cabinet Structure Template', () => {
+//    it('tc001 Verify the user can see and access the Client Maintenance page when he has “Add Client” permission', async () => {
+//        //Pre-condition: grant permission "Add Client" to account
+//        await GroupPermissionMaintenancePage.open();
+//        await GroupPermissionMaintenancePage.createGroup("Automation " + date);
+//        await GroupPermissionMaintenancePage.tickOn(superadmin2);
+//        await GroupPermissionMaintenancePage.tickOn("Add Client");
+//        await GroupPermissionMaintenancePage.save();
 
-        await LoginPage.logout();
-        await LoginPage.login(superadmin2, password);
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin2, password);
 
-        await ClientMaintenancePage.open();
-        await expect($('//button//i[.="person_add"]')).toBeExisting();
-    });
+//        await ClientMaintenancePage.open();
+//        await expect($('//button//i[.="person_add"]')).toBeExisting();
+//    });
 
-    it('tc002 Verify the user can add a new client', async () => {
-        await ClientMaintenancePage.createClient(clientname, clientcode);
-        await expect($('//td[normalize-space()="' + clientname + '"]')).toBeExisting();
-        await CabinetPage.openQuickFind(clientname);
-        await expect($('[aria-label="toggle ' + clientname + '"]')).toBeExisting();
-    });
+//    it('tc002 Verify the user can add a new client', async () => {
+//        await ClientMaintenancePage.createClient(clientname, clientcode);
+//        await expect($('//td[normalize-space()="' + clientname + '"]')).toBeExisting();
+//        await CabinetPage.openQuickFind(clientname);
+//        await expect($('[aria-label="toggle ' + clientname + '"]')).toBeExisting();
+//    });
 
-    it('tc004 Verify that if Client Code Required = False, the client code field is hidden when adding/editting a new client.', async () => {
-        //Pre-condition: edit Client Code Required = False in [System Configuration]
-        await SystemConfigurationPage.open();
-        await SystemConfigurationPage.editList("Client Code Required", "False");
-        await SystemConfigurationPage.save();
+//    it('tc004 Verify that if Client Code Required = False, the client code field is hidden when adding/editting a new client.', async () => {
+//        //Pre-condition: edit Client Code Required = False in [System Configuration]
+//        await SystemConfigurationPage.open();
+//        await SystemConfigurationPage.editList("Client Code Required", "False");
+//        await SystemConfigurationPage.save();
 
-        await LoginPage.reload();
-        await ClientMaintenancePage.open();
-        await $('//button//i[.="person_add"]').click();
-        await expect($('[formcontrolname="clientID"]')).not.toBeExisting();
-        await $('//button[normalize-space()="Cancel"]').click();
+//        await LoginPage.reload();
+//        await ClientMaintenancePage.open();
+//        await $('//button//i[.="person_add"]').click();
+//        await expect($('[formcontrolname="clientID"]')).not.toBeExisting();
+//        await $('//button[normalize-space()="Cancel"]').click();
 
-        await ClientMaintenancePage.searchClient(clientname);
-        await $('//td[normalize-space()="' + clientname + '"]/parent::tr//button[@mattooltip="Rename Client"]').click();
-        await expect($('[formcontrolname="clientID"]')).not.toBeExisting();
-        await $('//button[normalize-space()="Cancel"]').click();
-    });
+//        await ClientMaintenancePage.searchClient(clientname);
+//        await $('//td[normalize-space()="' + clientname + '"]/parent::tr//button[@mattooltip="Rename Client"]').click();
+//        await expect($('[formcontrolname="clientID"]')).not.toBeExisting();
+//        await $('//button[normalize-space()="Cancel"]').click();
+//    });
 
-    it('tc003 Verify that if Client Code Required = True, the Client Code field is shown and required when adding/editing a new client.', async () => {
-        //Pre-condition: edit Client Code Required = True in [System Configuration]
-        await SystemConfigurationPage.open();
-        await SystemConfigurationPage.editList("Client Code Required", "True");
-        await SystemConfigurationPage.save();
+//    it('tc003 Verify that if Client Code Required = True, the Client Code field is shown and required when adding/editing a new client.', async () => {
+//        //Pre-condition: edit Client Code Required = True in [System Configuration]
+//        await SystemConfigurationPage.open();
+//        await SystemConfigurationPage.editList("Client Code Required", "True");
+//        await SystemConfigurationPage.save();
 
-        await LoginPage.reload();
-        await ClientMaintenancePage.open();
-        await $('//button//i[.="person_add"]').click();
-        await expect($('[formcontrolname="clientID"]')).toBeExisting();
-        await $('//button[normalize-space()="Cancel"]').click();
+//        await LoginPage.reload();
+//        await ClientMaintenancePage.open();
+//        await $('//button//i[.="person_add"]').click();
+//        await expect($('[formcontrolname="clientID"]')).toBeExisting();
+//        await $('//button[normalize-space()="Cancel"]').click();
 
-        await ClientMaintenancePage.searchClient(clientname);
-        await $('//td[normalize-space()="' + clientname + '"]/parent::tr//button[@mattooltip="Rename Client"]').click();
-        await expect($('[formcontrolname="clientID"]')).toBeExisting();
-        await $('//button[normalize-space()="Cancel"]').click();
-    });
+//        await ClientMaintenancePage.searchClient(clientname);
+//        await $('//td[normalize-space()="' + clientname + '"]/parent::tr//button[@mattooltip="Rename Client"]').click();
+//        await expect($('[formcontrolname="clientID"]')).toBeExisting();
+//        await $('//button[normalize-space()="Cancel"]').click();
+//    });
 
-    it('tc006 Verify the user cannot add/ rename a client with the name that already exists', async () => {
-        await ClientMaintenancePage.createClient(clientname, clientcode);
-        let isExist = await ClientMaintenancePage.isPopupExist("The client " + clientname + " already exists");
-        await expect(isExist).toEqual(true);
-        await $('//button[normalize-space()="Cancel"]').click();
-    });
+//    it('tc006 Verify the user cannot add/ rename a client with the name that already exists', async () => {
+//        await ClientMaintenancePage.createClient(clientname, clientcode);
+//        let isExist = await ClientMaintenancePage.isPopupExist("The client " + clientname + " already exists");
+//        await expect(isExist).toEqual(true);
+//        await $('//button[normalize-space()="Cancel"]').click();
+//    });
 
-    it('tc007 Verify that user can add Client Structure for a client', async () => {
-        //Pre-condition: grant Add Client Structure permission
-        await LoginPage.logout();
-        await LoginPage.login(superadmin, password);
-        await GroupPermissionMaintenancePage.open();
-        await GroupPermissionMaintenancePage.focusOn("Automation " + date);
-        await GroupPermissionMaintenancePage.tickOn("Add Client Structure");
-        await GroupPermissionMaintenancePage.save();
-        await LoginPage.logout();
+//    it('tc007 Verify that user can add Client Structure for a client', async () => {
+//        //Pre-condition: grant Add Client Structure permission
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);
+//        await GroupPermissionMaintenancePage.open();
+//        await GroupPermissionMaintenancePage.focusOn("Automation " + date);
+//        await GroupPermissionMaintenancePage.tickOn("Add Client Structure");
+//        await GroupPermissionMaintenancePage.save();
+//        await LoginPage.logout();
 
-        await LoginPage.login(superadmin2, password);
-        await ClientMaintenancePage.open();
-        await ClientMaintenancePage.searchClient(clientname);
-        await $('//button//i[.="account_tree"]').click();
-        //Verify client name and client code are disabled
-        await expect($('[formcontrolname="clientName"]')).toHaveAttr('disabled');
-        await expect($('[formcontrolname="clientID"]')).toHaveAttr('disabled');
-        await $('//button[normalize-space()="Cancel"]').click();
-        //Verify user can change client's structure
-        await ClientMaintenancePage.addStructure(clientname, "DO NOT delete - Automation Template");
-        let isExist = await ClientMaintenancePage.isPopupExist("Add client structure successfully");
-        await expect(isExist).toEqual(true);
+//        await LoginPage.login(superadmin2, password);
+//        await ClientMaintenancePage.open();
+//        await ClientMaintenancePage.searchClient(clientname);
+//        await $('//button//i[.="account_tree"]').click();
+//        //Verify client name and client code are disabled
+//        await expect($('[formcontrolname="clientName"]')).toHaveAttr('disabled');
+//        await expect($('[formcontrolname="clientID"]')).toHaveAttr('disabled');
+//        await $('//button[normalize-space()="Cancel"]').click();
+//        //Verify user can change client's structure
+//        await ClientMaintenancePage.addStructure(clientname, "DO NOT delete - Automation Template");
+//        let isExist = await ClientMaintenancePage.isPopupExist("Add client structure successfully");
+//        await expect(isExist).toEqual(true);
 
-        await CabinetPage.openQuickFind(clientname);
-        await expect($('//span[normalize-space()="Automation Folder"]')).toBeExisting();
-    });
+//        await CabinetPage.openQuickFind(clientname);
+//        await expect($('//span[normalize-space()="Automation Folder"]')).toBeExisting();
+//    });
 
-    it('tc005 Verify that user can rename a Client folder', async () => {
-        let newName = "Edited " + clientname;
-        let newCode = clientcode + "000";
-        await ClientMaintenancePage.open();
-        await ClientMaintenancePage.searchClient(clientname);
-        await ClientMaintenancePage.renameClient(clientname, newName, newCode);
-        await LoginPage.reload();
-        await ClientMaintenancePage.open();
-        await ClientMaintenancePage.searchClient(newName);
-        await expect($('//td[normalize-space()="' + newName + '"]')).toBeExisting();
-        await expect($('//td[normalize-space()="' + newCode + '"]')).toBeExisting();
-    });
+//    it('tc005 Verify that user can rename a Client folder', async () => {
+//        let newName = "Edited " + clientname;
+//        let newCode = clientcode + "000";
+//        await ClientMaintenancePage.open();
+//        await ClientMaintenancePage.searchClient(clientname);
+//        await ClientMaintenancePage.renameClient(clientname, newName, newCode);
+//        await LoginPage.reload();
+//        await ClientMaintenancePage.open();
+//        await ClientMaintenancePage.searchClient(newName);
+//        await expect($('//td[normalize-space()="' + newName + '"]')).toBeExisting();
+//        await expect($('//td[normalize-space()="' + newCode + '"]')).toBeExisting();
+//    });
 
-    it('tc008 Verify that user can delete the client folder', async () => {
-        //Pre-condition: grant Delete Client permission
-        await LoginPage.logout();
-        await LoginPage.login(superadmin, password);
-        await GroupPermissionMaintenancePage.open();
-        await GroupPermissionMaintenancePage.focusOn("Automation " + date);
-        await GroupPermissionMaintenancePage.tickOn("Delete Client");
-        await GroupPermissionMaintenancePage.save();
-        await LoginPage.logout();
+//    it('tc008 Verify that user can delete the client folder', async () => {
+//        //Pre-condition: grant Delete Client permission
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);
+//        await GroupPermissionMaintenancePage.open();
+//        await GroupPermissionMaintenancePage.focusOn("Automation " + date);
+//        await GroupPermissionMaintenancePage.tickOn("Delete Client");
+//        await GroupPermissionMaintenancePage.save();
+//        await LoginPage.logout();
 
-        await LoginPage.login(superadmin2, password);
-        await ClientMaintenancePage.open();
-        await ClientMaintenancePage.searchClient(clientname);
-        await ClientMaintenancePage.deleteClient(clientname);
-        let isExist = await ClientMaintenancePage.isPopupExist("Delete successfully");
-        await expect(isExist).toEqual(true);
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        await $('//input[@placeholder="Quick Find"]').setValue(clientname);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await expect($('//span[contains(text(),"' + clientname + '")]')).not.toBeExisting();
-    });
+//        await LoginPage.login(superadmin2, password);
+//        await ClientMaintenancePage.open();
+//        await ClientMaintenancePage.searchClient(clientname);
+//        await ClientMaintenancePage.deleteClient(clientname);
+//        let isExist = await ClientMaintenancePage.isPopupExist("Delete successfully");
+//        await expect(isExist).toEqual(true);
+//        await new Promise(resolve => setTimeout(resolve, 2000));
+//        await $('//input[@placeholder="Quick Find"]').setValue(clientname);
+//        await new Promise(resolve => setTimeout(resolve, 1000));
+//        await expect($('//span[contains(text(),"' + clientname + '")]')).not.toBeExisting();
+//    });
 
-    it('tc009 Verify that user cannot delete a client if there is any task that is assigned to that client', async () => {
-        //Precondition 1: create a new client
-        //Precondition 2: create a task and in Entity field, select client in Precondition 1
-        let clientname = "A New Client Aug 2016-1152";
-        let errorMessage = "Cannot delete the client \"" + clientname + "\" because it is assigned to one or more tasks.";
-        await LoginPage.reload();
-        await ClientMaintenancePage.open();
-        await ClientMaintenancePage.searchClient(clientname);
-        await $('//button//i[.="delete"]').click();
-        await expect($("//p[contains(text(),'" + errorMessage + "')]")).toBeExisting();
-    });
+//    it('tc009 Verify that user cannot delete a client if there is any task that is assigned to that client', async () => {
+//        //Precondition 1: create a new client
+//        //Precondition 2: create a task and in Entity field, select client in Precondition 1
+//        let clientname = "A New Client Aug 2016-1152";
+//        let errorMessage = "Cannot delete the client \"" + clientname + "\" because it is assigned to one or more tasks.";
+//        await LoginPage.reload();
+//        await ClientMaintenancePage.open();
+//        await ClientMaintenancePage.searchClient(clientname);
+//        await $('//button//i[.="delete"]').click();
+//        await expect($("//p[contains(text(),'" + errorMessage + "')]")).toBeExisting();
+//    });
 
-    it('tc010 Verify the user can see and access the Cabinet Setting page to add a new cabinet when user has “CAC Manager” permission', async () => {
-        //Precondition: grant CAC Managers permission to account under test
-        await LoginPage.reload();
-        await LoginPage.logout();
-        await LoginPage.login(superadmin, password);
-        await GroupPermissionMaintenancePage.open();
-        await GroupPermissionMaintenancePage.focusOn("Automation " + date);
-        await GroupPermissionMaintenancePage.tickOn("CAC Managers");
-        await GroupPermissionMaintenancePage.save();
-        await LoginPage.logout();
+//    it('tc010 Verify the user can see and access the Cabinet Setting page to add a new cabinet when user has “CAC Manager” permission', async () => {
+//        //Precondition: grant CAC Managers permission to account under test
+//        await LoginPage.reload();
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);
+//        await GroupPermissionMaintenancePage.open();
+//        await GroupPermissionMaintenancePage.focusOn("Automation " + date);
+//        await GroupPermissionMaintenancePage.tickOn("CAC Managers");
+//        await GroupPermissionMaintenancePage.save();
+//        await LoginPage.logout();
 
-        await LoginPage.login(superadmin2, password);
-        await CabinetAccessControlPage.open();
-        await expect($('button[title="Cabinet Access Control"]')).toBeExisting();
-        await CabinetSettingsPage.open();
-        await expect($('button[title="Cabinet Settings"]')).toBeExisting();
-    });
+//        await LoginPage.login(superadmin2, password);
+//        await CabinetAccessControlPage.open();
+//        await expect($('button[title="Cabinet Access Control"]')).toBeExisting();
+//        await CabinetSettingsPage.open();
+//        await expect($('button[title="Cabinet Settings"]')).toBeExisting();
+//    });
 
-    it('tc011 Verify the user can add a new cabinet', async () => {
-        let message1 = "The cabinet \'" + cabinet_name + "\' has been created.";
-        let message2 = "Please apply access permissions for this cabinet via 'Administration - Cabinet Access Control'.";
-        let message3 = "This cabinet is not available to users until permissions are applied. Would you like to set Cabinet Access Control permission for '" + cabinet_name + "' now?";
+//    it('tc011 Verify the user can add a new cabinet', async () => {
+//        let message1 = "The cabinet \'" + cabinet_name + "\' has been created.";
+//        let message2 = "Please apply access permissions for this cabinet via 'Administration - Cabinet Access Control'.";
+//        let message3 = "This cabinet is not available to users until permissions are applied. Would you like to set Cabinet Access Control permission for '" + cabinet_name + "' now?";
         
-        await CabinetSettingsPage.addCabinet(cabinet_name, "None");
-        await expect($('//p[contains(.,"' + message1 + '")]')).toBeExisting();
-        await expect($('//p[contains(.,"' + message2 + '")]')).toBeExisting();
-        await expect($('//p[contains(normalize-space(),"' + message3 + '")]')).toBeExisting();
-        await $('//button[.="No"]').click();
-    });
-});
+//        await CabinetSettingsPage.addCabinet(cabinet_name, "None");
+//        await expect($('//p[contains(.,"' + message1 + '")]')).toBeExisting();
+//        await expect($('//p[contains(.,"' + message2 + '")]')).toBeExisting();
+//        await expect($('//p[contains(normalize-space(),"' + message3 + '")]')).toBeExisting();
+//        await $('//button[.="No"]').click();
+//    });
+
+//    it('tc012 Verify that user can see the cabinets in Cabinets/ Favourites list, Cabinet Settings page, Quickfind after applying Read permission for it on the CAC page', async () => {
+//        //Precondition: grant Read Cabinet permission
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);
+//        await CabinetAccessControlPage.open();
+//        await CabinetAccessControlPage.createNewGroup("Automation " + date);
+//        await CabinetAccessControlPage.focusOn("Automation " + date);
+//        await CabinetAccessControlPage.tickOnUser(superadmin2);
+//        await CabinetAccessControlPage.tickOnPermission("Read");
+//        await CabinetAccessControlPage.tickOnCabinet(cabinet_name);
+//        await CabinetAccessControlPage.save();
+//        await LoginPage.logout();
+
+//        //Verify in Cabinet
+//        await LoginPage.login(superadmin2, password);
+//        await CabinetPage.open();
+//        await expect($('//span[normalize-space()="' + cabinet_name + '"]')).toBeExisting();
+
+//        //Verify in Favourite (issue: admin account cannot add to Favourite)
+//        //await CabinetPage.addToFavourite(cabinet_name);
+//        //await FavouritesPage.open();
+//        //await expect($('//span[normalize-space(text())="' + cabinet_name + '"]')).toBeExisting();
+
+//        //Verify in Quick Find
+//        await $('//input[@placeholder="Quick Find"]').setValue(cabinet_name);
+//        await new Promise(resolve => setTimeout(resolve, 2000));
+//        await expect($('(//span[contains(text(),"' + cabinet_name + '")])')).toBeExisting();
+
+//        //Verify in Cabinet Setting
+//        await CabinetSettingsPage.open();
+//        await expect($('//td[normalize-space()="' + cabinet_name + '"]')).toBeExisting();
+//    });
+
+//    it('tc014 Verify the user can not add/ rename a cabinet with the name that already exists', async () => {
+//        //Precondition: grant Write Cabinet permission
+//        let newCabinetName = "Clients";
+//        let errorMessage = "The cabinet " + newCabinetName + " already exist";
+
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);
+//        await CabinetAccessControlPage.open();
+//        await CabinetAccessControlPage.focusOn("Automation " + date);
+//        await CabinetAccessControlPage.tickOnPermission("Write");
+//        await CabinetAccessControlPage.save();
+//        await LoginPage.logout();
+
+//        await LoginPage.login(superadmin2, password);
+//        await CabinetSettingsPage.open();
+//        await CabinetSettingsPage.renameCabinet(cabinet_name, newCabinetName);
+//        let isExist = await CabinetSettingsPage.isPopupExist(errorMessage);
+//        await expect(isExist).toEqual(true);
+//    });
+
+//    it('tc013 Verify that user can select any of the available cabinet name to rename', async () => {
+//        let newCabinetName = "Renamed " + cabinet_name;
+//        await CabinetSettingsPage.renameCabinet(cabinet_name, newCabinetName);
+//        await expect($('//td[normalize-space()="' + newCabinetName + '"]')).toBeExisting();
+//    });
+
+//    it('tc015 Verify that user can select any of the available cabinet name to delete', async () => {
+//        //Precondition: grant Delete Cabinet permission
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);
+//        await CabinetAccessControlPage.open();
+//        await CabinetAccessControlPage.focusOn("Automation " + date);
+//        await CabinetAccessControlPage.tickOnPermission("Delete");
+//        await CabinetAccessControlPage.save();
+//        await LoginPage.logout();
+
+//        await LoginPage.login(superadmin2, password);
+//        await CabinetSettingsPage.open();
+//        await CabinetSettingsPage.deleteCabinet("Renamed " + cabinet_name);
+//        await expect($('//td[normalize-space()="' + "Renamed " + cabinet_name + '"]')).not.toBeExisting();
+//    });
+
+//    //task issue - update late
+//    it('tc016 Verify the user cannot disable/ delete a DCM cabinet if there is any task that is assigned to a DCM folder in that DCM cabinet', async () => {
+//        //Precondition: create task and attach in cabinet folder
+//        let cabinetUnderTest = "Clients";
+
+//        //await CabinetSettingsPage.open();
+//        await $('//td[normalize-space()="' + cabinetUnderTest + '"]/following-sibling::*//i[.="create"]').click();
+//        await new Promise(resolve => setTimeout(resolve, 1000));
+//        await expect($('//label[normalize-space()="Enable DCM"]/preceding-sibling::input')).not.toBeExisting();
+//        //Postcondition for TC017
+//        await $('//button[.="Cancel"]').click();
+//        await LoginPage.logout();
+//    });
+
+//    it('tc017 Verify the user can access and use functions the Structure Maintenance page when that user has “Structure Maintenance” permission ', async () => {
+//        //Precondition: create new group to add permission
+//        await GroupPermissionMaintenancePage.open();
+//        await GroupPermissionMaintenancePage.createGroup("Automation " + date);
+//        await GroupPermissionMaintenancePage.tickOn(superadmin2);
+//        await GroupPermissionMaintenancePage.tickOn("Structure Maintenance");
+//        await GroupPermissionMaintenancePage.save();
+
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin2, password);
+//        await StructureMaintenancePage.open();
+//        await expect($('button[title="Structure Maintenance"]')).toBeExisting();
+//        await expect($('//*[contains(.,"New template")]/parent::button')).toBeExisting();
+//    });
+
+//    it('tc018 Verify that user can create a new structure template', async () => {
+//        await StructureMaintenancePage.addNewTemplate(templatename);
+//        await expect($('//label[normalize-space()="' + templatename + '"]')).toBeExisting();
+//    });
+
+//    it('tc021 Verify the user can not create/ rename a structure template with the name that already exists', async () => {
+//        let existTemplateName = "Standard Client";
+//        await StructureMaintenancePage.renameTemplate(templatename, existTemplateName);
+//        //let isExist = await StructureMaintenancePage.isPopupExist("Template with name " + existTemplateName + " already exists."); //Issue
+//        //await expect(isExist).toEqual(true);
+//        await $('//button[.="Cancel"]').click();
+//        await StructureMaintenancePage.addNewTemplate(existTemplateName);
+//        let isExist = await StructureMaintenancePage.isPopupExist("Template with name " + existTemplateName + " already exists.");
+//        await expect(isExist).toEqual(true);
+//        await $('//button[.="Cancel"]').click();
+//    });
+
+//    it('tc022 Verify that user can copy a structure template', async () => {
+//        await StructureMaintenancePage.copyTemplate(templatename);
+//        let isExist = await StructureMaintenancePage.isPopupExist("Copy Structure Template successfully");
+//        await expect(isExist).toEqual(true);
+//        await expect($('//label[normalize-space()="' + "Copy - " + templatename + '"]')).toBeExisting();
+
+//        //Postcondition: delete copied template
+//        await StructureMaintenancePage.deleteTemplate("Copy - " + templatename);
+//    });
+
+//    it('tc023 Verify the user can not copied duplicated Structure template name', async () => {
+//        await StructureMaintenancePage.copyTemplate(templatename, "Standard Client");
+//        let isExist = await StructureMaintenancePage.isPopupExist("Template name already exists.");
+//        await expect(isExist).toEqual(true);
+//        await $('//button[.="Cancel"]').click();
+//    });
+
+//    it('tc024 Verify that user can see and use list of the action in contextual menu when right-clicking a Folder structure', async () => {
+//        await StructureMaintenancePage.focusOnTemplate(templatename);
+//        await $('//span[normalize-space()="New Folder"]/parent::button').click({ button: 'right' });
+//        await new Promise(resolve => setTimeout(resolve, 100));
+//        await expect($('//button/span[normalize-space()="Set Folder Colour"]')).toBeExisting();
+//        await expect($('//button/span[normalize-space()="Add Folder"]')).toBeExisting();
+//        await expect($('//button/span[normalize-space()="Add Sub Folder"]')).toBeExisting();
+//        await expect($('//button/span[normalize-space()="Clone Folder"]')).toBeExisting();
+//        await expect($('//button/span[normalize-space()="Delete Folder"]')).toBeExisting();
+//        await expect($('//button/span[normalize-space()="Rename Folder"]')).toBeExisting();
+//    });
+
+//    it('tc025 Verify the user can not add folder/ add sub-folder/ rename folder/ clone folder with duplicated folder name', async () => {
+//        let folderName = "New Folder";
+//        let errorMessage = "Folder with name " + folderName + " already exists.";
+//        let errorMessage2 = "Folder with name Sub " + folderName + " already exists.";
+
+//        await StructureMaintenancePage.pressEsc();
+
+//        //Verify add folder with the duplicated name
+//        await StructureMaintenancePage.addFolder(folderName, false,"", folderName);
+//        await expect(await StructureMaintenancePage.isPopupExist(errorMessage)).toEqual(true);
+//        await $('//button[@aria-label="Close"]').click();
+
+//        //Verify clone folder with the duplicated name
+//        await StructureMaintenancePage.cloneFolder(folderName, folderName);
+//        await expect(await StructureMaintenancePage.isPopupExist(errorMessage)).toEqual(true);
+//        await $('//button[@aria-label="Close"]').click();
+
+//        //Verify rename folder with the duplicated name
+//        await StructureMaintenancePage.cloneFolder(folderName);
+//        await StructureMaintenancePage.renameFolder("Clone of " + folderName, folderName);
+//        await expect(await StructureMaintenancePage.isPopupExist(errorMessage)).toEqual(true);
+//        await $('//button[@aria-label="Close"]').click();
+
+//        //Verify sub folder with the duplicated name
+//        await StructureMaintenancePage.addFolder(folderName, true, "", folderName);
+//        await StructureMaintenancePage.addFolder(folderName, true, "", folderName);
+//        await expect(await StructureMaintenancePage.isPopupExist(errorMessage2)).toEqual(true);
+//        await $('//button[@aria-label="Close"]').click();
+//    });
+
+//    it('tc026 Verify that user can apply one or multiple cabinets to the Structure template', async () => {
+//        await StructureMaintenancePage.tickOnClient();
+//        await StructureMaintenancePage.saveTemplate();
+//        await ClientMaintenancePage.open();
+//        await $('//button//i[.="person_add"]').click();
+//        await new Promise(resolve => setTimeout(resolve, 500));
+//        await expect($('//label[normalize-space()="' + templatename + '"]')).toBeExisting();
+//        //Post-condition
+//        await $('//button[normalize-space()="Cancel"]').click();
+//        await StructureMaintenancePage.open();
+//    });
+
+//    it('tc020 Verify that user can select any of available template structure to rename', async () => {
+//        let newTemplateName = "Renamed " + templatename;
+//        await StructureMaintenancePage.renameTemplate(templatename, newTemplateName);
+//        let isExist = await StructureMaintenancePage.isPopupExist("Rename template successfully");
+//        await expect(isExist).toEqual(true);
+//        await expect($('//label[normalize-space()="' + newTemplateName + '"]')).toBeExisting();
+//    });
+
+//    it('tc019 Verify that user can select any of available template structure to delete', async () => {
+//        await StructureMaintenancePage.open();
+//        await StructureMaintenancePage.deleteTemplate("Renamed " + templatename);
+//        let isExist = await StructureMaintenancePage.isPopupExist("Delete template successfully");
+//        await expect(isExist).toEqual(true);
+//        await expect($('//label[normalize-space()="' + "Renamed " + templatename + '"]')).not.toBeExisting();
+//    });
+
+//    it('tc027 Verify the user can access the Administration > Template Maintenance page when that user has "Template Maintenance" permission', async () => {
+//        //Precondition: create new group to add permission
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin, password);
+//        await GroupPermissionMaintenancePage.open();
+//        await GroupPermissionMaintenancePage.createGroup("Automation " + date);
+//        await GroupPermissionMaintenancePage.tickOn(superadmin2);
+//        await GroupPermissionMaintenancePage.tickOn("Template Maintenance");
+//        await GroupPermissionMaintenancePage.save();
+
+//        await LoginPage.logout();
+//        await LoginPage.login(superadmin2, password);
+//        await TemplateMaintenancePage.open();
+//        await expect($('button[title="Template Maintenance"]')).toBeExisting();
+//    });
+
+
+//});

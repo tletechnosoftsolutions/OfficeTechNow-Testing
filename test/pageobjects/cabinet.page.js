@@ -99,7 +99,6 @@ class CabinetPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 2000));
         await $('//span[contains(.,"Save & Close")]').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
-       
     }
 
     /**
@@ -119,46 +118,21 @@ class CabinetPage extends Page {
     /**
    * a method to create quick note
    */
-    async createNewQuickNote(title,note, comments) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+    async createNewQuickNote(title, note) {
         await $('//button//i[.="add"]').click();
-         await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button//i[.="note_add"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
-        //await expect($('//div[contains(text(),"Create QuickNote")]')).toBeExisting();
-        await $('//input[@id="formly_9_input_title_0"]').click();
-        await $('//input[@id="formly_9_input_title_0"]').setValue("Cancellation");
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Tab']);
-        await browser.keys(['Note']);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        /* Fill mandatory */
-        //await $('//select[@id="formly_14_select_fileTypePrefix_0"]').click();
-         await new Promise(resolve => setTimeout(resolve, 1000));
-        //await $('//option[contains(.,"fn - File Note")]').click();
-        //await $('//input[@class="combobox-input ng-touched ng-dirty ng-valid"]').setValue("Cancellation");
-        // await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//app-subject-chooser-field[@id="formly_14_subject-chooser_subject_2"]').click();
-         await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('input[id*=input_title]').setValue(title);
+        await $('div[class*=editor][contenteditable]').setValue(note);
+        await new Promise(resolve => setTimeout(resolve, 200));
+        //Issue at Description
+        //await $('[id*=input_description]').clearValue();
+        //await $('[id*=input_description]').setValue("Cancellation");
+        await $('[id*=subject-chooser] input').click();
+        await new Promise(resolve => setTimeout(resolve, 200));
         await $('//a[contains(.,"Subject A")]').click();
-         await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//input[@id="formly_14_input_author_3"]').click();
-         await new Promise(resolve => setTimeout(resolve, 1000));
-        await browser.keys(['Tab']);
-         await new Promise(resolve => setTimeout(resolve, 1000));
-        await browser.keys(['Note']);
-         await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('[id*=textarea_comment]').setValue("Note Automation Testing");
         await $('//button/span[.="Save & Close"]').click();
         await new Promise(resolve => setTimeout(resolve, 5000));
     }
@@ -191,32 +165,29 @@ class CabinetPage extends Page {
    */
     async rightclickFolder(folder) {
         await new Promise(resolve => setTimeout(resolve, 1000));
-        await $('//span[text()=" ' + folder + '"]').click({ button: 'right' });        
+        await $('//span[normalize-space()="' + folder + '"]').click({ button: 'right' });        
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
-     async deleteNewQuickNote(note) {
+    async deleteNewQuickNote(note) {
         await new Promise(resolve => setTimeout(resolve, 1000));
-         await $('(//span[contains(.,"' + note + '")])[last()]').click();
-         await $('//span[contains(.,"delete")]').click();
-         await $('//textarea').setValue('testing reason for deleting');
-         await $('//button[.="Delete"]').click();
+        await $('(//span[contains(.,"' + note + '")])[last()]').click();
+        await $('//span[contains(.,"delete")]').click();
+        await $('//textarea').setValue('testing reason for deleting');
+        await $('//button[.="Delete"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
     async copyQuickNoteToPDF(note) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
-         await $('//span[contains(.,"' + note + '")]').click();
-        await $('(//button[@aria-label="File option"])[last()]').click();
+        await $('//span[contains(.,"' + note + '")]/ancestor::tr//button[@aria-label="File option"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//span[contains(.,"Open")]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button/span[.="Copy to PDF"]').click();
-        await new Promise(resolve => setTimeout(resolve, 10000));
-        await new Promise(resolve => setTimeout(resolve, 10000));
+        await new Promise(resolve => setTimeout(resolve, 15000));
         await $('//button/span[.="Save & Close"]').click();
         await new Promise(resolve => setTimeout(resolve, 5000));
         await $('//button/span/mat-icon[.="sync_problem"]').click();
-       
+        await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
     /**
@@ -230,7 +201,7 @@ class CabinetPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 2000));
         await $('//button//*[.="add_circle"]').click();
         //await clibboardy.writeSync(filename);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
         //await ks.sendCombination(['control', 'v']);
         await ks.sendText(filename);
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -344,6 +315,20 @@ class CabinetPage extends Page {
         await $('//button/span[normalize-space()="' + folderName + '"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
+
+    /**
+     * add to favorite
+     */
+    async addToFavourite(cabinetName) {
+        await this.rightclickFolder(cabinetName);
+        let isAddedFavourite = await $('//span[normalize-space()="Remove From Favourites"]').isExisting();
+        if (!isAddedFavourite) {
+            await $('//span[normalize-space()="Add To Favourites"]').click();
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+        else await ks.sendKey('escape');
+    }
+
 
     /**
      * open the Cabinet page

@@ -54,7 +54,6 @@ class ClientMaintenancePage extends Page {
         await $('(//label[.="Client Code"]/following-sibling::input)').setValue(clientcode);
         await $('//button/span[text()="Add"]').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
-
     }
 
     /**
