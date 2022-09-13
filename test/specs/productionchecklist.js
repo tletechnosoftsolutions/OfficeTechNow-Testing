@@ -22,8 +22,7 @@ const UserProfilePage = require('../pageobjects/userProfile.page');
 const { exec } = require('node:child_process');
 const { group } = require('node:console');
 
-const templatename = "AutomationTemplate" + new Date().getTime();
-const newTemplatename = "New" + templatename;
+
 const superadmin = 'tssadmin3';
 const superadmin2='tssadmin4';
 const user = 'tle@technosoftsolutions.com.au';
@@ -31,6 +30,9 @@ const password = 'Abc@12345';
 const isSuperadmin = true;
 const download_path = "C:/Users/TLe/Downloads/";
 
+var templatename = "AutomationTemplate" + new Date().getTime();
+var newTemplatename = "New" + templatename;
+var foldername = "AutomationFolder" + new Date().getTime();
 var clientname = "Automation" + new Date().getTime();
 var clientcode = new Date().getTime();
 var structure = "01. Standard Client";
@@ -618,6 +620,51 @@ describe('Client Cabinet Structure Template', () => {
         await $('//button[.="Cancel"]').click();
         await LoginPage.logout();
     });
+});
+
+
+
+
+describe('Template Maintenance', () => {
+    
+    it('tc027 Verify the user can access the Administration > Template Maintenance page when that user has "Template Maintenance" permission', async () => {
+        await TemplateMaintenancePage.open();
+        await expect($('button[title="Template Maintenance"]')).toBeExisting();
+    });
+
+    
+
+     it('tc030 Verify the user can add/rename/delete folder on the Template Maintenance page', async () => {
+         await TemplateMaintenancePage.open();
+         await TemplateMaintenancePage.rightclickFolder("Claims");
+         await TemplateMaintenancePage.addFolder(foldername);
+         await TemplateMaintenancePage.rightclickFolder(foldername);
+         await TemplateMaintenancePage.addSubFolder(foldername+"1");
+         await expect($('//span[text()=" '+foldername+'1"]')).toBeExisting();
+         
+     });
+    
+     it('tc029 Verify the user can upload templates on the Template Maintenance page', async () => {
+         await TemplateMaintenancePage.open();
+         await TemplateMaintenancePage.clickFolder(foldername);
+         await TemplateMaintenancePage.uploadFileSystem("testfilePDF.pdf");
+         await expect($('//span[text()="testfilePDF.pdf"]')).toBeExisting();
+     });
+
+     it('tc031 Verify the user can open/ rename templates in a folder on the Template Maintenance page', async () => {
+         await TemplateMaintenancePage.open();
+         await TemplateMaintenancePage.clickFolder(foldername);
+         await TemplateMaintenancePage.openTemplate();
+         
+     });
+
+    it('tc032 Verify the user can preview templates on the Template Maintenance page and the Templates page', async () => {
+         //await TemplateMaintenancePage.open();
+         //await TemplateMaintenancePage.clickFolder(foldername);
+        await TemplateMaintenancePage.reviewTemplate();     
+        await expect($('(//div[@id="mainContainer"])')).toBeExisting();
+         
+     });
 });
 
 describe('Logout', () => {

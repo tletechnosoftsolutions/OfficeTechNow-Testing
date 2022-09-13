@@ -39,10 +39,11 @@ const download_path = "C:/Users/TLe/Downloads/";
 
 describe('Login', () => {
     it('should login with valid credentials', async () => {
-       await LoginPage.open();
-      if (isSuperadmin) {
-			await LoginPage.login(superadmin, password);
-		} else await LoginPage.login(user, password);
+
+        await LoginPage.open();
+        if (isSuperadmin) {
+            await LoginPage.login(superadmin, password);
+        } else await LoginPage.login(user, password);
 
         await expect($('//span[text()="Home"]')).toBeExisting();
         await expect($('//span[text()="Home"]')).toBeExisting();
@@ -60,14 +61,14 @@ describe('Document Search/Folder Search', () => {
         await SearchPage.open();
         await SearchPage.typeInSearchBox("testfile.xlsx");
         await SearchPage.clickOnSearch();
-        await SearchPage.tickOn("Clients\A New Client Aug 2016-1152\2021")
+        await SearchPage.tickOn("Clients\\A New Client Aug 2016-1152\\2021")
         await SearchPage.goToLocation();
         await expect($('[aria-label="toggle A New Client Aug 2016-1152"]')).toBeExisting();
     });
-
+    
     it('tc002 Verify that user can download the selected file in Document Search', async () => {
         await SearchPage.open();
-        await new Promise(resolve => setTimeout(resolve, 30000)); //take time to search again
+        await new Promise(resolve => setTimeout(resolve, 25000)); //take time to search again
         //await SearchPage.typeInSearchBox("testfile.xlsx");
         //await SearchPage.clickOnSearch();
         await SearchPage.tickOn("2022.08.30-15.43-testfile.xlsx")
@@ -79,5 +80,55 @@ describe('Document Search/Folder Search', () => {
         await expect(isExist).toEqual(true);
     });
 
+    it('tc003 Verify that user can clear data search and search result when clicking Clear button on Document Search', async () => {
+        //Fulfill all fields
+        await SearchPage.tickOnMatchWholeWord();
+        await SearchPage.selectFileType(".xlsx");
+        await SearchPage.typeMaxResult("300");
+        await SearchPage.typeCabinet("Prospects");
+        await SearchPage.selectClient("AutomationTest");
+        await SearchPage.selectAuthor(superadmin);
+        await SearchPage.typeSubject("Subject A");
+        await SearchPage.typeComment("testing comment");
+        await SearchPage.selectNamingConvention("File Note");
+        await SearchPage.typeFromToDate();
+        await SearchPage.selectFileDate("2022", "9", "8");
+        await SearchPage.clearSearch();
+    });
+    
 
+    it('tc004 Verify that user can export search results when clicking Export button on Document Search', async () => {
+        let fs = require('fs');
+        let files = fs.readdirSync(download_path);
+        let fileName_prefix = "SearchResults_";
+
+        let today = new Date();
+        let date_postfix = ('0' + today.getDate()).slice(-2) + ('0' + (today.getMonth() + 1)).slice(-2) + today.getFullYear();
+
+        await SearchPage.typeInSearchBox("testfile.xlsx");
+        await SearchPage.clickOnSearch();
+        await SearchPage.exportSearch();
+        await expect(files.toString().includes(fileName_prefix + date_postfix)).toEqual(true);
+    });
+
+    it('tc005 Verify that user can search data with all fields on the Document Search', async () => {
+        let fileName = '2022.08.30-15.43-testfile.xlsx';
+        await SearchPage.typeInSearchBox(fileName);
+        await SearchPage.tickOnClientCabinetOnly();
+        await SearchPage.selectFileType(".xlsx");
+        await SearchPage.typeMaxResult("300");
+        await SearchPage.selectClient("A New Client Aug 2016-1152");
+        await SearchPage.selectAuthor(superadmin);
+        await SearchPage.typeSubject("Subject A");
+        await SearchPage.typeComment("testing upload");
+        await SearchPage.selectNamingConvention("File Note");
+        await SearchPage.typeFromToDate('8/6/22','8/9/22');
+        await SearchPage.clickOnSearch();
+
+        await expect($('//span[text()="' + fileName + '"]')).toBeExisting();
+    });
+
+    it('tc006 Verify that user will be redirected to the last folder when choosing "Go to client" on the Folder Search', async () => {
+
+    });
 });

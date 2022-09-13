@@ -21,8 +21,9 @@ class GroupPermissionMaintenancePage extends Page {
      * create new group
      */
     async createGroup(groupName) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
         await $('[mattooltip="Create"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
         await $('[formcontrolname="groupName"]').clearValue();
         await $('[formcontrolname="groupName"]').setValue(groupName);
         await $('//button[@type="submit"]').click();

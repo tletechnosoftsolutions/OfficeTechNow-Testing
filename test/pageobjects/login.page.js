@@ -1,7 +1,10 @@
 
 
 const Page = require('./page');
-
+const superadmin = 'tssadmin3';
+const superadmin2='tssadmin4';
+const user = 'tle@technosoftsolutions.com.au';
+const password = 'Abc@12345';
 /**
  * sub page containing specific selectors and methods for a specific page
  */
@@ -31,7 +34,7 @@ class LoginPage extends Page {
         await this.inputPassword.setValue(password);
         await this.btnSubmit.click();
         await new Promise(resolve => setTimeout(resolve, 3000));
-        $('(//button[@aria-label="Close"])').click();
+        //await $('(//button[@aria-label="Close"])').click();
 
     }
 
@@ -66,7 +69,7 @@ class LoginPage extends Page {
     async reloadsite (sitename) {
         await browser.url(sitename);
         await new Promise(resolve => setTimeout(resolve, 2000));
-        await $('(//button[@aria-label="Close"])').click();
+        //await $('(//button[@aria-label="Close"])').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
@@ -74,11 +77,17 @@ class LoginPage extends Page {
      * overwrite specific options to adapt it to page object
      */
     async reload () {
-        await browser.url(`https://officetechnow-develop.azurewebsites.net`);
+        this.open();
+        let isExisting = await $('//input[@id="username"]').isExisting();
+        if (isExisting == true) {
+            await this.login(superadmin, password);
+        }
         await new Promise(resolve => setTimeout(resolve, 2000));
-        await $('(//button[@aria-label="Close"])').click();
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        //await $('(//button[@aria-label="Close"])').click();
+        //await new Promise(resolve => setTimeout(resolve, 3000));
     }
+
+    
 }
 
 module.exports = new LoginPage();

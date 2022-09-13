@@ -141,6 +141,7 @@ class TaskPage extends Page {
      */
     async deleteTask() {
         await $('button[mattooltip=Delete]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
         await $('//span[.="Yes"]').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
     }
