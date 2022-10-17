@@ -441,6 +441,96 @@ class TaskPage extends Page {
         await this.btnTask.click();
         await new Promise(resolve => setTimeout(resolve, 2000));
     }
+
+    /**
+     * open the Cabinet page
+     */
+     async open1() {
+        await this.btnHome.click()
+        await this.btnTask.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * open the Cabinet page
+     */
+     async open2() {
+        await this.btnHome.click()
+        await this.btnTask.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * open the Cabinet page
+     */
+     async open3() {
+        await this.btnHome.click()
+        await this.btnTask.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * open the Cabinet page
+     */
+     async open4() {
+        await this.btnHome.click()
+        await this.btnTask.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * open the Cabinet page
+     */
+     async open5() {
+        await this.btnHome.click()
+        await this.btnTask.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * open the Cabinet page
+     */
+     async open6() {
+        await this.btnHome.click()
+        await this.btnTask.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * open the Cabinet page
+     */
+     async open7() {
+        await this.btnHome.click()
+        await this.btnTask.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * open the Cabinet page
+     */
+     async open8() {
+        await this.btnHome.click()
+        await this.btnTask.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * open the Cabinet page
+     */
+     async open9() {
+        await this.btnHome.click()
+        await this.btnTask.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * open the Cabinet page
+     */
+     async open10() {
+        await this.btnHome.click()
+        await this.btnTask.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
 }
 
 module.exports = new TaskPage();

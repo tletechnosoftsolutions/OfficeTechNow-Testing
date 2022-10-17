@@ -105,7 +105,7 @@ describe('Cabinets/ Favourites page', () => {
 		//open Cabinet
         await LoginPage.reload();
 		await CabinetPage.open();
-		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet1('Clients');
 		//await CabinetPage.expandCabinet("Z")
 		//await CabinetPage.expandCabinet('Z GARRETT-63362');
         //await CabinetPage.expandCabinet('2022');
@@ -132,7 +132,7 @@ describe('File', () => {
 		//Cabinet
 		await LoginPage.reload();
 		await CabinetPage.open();
-		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet2('Clients');
 		//await CabinetPage.expandCabinet("Z")
 		//await CabinetPage.expandCabinet('Z GARRETT-63362');
 		//await CabinetPage.expandCabinet('2022');
@@ -144,7 +144,7 @@ describe('File', () => {
 	it('tc002 Verify the Upload File(s) popup will display when clicking on Floating button > Upload button', async () => {
         //Cabinet
 		await CabinetPage.open();
-		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet3('Clients');
 		//await CabinetPage.expandCabinet("Z")
 		//await CabinetPage.expandCabinet('Z GARRETT-63362');
 		//await CabinetPage.expandCabinet('2022');
@@ -166,34 +166,34 @@ describe('Add New User', () => {
 	it('tc002 Verify the Super Admin User can access the User & Authentication Maintenance page to Add a new user ', async () => {
         //Cabinet
 		await CabinetPage.open();
-        await UserAuthenticationMaintenancePage.open();
+        await UserAuthenticationMaintenancePage.open1();
     });
 
     
 	it('tc003 Verify that a new user added by super admin user will recieve an email and user can click on "Go to Officetech" button  to set new password and scan QR code ', async () => {
         //Cabinet
 		await CabinetPage.open();
-        await UserAuthenticationMaintenancePage.open();
+        await UserAuthenticationMaintenancePage.open2();
     });
 
     
 	it('tc004 Verify a new user can login to OTNow system after setting password and scan QR code ', async () => {
         //Cabinet
 		await CabinetPage.open();
-        await UserAuthenticationMaintenancePage.open();
+        await UserAuthenticationMaintenancePage.open3();
     });
 
      
 	it('tc005 Verify a QR code form will appear to user scan QR code before login if user has not scanned QR code before', async () => {
         //Cabinet
 		await CabinetPage.open();
-        await UserAuthenticationMaintenancePage.open();
+        await UserAuthenticationMaintenancePage.open4();
     });
 
     it('tc006 Verify that the user can reset the password if he forgot it by clicking “Forgot password?”.', async () => {
         //Cabinet
 		await CabinetPage.open();
-		await UserAuthenticationMaintenancePage.open();
+		await UserAuthenticationMaintenancePage.open5();
     });
 
     it('tc007 Verify if the user can not access the Authenticator App to get the OTP code, he can request 2FA Manager to reset his 2-factor Authentication on the OTP form', async () => {
@@ -448,9 +448,9 @@ describe('Task', () => {
 
 
 	it('tc003 Verify that user can select one or multiple the task(s) to reassign to another user in the Task list', async () => {
-
+        await LoginPage.reload();
 			//Pre-condition: create 02 tasks
-            await TaskPage.open();
+            await TaskPage.open1();
 			//await TaskPage.createTask();
 			//await TaskPage.saveAndClose();
 			//await TaskPage.createTask();
@@ -460,7 +460,8 @@ describe('Task', () => {
 
     it('tc004 Verify that user can create a new task by clicking Create Task button', async () => {
         //Pre-condition: create 01 task
-        await TaskPage.open();
+        await LoginPage.reload();
+        await TaskPage.open2();
         //await TaskPage.createTask();
         //await TaskPage.saveAndClose();
        // await TaskPage.goToClient();
@@ -468,9 +469,9 @@ describe('Task', () => {
     });
 
     it('tc005 Verify that the data in task filtered will deleted when Clicking on Clear All button on Task list', async () => {
-
-			await TaskPage.open();
-			await TaskPage.fulfilldata();
+            await LoginPage.reload();
+			await TaskPage.open3();
+			//await TaskPage.fulfilldata();
 			await TaskPage.clearAll();
 			
     });
@@ -479,7 +480,7 @@ describe('Task', () => {
     it('tc006 Verify that the ott file will be created in the selected location when user complete a task', async () => {
         //Pre-condition: create 01 completed task
         await LoginPage.reload();
-        await TaskPage.open();
+        await TaskPage.open4();
         //await TaskPage.createTask();
        //await TaskPage.saveAndClose();
         //await TaskPage.changeStatus("Complete");
@@ -489,10 +490,10 @@ describe('Task', () => {
     it('tc007 Verify that user can search task when entering data search all task fields', async () => {
 
             await LoginPage.reload();
-            await TaskPage.open();
+            await TaskPage.open5();
             //await TaskPage.createTask();
             //await TaskPage.saveAndClose();
-			await TaskPage.fulfilldata();
+			//await TaskPage.fulfilldata();
 			await TaskPage.search();
 			
     });
@@ -500,7 +501,7 @@ describe('Task', () => {
      it('tc008 Verify that user can select one or multiple task(s) in the Task list to delete', async () => {
         //Pre-condition: create 01 task
         await LoginPage.reload();
-        await TaskPage.open();
+        await TaskPage.open6s();
         //await TaskPage.createTask();
         //await TaskPage.saveAndClose();
         //Delete selected tasks
@@ -524,56 +525,56 @@ describe('Document Search/Folder Search', () => {
     
     it('tc002 Verify that user can download the selected file in Document Search', async () => {
         await SearchPage.open();
-        await SearchPage.typeInSearchBox("testfile.xlsx");
+        await SearchPage.typeInSearchBox1("testfile.xlsx");
         await expect($('//span[contains(.,"testfile")]')).toBeExisting();
     });
 
     it('tc003 Verify that user can clear data search and search result when clicking Clear button on Document Search', async () => {
         await SearchPage.open();
-        await SearchPage.typeInSearchBox("testfile.xlsx");
+        await SearchPage.typeInSearchBox2("testfile.xlsx");
         await expect($('//span[contains(.,"testfile")]')).toBeExisting();
     });
     
 
     it('tc004 Verify that user can export search results when clicking Export button on Document Search', async () => {
         await SearchPage.open();
-        await SearchPage.typeInSearchBox("testfile.xlsx");
+        await SearchPage.typeInSearchBox3("testfile.xlsx");
         await expect($('//span[contains(.,"testfile")]')).toBeExisting();
     });
 
     it('tc005 Verify that user can search data with all fields on the Document Search', async () => {
         await SearchPage.open();
-        await SearchPage.typeInSearchBox("testfile.xlsx");
+        await SearchPage.typeInSearchBox4("testfile.xlsx");
         await expect($('//span[contains(.,"testfile")]')).toBeExisting();
     });
 
     it('tc006 Verify that user will be redirected to the last folder when choosing "Go to client" on the Folder Search', async () => {
         await SearchPage.open();
-        await SearchPage.typeInSearchBox("testfile.xlsx");
+        await SearchPage.typeInSearchBox5("testfile.xlsx");
         await expect($('//span[contains(.,"testfile")]')).toBeExisting();
     });
 
     it('tc007 Verify that user will be redirected to the last folder when choosing "Go to client" on the Folder Search', async () => {
         await SearchPage.open();
-        await SearchPage.typeInSearchBox("testfile.xlsx");
+        await SearchPage.typeInSearchBox6("testfile.xlsx");
         await expect($('//span[contains(.,"testfile")]')).toBeExisting();
     });
 
     it('tc008 Verify that user will be redirected to the last folder when choosing "Go to client" on the Folder Search', async () => {
         await SearchPage.open();
-        await SearchPage.typeInSearchBox("testfile.xlsx");
+        await SearchPage.typeInSearchBox7("testfile.xlsx");
         await expect($('//span[contains(.,"testfile")]')).toBeExisting();
     });
 
     it('tc009 Verify that user will be redirected to the last folder when choosing "Go to client" on the Folder Search', async () => {
         await SearchPage.open();
-        await SearchPage.typeInSearchBox("testfile.xlsx");
+        await SearchPage.typeInSearchBox8("testfile.xlsx");
         await expect($('//span[contains(.,"testfile")]')).toBeExisting();
     });
 
     it('tc010 Verify that user will be redirected to the last folder when choosing "Go to client" on the Folder Search', async () => {
         await SearchPage.open();
-        await SearchPage.typeInSearchBox("testfile.xlsx");
+        await SearchPage.typeInSearchBox9("testfile.xlsx");
         await expect($('//span[contains(.,"testfile")]')).toBeExisting();
     });
 
@@ -613,6 +614,8 @@ describe('Task Template Maintenance', () => {
 
     
     it('tc003 Verify that user can select any of the available task template to copy the copied task template will copy all task steps, step setting and task field of the selected template to copy', async () => {
+        await LoginPage.reload();
+        await TaskTemplateMaintenance.open();
         await TaskTemplateMaintenance.focusOn(newTemplateName);
         await TaskTemplateMaintenance.copy(newTemplateName);
         await expect($('//label[normalize-space()="Copy - ' + newTemplateName + '"]')).toBeExisting();
@@ -621,6 +624,8 @@ describe('Task Template Maintenance', () => {
 
     it('tc004 Verify that user can add new a step by clicking Create button', async () => {
         //Pre-condition: TC001 - Create a new task template
+        await LoginPage.reload();
+        await TaskTemplateMaintenance.open();
         await TaskTemplateMaintenance.focusOn(newTemplateName);
         await TaskTemplateMaintenance.createStep("Step 1", "Simple");
         await TaskTemplateMaintenance.createStep("Step 2", "Text Box");
@@ -635,6 +640,8 @@ describe('Task Template Maintenance', () => {
     });
 
     it('tc005 Verify that user can select any of the available Step to edit/ delete', async () => {
+        await LoginPage.reload();
+        await TaskTemplateMaintenance.open();
         await TaskTemplateMaintenance.focusOn(newTemplateName);
         //Pre-condition: TC004 - Steps already have been added in Task Template
         //Delete step 4
@@ -648,7 +655,8 @@ describe('Task Template Maintenance', () => {
     it('tc006 Verify that user can select any of the available Step to move up/down', async () => {
         //Pre-condition: TC004 - Steps already have been added in Task Template
         //Re-order all steps: 4 > 3 > 2 > 1
-		
+		await LoginPage.reload();
+        await TaskTemplateMaintenance.open();
         await TaskTemplateMaintenance.focusOn(newTemplateName);
         await TaskTemplateMaintenance.moveStep("Step 1", "Down");
         await TaskTemplateMaintenance.moveStep("Step 1", "Down");
@@ -1094,7 +1102,7 @@ describe('Cabinet list', () => {
     it('tc003 Delete quick note', async () => {
         await LoginPage.reload();
 		await CabinetPage.open();
-		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet1('Clients');
       //  await CabinetPage.expandCabinet("Z");
 		//await CabinetPage.expandCabinet('Z GARRETT-63362');
        // await CabinetPage.expandCabinet('2022');
@@ -1108,7 +1116,7 @@ describe('Cabinet list', () => {
 	it('tc004 Verify that user can create a new task when clicking Floating >  Create new task button, the data should display correctly after create new task successfully', async () => {		
         await LoginPage.reload();
         await CabinetPage.open();
-		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet2('Clients');
       //  await CabinetPage.expandCabinet("Z");
 	//	await CabinetPage.expandCabinet('Z GARRETT-63362');
       //  await CabinetPage.expandCabinet('2022');
@@ -1119,7 +1127,7 @@ describe('Cabinet list', () => {
     	//Cabinet
         await LoginPage.reload();
 		await CabinetPage.open();
-		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet3('Clients');
         //await CabinetPage.expandCabinet("Z");
 		//await CabinetPage.expandCabinet('Z GARRETT-63362');
         //await CabinetPage.expandCabinet('2022');
@@ -1135,7 +1143,7 @@ describe('Cabinet list', () => {
 		//Cabinet
 		await LoginPage.reload();
 		await CabinetPage.open();
-		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet4('Clients');
        // await CabinetPage.expandCabinet("Z");
 		//await CabinetPage.expandCabinet('Z GARRETT-63362');
        // await CabinetPage.expandCabinet('2022');
@@ -1172,7 +1180,7 @@ describe('Cabinet list', () => {
 		//Cabinet
 		await LoginPage.reload();
 		await CabinetPage.open();
-		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet1('Clients');
        // await CabinetPage.expandCabinet("Z");
 		//await CabinetPage.expandCabinet('Z GARRETT-63362');
         //await CabinetPage.rightclickFolder("Z GARRETT-63362");
@@ -1188,7 +1196,7 @@ describe('Cabinet list', () => {
 		//Cabinet
 		await LoginPage.reload();
 		await CabinetPage.open();
-		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet2('Clients');
         //await CabinetPage.expandCabinet("Z");
 		//await CabinetPage.expandCabinet('Z GARRETT-63362');
         //await CabinetPage.rightclickFolder("Z GARRETT-63362");
@@ -1227,7 +1235,9 @@ describe('Intray', () => {
 
     it('tc002 Verify that the current user login can upload default action of a file on his own In-tray', async () => {
         //Pre-condition: Delete all files in Intray then upload 02 file in intray
-		await IntrayPage.goToUserIntray(accountA);
+        await LoginPage.reload();
+        await IntrayPage.open();
+        await IntrayPage.goToUserIntray(accountA);
         //await IntrayPage.checkInAndDeleteAllFiles();
         //await IntrayPage.uploadFileSystem(fileName);
         //await IntrayPage.checkInFile(fileName);
@@ -1236,7 +1246,9 @@ describe('Intray', () => {
     });
 
     it('tc003 Verify that the current user login can copy a file on his own In-tray', async () => {
-       
+        await LoginPage.reload();
+        await IntrayPage.open();
+        await IntrayPage.goToUserIntray1(accountA);
             //Verify copy file
 			//await IntrayPage.uploadFileSystem(fileName);
 			//await IntrayPage.checkInFile(fileName);
@@ -1252,7 +1264,9 @@ describe('Intray', () => {
     it('tc004 Verify that the current user login can move a file on his own In-tray', async () => {
        
         //Verify move file
-       //await IntrayPage.goToUserIntray(accountA);
+        await LoginPage.reload();
+        await IntrayPage.open();
+        await IntrayPage.goToUserIntray2(accountA);
 		//await IntrayPage.uploadFileSystem(fileName);
 		//await IntrayPage.checkInFile(fileName);
         //await IntrayPage.moveTo(accountB);
@@ -1268,7 +1282,9 @@ describe('Intray', () => {
        
 
         //Verify new email
-       // await IntrayPage.goToUserIntray(accountA);
+        await LoginPage.reload();
+        await IntrayPage.open();
+        await IntrayPage.goToUserIntray3(accountA);
 		//await IntrayPage.uploadFileSystem(fileName);
        // await IntrayPage.checkInFile(fileName);
         //await IntrayPage.tickOnFile(fileName);
@@ -1284,7 +1300,9 @@ describe('Intray', () => {
     
     it('tc006 Verify that the current user login send task a file on his own In-tray', async () => {
        
-	//	await IntrayPage.goToUserIntray(accountA);
+        await LoginPage.reload();
+        await IntrayPage.open();
+        await IntrayPage.goToUserIntray4(accountA);
 		//await IntrayPage.uploadFileSystem(fileName);
       //  await IntrayPage.checkInFile(fileName);
       //  await IntrayPage.sendToTask("Existing");
@@ -1325,7 +1343,7 @@ describe('CAC/IAC', () => {
             //Check file can be copied from Cabinet
 			await LoginPage.reload();
 			await CabinetPage.open();
-			await CabinetPage.expandCabinet('Clients');
+			await CabinetPage.expandCabinet1('Clients');
             /*
 			await CabinetPage.expandCabinet("Z");
 			await CabinetPage.expandCabinet('Z GARRETT-63362');
@@ -1360,7 +1378,7 @@ describe('CAC/IAC', () => {
         
 			await LoginPage.reload();
 			await CabinetPage.open();
-			await CabinetPage.expandCabinet('Clients');
+			await CabinetPage.expandCabinet2('Clients');
 			//await CabinetPage.expandCabinet("Z");
 			//await CabinetPage.expandCabinet('Z GARRETT-63362');
 			//await CabinetPage.expandCabinet("2022");

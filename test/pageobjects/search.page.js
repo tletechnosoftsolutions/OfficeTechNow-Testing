@@ -32,6 +32,76 @@ class InTraysPage extends Page {
     }
 
     /**
+     * type in search box
+     */
+     async typeInSearchBox1(searchContent) {
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
+    }
+
+    /**
+     * type in search box
+     */
+     async typeInSearchBox2(searchContent) {
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
+    }
+
+    /**
+     * type in search box
+     */
+     async typeInSearchBox3(searchContent) {
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
+    }
+
+    /**
+     * type in search box
+     */
+     async typeInSearchBox4(searchContent) {
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
+    }
+
+    /**
+     * type in search box
+     */
+     async typeInSearchBox5(searchContent) {
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
+    }
+
+    /**
+     * type in search box
+     */
+     async typeInSearchBox6(searchContent) {
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
+    }
+
+    /**
+     * type in search box
+     */
+     async typeInSearchBox7(searchContent) {
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
+    }
+
+    /**
+     * type in search box
+     */
+     async typeInSearchBox8(searchContent) {
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
+    }
+
+    /**
+     * type in search box
+     */
+     async typeInSearchBox9(searchContent) {
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
+    }
+
+    /**
+     * type in search box
+     */
+     async typeInSearchBox10(searchContent) {
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
+    }
+
+    /**
      * click on search button
      */
     async clickOnSearch() {

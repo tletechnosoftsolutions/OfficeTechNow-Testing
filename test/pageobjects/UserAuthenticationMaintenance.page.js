@@ -27,6 +27,46 @@ class UserAuthenticationMaintenancePage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
 
+     /**
+     * open the User Authentication Maintenance page
+     */
+      async open1() {
+        await this.btnAdministration.click();
+        await this.btnUserAuthenticationMaintenance.click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+     /**
+     * open the User Authentication Maintenance page
+     */
+      async open2() {
+        await this.btnAdministration.click();
+        await this.btnUserAuthenticationMaintenance.click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+     /**
+     * open the User Authentication Maintenance page
+     */
+      async open3() {
+        await this.btnAdministration.click();
+        await this.btnUserAuthenticationMaintenance.click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+     /**
+     * open the User Authentication Maintenance page
+     */
+      async open4() {
+        await this.btnAdministration.click();
+        await this.btnUserAuthenticationMaintenance.click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+     /**
+     * open the User Authentication Maintenance page
+     */
+      async open5() {
+        await this.btnAdministration.click();
+        await this.btnUserAuthenticationMaintenance.click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
     /**
      * create user
      */

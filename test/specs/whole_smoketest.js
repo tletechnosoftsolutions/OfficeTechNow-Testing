@@ -1543,6 +1543,12 @@ describe('Audit Trail', () => {
             await AuditTrailPage.openIndividual();
             await expect($('[id="Audit Trail"]')).toBeExisting();
 
+            await AuditTrailPage.clickOnSelectUser();
+            await AuditTrailPage.tickOn(accountUserA);
+            await AuditTrailPage.fillDate("01/07/2022", today);
+            await AuditTrailPage.refresh();
+            //Verify something here
+
     });
 
     it('tc002 Verify that user can access to Invidual Audit Trail when user has "Audit Trail Individual " permission checked on the Group & Permission Maintenance', async () => {
@@ -1577,8 +1583,15 @@ describe('Audit Trail', () => {
     it('tc006 Verify that user can export search results by clicking Export button', async () => {
         //Pre-condition: TC005
         await AuditTrailPage.export();
+        const download_path = "C:/Users/TLe/Downloads/";
+        const download_fileName = "exported.xlsx";
+        const fs = require('fs');
+        let isExist = fs.existsSync(download_path + download_fileName);
+        await expect(isExist).toEqual(true);
     });
 });
+
+
 
 
 describe('Cabinet list', () => {
@@ -1607,11 +1620,12 @@ describe('Cabinet list', () => {
     });
 
     it('tc003 Verify that on the quicknote detail user can select a Copy to PDF  button, The PDF document is created and saved to the same location as the original quicknote', async () => {
+		//Cabinet
         let note = "Cancellation";
-        //await CabinetPage.copyQuickNoteToPDF(note)
-        //await expect($('//span[contains(.,".pdf")]')).toBeExisting();
-        //await CabinetPage.deleteNewQuickNote("Cancellation.oqn")
-        //await CabinetPage.deleteNewQuickNote("Cancellation.pdf")
+        await CabinetPage.copyQuickNoteToPDF(note)
+        await expect($('//span[contains(.,".pdf")]')).toBeExisting();
+        await CabinetPage.deleteNewQuickNote("Cancellation.oqn")
+        await CabinetPage.deleteNewQuickNote("Cancellation.pdf")
     });
 
 
@@ -1621,12 +1635,13 @@ describe('Cabinet list', () => {
 		await CabinetPage.open();
 		await CabinetPage.uploadFileSystem('testfile.xlsx');
         await expect($('(//span[contains(.,"testfile.xlsx")])[last()]')).toBeExisting();
+        //await CabinetPage.deleteNewQuickNote("testfile.xlsx")
 
     });
 
     //issue unable to create task
 	it('tc005 Verify that user can upload a file when clicking Floating >  Upload button, the data should display correctly afterupload file successfully', async () => {
-		await CabinetPage.open();
+		await CabinetPage.createNewTask("Claim")
 
 	});
 
@@ -2000,6 +2015,19 @@ describe('Group & Permission Maintenance', () => {
         await expect($('//label[normalize-space()="Edited ' + templatename + '"]')).not.toBeExisting();
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 describe('Logout', () => {

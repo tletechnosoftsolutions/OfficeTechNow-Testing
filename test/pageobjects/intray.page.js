@@ -51,6 +51,42 @@ class InTraysPage extends Page {
     }
 
     /**
+     * go to user's intray
+     */
+     async goToUserIntray1(userName) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await $('//button/span[normalize-space()="' + userName + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
+    /**
+     * go to user's intray
+     */
+     async goToUserIntray2(userName) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await $('//button/span[normalize-space()="' + userName + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
+    /**
+     * go to user's intray
+     */
+     async goToUserIntray3(userName) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await $('//button/span[normalize-space()="' + userName + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
+     /**
+     * go to user's intray
+     */
+      async goToUserIntray4(userName) {
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await $('//button/span[normalize-space()="' + userName + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
+    /**
      * move file to another user's intray
      */
     async moveTo(desUserIntrayFolder) {

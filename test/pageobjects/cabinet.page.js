@@ -39,6 +39,50 @@ class CabinetPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 500));
     }
 
+    
+    /**
+    * a method to expand folder
+    */
+     async expandCabinet1(folder) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('button[aria-label="toggle ' + folder + '"]').click();
+        await $('//span[text()=" ' + folder + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+     
+    /**
+    * a method to expand folder
+    */
+     async expandCabinet2(folder) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('button[aria-label="toggle ' + folder + '"]').click();
+        await $('//span[text()=" ' + folder + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+      
+    /**
+    * a method to expand folder
+    */
+     async expandCabinet3(folder) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('button[aria-label="toggle ' + folder + '"]').click();
+        await $('//span[text()=" ' + folder + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+       
+    /**
+    * a method to expand folder
+    */
+     async expandCabinet4(folder) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('button[aria-label="toggle ' + folder + '"]').click();
+        await $('//span[text()=" ' + folder + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
     /**
    * a method to expand folder to the 4th child
    */
