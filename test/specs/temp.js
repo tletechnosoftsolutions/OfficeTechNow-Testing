@@ -233,7 +233,7 @@ describe('Login', () => {
 
 //describe('Structure Maintenance', () => {
 //	//TC001->TC004->TC003->TC005
-//	it('tc001 Verify the user can see and access the Structure Maintenance page to add a new template when user has “Structure Maintenance” permission checked on the Group & Permission Maintenance', async () => {
+//	it('tc001 Verify the user can see and access the Structure Maintenance page to add a new template when user has ï¿½Structure Maintenanceï¿½ permission checked on the Group & Permission Maintenance', async () => {
 //		await StructureMaintenancePage.open();
 //		await StructureMaintenancePage.addNewTemplate(templatename);
 //		await StructureMaintenancePage.saveTemplate();
@@ -1471,7 +1471,7 @@ describe('Login', () => {
 
 
 //describe('Group & Permission Maintenance', () => {
-//    it('tc001 Verify the user can see and access the Group & Permission Maintenance page when that user has “User & Group Maintenance” permission ', async () => {
+//    it('tc001 Verify the user can see and access the Group & Permission Maintenance page when that user has ï¿½User & Group Maintenanceï¿½ permission ', async () => {
 //        await GroupPermissionMaintenancePage.open();
 //        let existUrl = await browser.getUrl();
 //        expect(existUrl).toHaveTextContaining("group-management");
@@ -1548,7 +1548,7 @@ describe('Login', () => {
 //});
 
 describe('Client Cabinet Structure Template', () => {
-    it('tc001 Verify the user can see and access the Client Maintenance page when he has “Add Client” permission', async () => {
+    it('tc001 Verify the user can see and access the Client Maintenance page when he has ï¿½Add Clientï¿½ permission', async () => {
         //Pre-condition: grant permission "Add Client" to account
         await GroupPermissionMaintenancePage.open();
         await GroupPermissionMaintenancePage.createGroup("Automation " + date);
@@ -1687,7 +1687,7 @@ describe('Client Cabinet Structure Template', () => {
         await expect($("//p[contains(text(),'" + errorMessage + "')]")).toBeExisting();
     });
 
-    it('tc010 Verify the user can see and access the Cabinet Setting page to add a new cabinet when user has “CAC Manager” permission', async () => {
+    it('tc010 Verify the user can see and access the Cabinet Setting page to add a new cabinet when user has ï¿½CAC Managerï¿½ permission', async () => {
         //Precondition: grant CAC Managers permission to account under test
         await LoginPage.reload();
         await LoginPage.logout();
@@ -1793,29 +1793,20 @@ describe('Client Cabinet Structure Template', () => {
     });
 
     //task issue - update late
-    it('tc016 Verify the user cannot disable/ delete a DCM cabinet if there is any task that is assigned to a DCM folder in that DCM cabinet', async () => {
-        //Precondition: create task and attach in cabinet folder
-        let cabinetUnderTest = "Clients";
+ //   it('tc016 Verify the user cannot disable/ delete a DCM cabinet if there is any task that is assigned to a DCM folder in that DCM cabinet', async () => {
+ //       //Precondition: create task and attach in cabinet folder
+ //       let cabinetUnderTest = "Clients";
 
-        //await CabinetSettingsPage.open();
-        await $('//td[normalize-space()="' + cabinetUnderTest + '"]/following-sibling::*//i[.="create"]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        await expect($('//label[normalize-space()="Enable DCM"]/preceding-sibling::input')).not.toBeExisting();
-        //Postcondition for TC017
-        await $('//button[.="Cancel"]').click();
-        await LoginPage.logout();
-    });
+ //       //await CabinetSettingsPage.open();
+ //       await $('//td[normalize-space()="' + cabinetUnderTest + '"]/following-sibling::*//i[.="create"]').click();
+ //       await new Promise(resolve => setTimeout(resolve, 1000));
+ //       await expect($('//label[normalize-space()="Enable DCM"]/preceding-sibling::input')).not.toBeExisting();
+ //       //Postcondition for TC017
+ //       await $('//button[.="Cancel"]').click();
+ //       await LoginPage.logout();
+ //   });
 
-    it('tc017 Verify the user can access and use functions the Structure Maintenance page when that user has “Structure Maintenance” permission ', async () => {
-        //Precondition: create new group to add permission
-        await GroupPermissionMaintenancePage.open();
-        await GroupPermissionMaintenancePage.createGroup("Automation " + date);
-        await GroupPermissionMaintenancePage.tickOn(superadmin2);
-        await GroupPermissionMaintenancePage.tickOn("Structure Maintenance");
-        await GroupPermissionMaintenancePage.save();
-
-        await LoginPage.logout();
-        await LoginPage.login(superadmin2, password);
+    it('tc017 Verify the user can access and use functions the Structure Maintenance page when that user has ï¿½Structure Maintenanceï¿½ permission ', async () => {
         await StructureMaintenancePage.open();
         await expect($('button[title="Structure Maintenance"]')).toBeExisting();
         await expect($('//*[contains(.,"New template")]/parent::button')).toBeExisting();

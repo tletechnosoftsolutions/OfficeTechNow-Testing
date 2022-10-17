@@ -1,5 +1,6 @@
 ﻿
 const Page = require('./page');
+const ks = require('node-key-sender');
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -16,6 +17,59 @@ class TaskPage extends Page {
     get btnHome() {
         return $('//span[text()="Home"]');
     }
+
+     /**
+     * create task at cabinet (not contain filling Entity or Client)
+     */
+      async createFullTask2(client, business,tasksubject) {
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//a[.="'+business+'"]').click();
+        //Progress
+        await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//a[.="Task Subject 01"]').click();
+    }
+
+    /**
+     * create and fill information of task
+     */
+     async createFullTask(client, business,tasksubject) {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        //Entity
+        //await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').setValue(client);
+        await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').click();
+        await ks.sendText(client);
+        //await ks.sendKey('enter');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await $('(//div[@role="option"])[1]').click();
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//a[.="'+business+'"]').click();
+        //Progress
+        await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//a[.="'+tasksubject+'"]').click();
+    }
+
+    
 
     /**
      * create and fill information of task

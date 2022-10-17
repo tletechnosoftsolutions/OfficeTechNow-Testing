@@ -34,7 +34,8 @@ class UserProfilePage extends Page {
         await $('[id*=currentPassword] input').setValue(currentPassword);
         await $('input[placeholder="New Password"]').setValue(newPassword);
         await $('[id*=passwordConfirm] input').setValue(newPassword);
-        await $('//button/span[.="Change Password"]').click();
+        //await $('//button/span[.="Change Password"]').click();
+        await $('//button[.="Cancel"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
 }

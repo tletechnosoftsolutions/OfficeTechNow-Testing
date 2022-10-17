@@ -102,6 +102,27 @@ class CabinetPage extends Page {
     }
 
     /**
+    * a method to create task
+    */
+     async createTaskCategoryname(categoryname) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//button//i[.="add"]').click();
+        await $('//button//i[.="add_task"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));       
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//a[.="'+categoryname+'"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('//span[contains(.,"Save & Close")]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+
+    /**
    * a method to create quick note
    */
     async createQuickNote() {
@@ -166,7 +187,7 @@ class CabinetPage extends Page {
     async rightclickFolder(folder) {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//span[normalize-space()="' + folder + '"]').click({ button: 'right' });        
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
     }
     async deleteNewQuickNote(note) {
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -336,6 +357,7 @@ class CabinetPage extends Page {
     async open() {
         await this.btnHome.click();
         await this.btnCabinet.click();
+        await new Promise(resolve => setTimeout(resolve, 5000));
     }
 }
 

@@ -63,6 +63,7 @@ class SystemAdminWizardPage extends Page {
      * form #3 is the popup form laid in: Naming Convention
      */
     async fillForm3(name) {
+        await new Promise(resolve => setTimeout(resolve, 6000));
         await $('[id*=input_prefix]').clearValue();
         await $('[id*=input_prefix]').setValue(name.slice(name.length - 3, name.length)); //get last 3 digits from the postfix passed
         await $('[id*=input_name]').clearValue();
@@ -90,10 +91,10 @@ class SystemAdminWizardPage extends Page {
      */
     async moveToTop() {
         let num = await $$('(//app-box-template)[2]//*[contains(@class,"list-group-item")][contains(@class,"d active") or contains(@class,"active ng")]/preceding-sibling::*').length;
-        for (let i = 0; i < num; i++) {
+        //for (let i = 0; i < num; i++) {
             await this.clickOnButton("Up");
             await new Promise(resolve => setTimeout(resolve, 1000));
-        }
+        //}
     }
 
      /**
@@ -101,10 +102,10 @@ class SystemAdminWizardPage extends Page {
      */
     async moveToBottom() {
         let num = await $$('(//app-box-template)[2]//*[contains(@class,"list-group-item")][contains(@class,"d active") or contains(@class,"active ng")]/following-sibling::*').length;
-        for (let i = 0; i < num; i++) {
+        //for (let i = 0; i < num; i++) {
             await this.clickOnButton("Down");
             await new Promise(resolve => setTimeout(resolve, 1000));
-        }
+        //}
     }
 
     /**

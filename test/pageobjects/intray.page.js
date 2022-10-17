@@ -55,10 +55,10 @@ class InTraysPage extends Page {
      */
     async moveTo(desUserIntrayFolder) {
         await $('[mattooltip="Move To"]').click();
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        await $('//app-dialog-folder-browser//button/span[normalize-space()="' + desUserIntrayFolder + '"]').scrollIntoView();
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        //await $('//app-dialog-folder-browser//button/span[normalize-space()="' + desUserIntrayFolder + '"]').scrollIntoView();
         await $('//app-dialog-folder-browser//button/span[normalize-space()="' + desUserIntrayFolder + '"]').click();
-        await new Promise(resolve => setTimeout(resolve, 200));
+        await new Promise(resolve => setTimeout(resolve, 5000));
         await $('//button/span[.="Select"]').click();
         await new Promise(resolve => setTimeout(resolve, 7000));
     }

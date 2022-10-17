@@ -63,6 +63,19 @@ class FavouritesPage extends Page {
         await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
+     /**
+     * copy file to new directory
+     */
+      async copyTo() {
+        await $('[mattooltip="Copy To"]').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await $('app-dialog-folder-browser [aria-label="toggle 2022"]').click();
+        await $('(//app-dialog-folder-browser//button/span[contains(.,"Business")])[last()]').click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        await $('//button/span[.="Select"]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+    }
+    
     /**
      * delete file
      */

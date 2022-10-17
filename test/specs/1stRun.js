@@ -20,11 +20,11 @@ const { exec } = require('node:child_process');
 
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
-const superadmin = 'tssadmin3';
+const superadmin = 'tssadmin';
 const superadmin2='tssadmin4';
 const user = 'tle@technosoftsolutions.com.au';
 const password = 'Abc@12345';
-const isSuperadmin = false;
+const isSuperadmin = true;
 
 var clientname = "Automation" + new Date().getTime();
 var clientcode = new Date().getTime();
@@ -272,7 +272,7 @@ describe('Search quick find', () => {
 
 describe('Structure Maintenance', () => {
 	//TC001->TC004->TC003->TC005
-	it('tc001 Verify the user can see and access the Structure Maintenance page to add a new template when user has “Structure Maintenance” permission checked on the Group & Permission Maintenance', async () => {
+	it('tc001 Verify the user can see and access the Structure Maintenance page to add a new template when user has ï¿½Structure Maintenanceï¿½ permission checked on the Group & Permission Maintenance', async () => {
 		await LoginPage.reload();
 		await StructureMaintenance.open();
 		await StructureMaintenance.addNewTemplate(templatename);
@@ -487,6 +487,26 @@ describe('Task', () => {
 });
 
 
+describe('Send to task (New Task/ Existing Task)', () => {
+ 
+    it('tc001 Verify that user can select a file(s) to attach to a new task, the selected file will show in Attachments tab', async () => {
+        await TaskTemplateMaintenance.open();
+        await TaskTemplateMaintenance.createTaskTemplate(newTemplateName);
+        await expect($('//label[normalize-space()="' + newTemplateName + '"]')).toBeExisting();
+    });
+
+    
+    it('tc003 Verify that user can select a file(s) to attach to existing task, the selected file will be attached to task selected', async () => {
+        await TaskTemplateMaintenance.activate(newTemplateName);
+        await TaskTemplateMaintenance.copy(newTemplateName);
+        await expect($('//label[normalize-space()="Copy - ' + newTemplateName + '"]')).toBeExisting();
+    });
+
+    it('tc002 Verify that user can create a new task when selecting Send to task > New Task', async () => {
+        await TaskTemplateMaintenance.deletecopy(newTemplateName);
+        await expect($('//label[normalize-space()="Copy - ' + newTemplateName + '"]')).not.toBeExisting();
+    });
+});   
 
 describe('Task Template Maintenance', () => {
  
@@ -995,7 +1015,7 @@ describe('HomePage Maintenance', () => {
     });
 
     
-	it('tc003 Verify that User can check/uncheck the ‘Show My Task on startup’ checkbox to hide/show My task list in homepage (default: ‘Show My Task on startup’ checkbox checked)', async () => {
+	it('tc003 Verify that User can check/uncheck the ï¿½Show My Task on startupï¿½ checkbox to hide/show My task list in homepage (default: ï¿½Show My Task on startupï¿½ checkbox checked)', async () => {
 		//HomePageMaintenancePage
 		await HomePageMaintenancePage.open();
         await expect($('//span[text()="Show Tasks on Homepage"]')).toBeExisting();

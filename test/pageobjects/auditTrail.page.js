@@ -17,7 +17,7 @@ class AuditTrailPage extends Page {
     }
 
     get btnAuditTrail() {
-        return $('[id="Audit Trail"]');
+        return $('//button[@title="Audit Trail"]');
     }
 
      /**
@@ -112,8 +112,9 @@ class AuditTrailPage extends Page {
 
     async openIndividual() {
         await this.btnAdministration.click();
+        await new Promise(resolve => setTimeout(resolve, 5000));
         await this.btnAuditTrail.click()
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
     }
 }
 

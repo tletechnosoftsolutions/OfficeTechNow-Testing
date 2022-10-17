@@ -25,7 +25,7 @@ class ClientMaintenancePage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button//i[.="person_add"]').click();
         await $('(//label[.="Client Name"]/following-sibling::input)').setValue(clientname);
-        await $('(//label[.="Client Code"]/following-sibling::input)').setValue(clientcode);
+        //await $('(//label[.="Client Code"]/following-sibling::input)').setValue(clientcode);
         await $('(//label[contains(text(),"' + structure + '")])').click();   
         await $('//button[contains(text(),"Cancel")]').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
@@ -38,10 +38,10 @@ class ClientMaintenancePage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button//i[.="person_add"]').click();
         await $('(//label[.="Client Name"]/following-sibling::input)').setValue(clientname);
-        await $('(//label[.="Client Code"]/following-sibling::input)').setValue(clientcode);
+        //await $('(//label[.="Client Code"]/following-sibling::input)').setValue(clientcode);
         await $('(//label[contains(text(),"' + structure + '")])').click();
         await $('//button/span[text()="Add"]').click();
-        await new Promise(resolve => setTimeout(resolve, 3000));
+        await new Promise(resolve => setTimeout(resolve, 6000));
     }
 
     /**
@@ -51,7 +51,7 @@ class ClientMaintenancePage extends Page {
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button//i[.="person_add"]').click();
         await $('(//label[.="Client Name"]/following-sibling::input)').setValue(clientname);
-        await $('(//label[.="Client Code"]/following-sibling::input)').setValue(clientcode);
+        //await $('(//label[.="Client Code"]/following-sibling::input)').setValue(clientcode);
         await $('//button/span[text()="Add"]').click();
         await new Promise(resolve => setTimeout(resolve, 3000));
     }
@@ -93,8 +93,7 @@ class ClientMaintenancePage extends Page {
         await $('//td[normalize-space()="' + clientOldName + '"]/parent::tr//button[@mattooltip="Rename Client"]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('[formcontrolname="clientName"]').setValue(clientNewName);
-        if (clientNewCode != null || clientNewCode != "")
-            await $('[formcontrolname="clientID"]').setValue(clientNewCode);
+        //if (clientNewCode != null || clientNewCode != "") await $('[formcontrolname="clientID"]').setValue(clientNewCode);
         await $('//button/span[.="Rename"]').click();
         await new Promise(resolve => setTimeout(resolve, 5000));
     }

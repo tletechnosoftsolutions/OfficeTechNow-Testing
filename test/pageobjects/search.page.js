@@ -28,7 +28,7 @@ class InTraysPage extends Page {
      * type in search box
      */
     async typeInSearchBox(searchContent) {
-        await $('[formcontrolname="query"]').setValue(searchContent);
+        await $('(//input[@type="text"])[2]').setValue(searchContent);
     }
 
     /**

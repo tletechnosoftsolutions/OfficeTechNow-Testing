@@ -20,7 +20,7 @@ const { exec } = require('node:child_process');
 
 const templatename = "AutomationTemplate" + new Date().getTime();
 const newTemplatename = "New" + templatename;
-const superadmin = 'tssadmin3';
+const superadmin = 'tssadmin';
 const superadmin2='tssadmin4';
 const user = 'tle@technosoftsolutions.com.au';
 const password = 'Abc@12345';
@@ -274,7 +274,7 @@ describe('Search quick find', () => {
 
 describe('Structure Maintenance', () => {
 	//TC001->TC004->TC003->TC005
-	it('tc001 Verify the user can see and access the Structure Maintenance page to add a new template when user has “Structure Maintenance” permission checked on the Group & Permission Maintenance', async () => {
+	it('tc001 Verify the user can see and access the Structure Maintenance page to add a new template when user has ï¿½Structure Maintenanceï¿½ permission checked on the Group & Permission Maintenance', async () => {
 		await LoginPage.reload();
 		await StructureMaintenance.open();
 		await StructureMaintenance.addNewTemplate(templatename);
@@ -914,7 +914,7 @@ describe('HomePage Maintenance', () => {
         await expect($('//p[contains(text(),"'+date+'")]')).toBeExisting();
     });
 
-	it('tc003 Verify that User can check/uncheck the ‘Show My Task on startup’ checkbox to hide/show My task list in homepage (default: ‘Show My Task on startup’ checkbox checked)', async () => {
+	it('tc003 Verify that User can check/uncheck the ï¿½Show My Task on startupï¿½ checkbox to hide/show My task list in homepage (default: ï¿½Show My Task on startupï¿½ checkbox checked)', async () => {
         await HomePageMaintenancePage.open();
         await HomePageMaintenancePage.checkShowTask();
         let isChecked = (await $('[formcontrolname="isShowMyTask"]').getAttribute('class')).includes('checked');

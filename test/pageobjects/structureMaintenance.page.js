@@ -98,7 +98,9 @@ class StructureMaintenancePage extends Page {
     }
 
     async renameTemplate(templatename, newTemplatename) {
-        this.focusOnTemplate(templatename);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await $('//label[contains(.,"' + templatename + '")]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//button[contains(.,"Rename")]').click();
         await new Promise(resolve => setTimeout(resolve, 1000));
         await $('//input[contains(@placeholder,"Enter Name")]').setValue(newTemplatename);
@@ -190,7 +192,7 @@ class StructureMaintenancePage extends Page {
      * focus on template
      */
     async focusOnTemplate(templatename) {
-        await $('//label[normalize-space()="' + templatename + '"]').click();
+        await $('//label[contains(.,"' + templatename + '")]').click();
         await new Promise(resolve => setTimeout(resolve, 300));
     }
 

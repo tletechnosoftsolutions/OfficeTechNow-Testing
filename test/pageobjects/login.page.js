@@ -1,10 +1,15 @@
 
 
 const Page = require('./page');
-const superadmin = 'tssadmin3';
+const ks = require('node-key-sender');
+const superadmin = 'tssadmin';
 const superadmin2='tssadmin4';
 const user = 'tle@technosoftsolutions.com.au';
 const password = 'Abc@12345';
+//const url = `https://officetechnow-develop.azurewebsites.net` ;
+const url = `https://avtest.officetechnow.com.au` ;
+
+
 /**
  * sub page containing specific selectors and methods for a specific page
  */
@@ -33,9 +38,20 @@ class LoginPage extends Page {
         await this.inputUsername.setValue(username);
         await this.inputPassword.setValue(password);
         await this.btnSubmit.click();
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        //await $('(//button[@aria-label="Close"])').click();
-
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        //await new Promise(resolve => setTimeout(resolve, 2000));
+        let isExist = await $('(//button[@aria-label="Close"])').isExisting();
+        if (isExist == true) {
+            await $('(//button[@aria-label="Close"])').click();
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+        let isExist2 = await $('(//span[.="×"])').isExisting();
+        if (isExist2 == true) {
+            await $('(//span[.="×"])').click();
+            await new Promise(resolve => setTimeout(resolve, 3000));
+        }
     }
 
     /**
@@ -51,8 +67,8 @@ class LoginPage extends Page {
      * overwrite specific options to adapt it to page object
      */
     async open() {
-        await browser.url(`https://officetechnow-develop.azurewebsites.net`);
-         await new Promise(resolve => setTimeout(resolve, 3000));
+        await browser.url(url);
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
     /**
@@ -69,8 +85,20 @@ class LoginPage extends Page {
     async reloadsite (sitename) {
         await browser.url(sitename);
         await new Promise(resolve => setTimeout(resolve, 2000));
-        //await $('(//button[@aria-label="Close"])').click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        //let isExist = await $('(//button[@aria-label="Close"])').isExisting();
+       //if (isExist == true) {
+        //    await $('(//button[@aria-label="Close"])').click();
+        //await new Promise(resolve => setTimeout(resolve, 3000));
+       // }
+        let isExist2 = await $('//div[.="OfficeTechNow ServiceHook is not working"]').isExisting();
+        if (isExist2 == true) {
+       //await browser.dismissAlert();
+            await $('(//span[.="×"])').click();
+            //await new Promise(resolve => setTimeout(resolve, 3000));
+        }
         await new Promise(resolve => setTimeout(resolve, 3000));
+        await ks.sendKey('enter');
     }
 
     /**
@@ -78,13 +106,24 @@ class LoginPage extends Page {
      */
     async reload () {
         this.open();
-        let isExisting = await $('//input[@id="username"]').isExisting();
-        if (isExisting == true) {
-            await this.login(superadmin, password);
-        }
+       // let isExisting = await $('//input[@id="username"]').isExisting();
+       // if (isExisting == true) {
+       //     await this.login(superadmin, password);
+       // }
         await new Promise(resolve => setTimeout(resolve, 2000));
-        //await $('(//button[@aria-label="Close"])').click();
+        //let isExist = await $('(//button[@aria-label="Close"])').isExisting();
+       //if (isExist == true) {
+        //    await $('(//button[@aria-label="Close"])').click();
         //await new Promise(resolve => setTimeout(resolve, 3000));
+       // }
+        let isExist2 = await $('//div[.="OfficeTechNow ServiceHook is not working"]').isExisting();
+        if (isExist2 == true) {
+       //await browser.dismissAlert();
+            await $('(//span[.="×"])').click();
+            //await new Promise(resolve => setTimeout(resolve, 3000));
+        }
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        await ks.sendKey('enter');
     }
 
     
