@@ -199,10 +199,10 @@ describe('File', () => {
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet2('Clients');
 
-		//await CabinetPage.expandCabinet("Z")
-		//await CabinetPage.expandCabinet('Z GARRETT-63362');
-		//await CabinetPage.expandCabinet('2022');
-		//await CabinetPage.createQuickNote()
+		await CabinetPage.expandCabinet("Z")
+		await CabinetPage.expandCabinet('Z GARRETT-63362');
+		await CabinetPage.expandCabinet('2022');
+		await CabinetPage.createQuickNote()
 
 		await CabinetPage.collapCabinet('Clients');
 	});
@@ -613,29 +613,27 @@ describe('Send to task (New Task/ Existing Task)', () => {
         await LoginPage.reload();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
-        //await CabinetPage.expandCabinet("Z");
-		//await CabinetPage.expandCabinet('Z GARRETT-63362');
-        //await CabinetPage.expandCabinet('2022');
-		//await CabinetPage.attachnew('testfile.xlsx');
+        await CabinetPage.expandCabinet("Z");
+		await CabinetPage.expandCabinet('Z GARRETT-63362');
+        await CabinetPage.expandCabinet('2022');
+		await CabinetPage.attachnew('testfile.xlsx');
     });
 
     
     it('tc002 Verify that user can select a file(s) to attach to existing task, the selected file will be attached to task selected', async () => {
         await LoginPage.reload();
-        await TaskPage.open();
-        await TaskPage.createTask1();
-        await TaskPage.saveAndClose();
-		//await CabinetPage.expandCabinet('Clients');
-        //await CabinetPage.expandCabinet("Z");
-		//await CabinetPage.expandCabinet('Z GARRETT-63362');
-        //await CabinetPage.expandCabinet('2022');
-		//await CabinetPage.attachexist('testfile.xlsx');
+		await CabinetPage.open();
+		await CabinetPage.expandCabinet('Clients');
+        await CabinetPage.expandCabinet("Z");
+		await CabinetPage.expandCabinet('Z GARRETT-63362');
+        await CabinetPage.expandCabinet('2022');
+		await CabinetPage.attachexist('testfile.xlsx');
     });
 
     it('tc003 Verify that user can create a new task when selecting Send to task > New Task', async () => {
 		await LoginPage.reload();
 		await TaskPage.open();
-        await TaskPage.createTask2();
+        await TaskPage.createTask1();
         await TaskPage.saveAndClose();
     });
 });
@@ -1127,16 +1125,16 @@ describe('Cabinet list', () => {
 		await LoginPage.reload();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet('Clients');
-        //await CabinetPage.expandCabinet("Z");
-		//await CabinetPage.expandCabinet('Z GARRETT-63362');
-        //wait CabinetPage.expandCabinet('2022');
-       //await CabinetPage.createNewQuickNote(note, note);
+        await CabinetPage.expandCabinet("Z");
+		await CabinetPage.expandCabinet('Z GARRETT-63362');
+        await CabinetPage.expandCabinet('2022');
+       await CabinetPage.createNewQuickNote(note, note);
        //await expect($('//span[contains(.,"' + note + '")]')).toBeExisting();
     });
 
     it('tc003 Verify that on the quicknote detail user can select a Copy to PDF  button, The PDF document is created and saved to the same location as the original quicknote', async () => {
 		//Cabinet
-        //await CabinetPage.copyQuickNoteToPDF(note);
+        await CabinetPage.copyQuickNoteToPDF(note);
         //await expect($('//span[contains(.,"' + note + '.pdf")]')).toBeExisting();
     });
 
@@ -1144,11 +1142,11 @@ describe('Cabinet list', () => {
         await LoginPage.reload();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet1('Clients');
-        //await CabinetPage.expandCabinet("Z");
-		//await CabinetPage.expandCabinet('Z GARRETT-63362');
-        ////await CabinetPage.expandCabinet('2022');
-        //await CabinetPage.tickOnFile(note + ".oqn");
-        //await CabinetPage.tickOnFile(note + ".pdf");
+        await CabinetPage.expandCabinet("Z");
+		await CabinetPage.expandCabinet('Z GARRETT-63362');
+        await CabinetPage.expandCabinet('2022');
+        await CabinetPage.tickOnFile(note + ".oqn");
+        await CabinetPage.tickOnFile(note + ".pdf");
         //await CabinetPage.deleteFile();
         //await expect($('//span[contains(.,"' + note + '.oqn")]')).not.toBeExisting();
         //await expect($('//span[contains(.,"' + note + '.oqn")]')).not.toBeExisting();
@@ -1158,10 +1156,10 @@ describe('Cabinet list', () => {
         await LoginPage.reload();
         await CabinetPage.open();
 		await CabinetPage.expandCabinet2('Clients');
-      //await CabinetPage.expandCabinet("Z");
-	//await CabinetPage.expandCabinet('Z GARRETT-63362');
-      //await CabinetPage.expandCabinet('2022');
-       //await CabinetPage.createTask("Claim")
+      await CabinetPage.expandCabinet("Z");
+	await CabinetPage.expandCabinet('Z GARRETT-63362');
+      await CabinetPage.expandCabinet('2022');
+       await CabinetPage.createTask("Claim")
     });
 
 	it('tc005 Verify that user can upload a file when clicking Floating >  Upload button, the data should display correctly afterupload file successfully', async () => {
@@ -1169,11 +1167,11 @@ describe('Cabinet list', () => {
         await LoginPage.reload();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet3('Clients');
-        //await CabinetPage.expandCabinet("Z");
-		//await CabinetPage.expandCabinet('Z GARRETT-63362');
-        //await CabinetPage.expandCabinet('2022');
+        await CabinetPage.expandCabinet("Z");
+		await CabinetPage.expandCabinet('Z GARRETT-63362');
+        await CabinetPage.expandCabinet('2022');
        //await CabinetPage.createTask("Claim")
-		//await CabinetPage.uploadFileSystem('testfile.xlsx');
+		await CabinetPage.uploadFileSystem('testfile.xlsx');
        // await expect($('(//span[contains(.,"testfile.xlsx")])[last()]')).toBeExisting();
        // await CabinetPage.deleteNewQuickNote("testfile.xlsx")
 
@@ -1185,11 +1183,11 @@ describe('Cabinet list', () => {
 		await LoginPage.reload();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet4('Clients');
-       //await CabinetPage.expandCabinet("Z");
-		//await CabinetPage.expandCabinet('Z GARRETT-63362');
-       //await CabinetPage.expandCabinet('2022');
-       //await CabinetPage.createTask("Claim")
-       // await CabinetPage.scan();
+       await CabinetPage.expandCabinet("Z");
+		await CabinetPage.expandCabinet('Z GARRETT-63362');
+       await CabinetPage.expandCabinet('2022');
+       await CabinetPage.createTask("Claim")
+        await CabinetPage.scan();
     });
 
     it('tc008 Verify that user can see list of the action in contextual menu: Open, Set Folder Colour, Add to Favourite, Show Deleted Files when right-clicking a Clients cabinet', async () => {
@@ -1208,13 +1206,13 @@ describe('Cabinet list', () => {
 		//Cabinet
 		await LoginPage.reload();
 		await CabinetPage.open();
-        await CabinetPage.expandCabinet1('Clients');
-       //await CabinetPage.expandCabinet("Z");
-       //await CabinetPage.rightclickFolder("Z");
-       //await expect($('//span[contains(.,"Open")]')).toBeExisting();
-		//await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
-        //await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
-       //await expect($('//span[contains(.,"Add Structure")]')).toBeExisting();
+        await CabinetPage.expandCabinet('Clients');
+       await CabinetPage.expandCabinet("Z");
+       await CabinetPage.rightclickFolder("Z");
+       await expect($('//span[contains(.,"Open")]')).toBeExisting();
+		await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
+        await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
+       await expect($('//span[contains(.,"Add Structure")]')).toBeExisting();
     });
 
      it('tc010 Verify that user can see list of the action in contextual menu: Open, Set Folder Colour, Add Folder, Add Structure, Show Deleted files when right-clicking a index folder', async () => {
@@ -1222,15 +1220,15 @@ describe('Cabinet list', () => {
 		await LoginPage.reload();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet1('Clients');
-       //await CabinetPage.expandCabinet("Z");
-		//await CabinetPage.expandCabinet('Z GARRETT-63362');
-        //await CabinetPage.rightclickFolder("Z GARRETT-63362");
+       await CabinetPage.expandCabinet("Z");
+		await CabinetPage.expandCabinet('Z GARRETT-63362');
+        await CabinetPage.rightclickFolder("Z GARRETT-63362");
         await expect($('//span[contains(.,"Open")]')).toBeExisting();
         await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
-        //await expect($('//span[contains(.,"Add To Favourites")]')).toBeExisting();
-       //await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
-       // await expect($('//span[contains(.,"Copy Folder")]')).toBeExisting();
-       //await expect($('//span[contains(.,"Add Client Structure")]')).toBeExisting();
+        await expect($('//span[contains(.,"Add To Favourites")]')).toBeExisting();
+       await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
+        await expect($('//span[contains(.,"Copy Folder")]')).toBeExisting();
+       await expect($('//span[contains(.,"Add Client Structure")]')).toBeExisting();
      });
 
      it('tc011 Verify that user can see list of the action in contextual menu: Open, Set Folder Colour, Add to Favourite, Add Folder, Add Structure, Move Folder, Copy Folder, Delete Folder, Rename Folder, Show Deleted files and do it when right-clicking a Folder', async () => {
@@ -1238,21 +1236,21 @@ describe('Cabinet list', () => {
 		await LoginPage.reload();
 		await CabinetPage.open();
 		await CabinetPage.expandCabinet2('Clients');
-        //await CabinetPage.expandCabinet("Z");
-		//await CabinetPage.expandCabinet('Z GARRETT-63362');
-        //await CabinetPage.rightclickFolder("Z GARRETT-63362");
-        //await CabinetPage.expandCabinet('2022');
-        //await CabinetPage.rightclickFolder("2022");
+        await CabinetPage.expandCabinet("Z");
+		await CabinetPage.expandCabinet('Z GARRETT-63362');
+        await CabinetPage.rightclickFolder("Z GARRETT-63362");
+        await CabinetPage.expandCabinet('2022');
+        await CabinetPage.rightclickFolder("2022");
         await expect($('//span[contains(.,"Open")]')).toBeExisting();
         await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
         await expect($('//span[contains(.,"Add To Favourites")]')).toBeExisting();
-        //await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
-        //await expect($('//span[contains(.,"Add Structure")]')).toBeExisting();
-       //await expect($('//span[contains(.,"Move Folder")]')).toBeExisting();
-        //await expect($('//span[contains(.,"Copy Folder")]')).toBeExisting();
-       //await expect($('//span[contains(.,"Delete Folder")]')).toBeExisting();
-       //await expect($('//span[contains(.,"Rename Folder")]')).toBeExisting();
-       //await expect($('//span[contains(.,"Show Deleted Files")]')).toBeExisting();
+        await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
+        await expect($('//span[contains(.,"Add Structure")]')).toBeExisting();
+       await expect($('//span[contains(.,"Move Folder")]')).toBeExisting();
+        await expect($('//span[contains(.,"Copy Folder")]')).toBeExisting();
+       await expect($('//span[contains(.,"Delete Folder")]')).toBeExisting();
+       await expect($('//span[contains(.,"Rename Folder")]')).toBeExisting();
+       await expect($('//span[contains(.,"Show Deleted Files")]')).toBeExisting();
        //await CabinetPage.setFolderColor();
       // await expect($('//span[normalize-space()="2021"]/preceding-sibling::em[contains(@style,"rgb(250, 209, 101)")]')).toBeExisting();
         
@@ -1371,13 +1369,13 @@ describe('CAC/IAC', () => {
 			await CabinetPage.expandCabinet('Clients');
            
 			await CabinetPage.expandCabinet("Z");
-			//await CabinetPage.expandCabinet('Z GARRETT-63362');
-			//await CabinetPage.expandCabinet("2022");
-			//await CabinetPage.focusOn("(Claims)");
-			//await CabinetPage.uploadFileSystem('testfile.xlsx');
-			//await CabinetPage.tickOnFile("testfile"); //tick on the 1st file
-           // await expect(await $('[mattooltip="New Email"]').isClickable()).toEqual(true); //verify can add New Email
-           //await expect(await $('[mattooltip="Send To Task"]').isClickable()).toEqual(true); //verify can Send to task
+			await CabinetPage.expandCabinet('Z GARRETT-63362');
+			await CabinetPage.expandCabinet("2022");
+			await CabinetPage.focusOn("(Claims)");
+			await CabinetPage.uploadFileSystem('testfile.xlsx');
+			await CabinetPage.tickOnFile("testfile"); //tick on the 1st file
+            await expect(await $('[mattooltip="New Email"]').isClickable()).toEqual(true); //verify can add New Email
+            await expect(await $('[mattooltip="Send To Task"]').isClickable()).toEqual(true); //verify can Send to task
             
     });
 
@@ -1387,30 +1385,30 @@ describe('CAC/IAC', () => {
 			await CabinetPage.open();
 			await CabinetPage.expandCabinet1('Clients');
             
-			//await CabinetPage.expandCabinet("Z");
-			//await CabinetPage.expandCabinet('Z GARRETT-63362');
-			//await CabinetPage.expandCabinet("2022");
-			//await CabinetPage.focusOn("(Claims)");
-			//await CabinetPage.uploadFileSystem('testfile.xlsx');
-			//await CabinetPage.tickOnFile("testfile"); //tick on the 1st file
-            //await CabinetPage.copyToFolder("(Claims)"); //Copy to folder: Cabinet/Automation/2022/Emails
-            //await CabinetPage.collapCabinet("2022");
-            //await CabinetPage.expandCabinet("2023");
-            //await CabinetPage.expandCabinet("(Claims)");
-            //await expect($('(//span[contains(.,"testfile")]/ancestor::td)[1]')).toBeExisting();
+			await CabinetPage.expandCabinet("Z");
+			await CabinetPage.expandCabinet('Z GARRETT-63362');
+			await CabinetPage.expandCabinet("2022");
+			await CabinetPage.focusOn("(Claims)");
+			await CabinetPage.uploadFileSystem('testfile.xlsx');
+			await CabinetPage.tickOnFile("testfile"); //tick on the 1st file
+            await CabinetPage.copyToFolder("(Claims)"); //Copy to folder: Cabinet/Automation/2022/Emails
+            await CabinetPage.collapCabinet("2022");
+            await CabinetPage.expandCabinet("2023");
+            await CabinetPage.expandCabinet("(Claims)");
+            await expect($('(//span[contains(.,"testfile")]/ancestor::td)[1]')).toBeExisting();
 
             //Check file can be copied from Favorite
-            //await CabinetPage.addToFavourite("Z GARRETT-63362");
-            //await FavoritePage.open();
-            //await FavoritePage.expandFavourites("Z GARRETT-63362");
-            //await FavoritePage.expandFavourites("2022");
-            //await FavoritePage.focusOn("(Claims)");
-            //await FavoritePage.tickOnFile("testfile");
-            //await CabinetPage.copyToFolder("(Claims)");
-            //await FavoritePage.collapFavourites("2022");
-            //await FavoritePage.expandFavourites("2023");
-            //await FavoritePage.focusOn("(Claims)");
-            //await expect($('(//span[contains(.,"testfile")]/ancestor::td)[1]')).toBeExisting();
+            await CabinetPage.addToFavourite("Z GARRETT-63362");
+            await FavoritePage.open();
+            await FavoritePage.expandFavourites("Z GARRETT-63362");
+            await FavoritePage.expandFavourites("2022");
+            await FavoritePage.focusOn("(Claims)");
+            await FavoritePage.tickOnFile("testfile");
+            await CabinetPage.copyToFolder("(Claims)");
+            await FavoritePage.collapFavourites("2022");
+            await FavoritePage.expandFavourites("2023");
+            await FavoritePage.focusOn("(Claims)");
+            await expect($('(//span[contains(.,"testfile")]/ancestor::td)[1]')).toBeExisting();
            
 
     });
@@ -1421,21 +1419,21 @@ describe('CAC/IAC', () => {
 			await LoginPage.reload();
 			await CabinetPage.open();
 			await CabinetPage.expandCabinet2('Clients');
-			//await CabinetPage.expandCabinet("Z");
-			//await CabinetPage.expandCabinet('Z GARRETT-63362');
-			//await CabinetPage.expandCabinet("2022");
-			//await CabinetPage.focusOn("(Claims)");
-			//await CabinetPage.uploadFileSystem('testfile.xlsx');
-			//await CabinetPage.tickOnFile("testfile"); //tick on the 1st file
-            //await CabinetPage.deleteFile();
+			await CabinetPage.expandCabinet("Z");
+			await CabinetPage.expandCabinet('Z GARRETT-63362');
+			await CabinetPage.expandCabinet("2022");
+			await CabinetPage.focusOn("(Claims)");
+			await CabinetPage.uploadFileSystem('testfile.xlsx');
+			await CabinetPage.tickOnFile("testfile"); //tick on the 1st file
+            await CabinetPage.deleteFile();
 
             //Check file can be deleted in Favorite
             await FavoritePage.open();
-            //await FavoritePage.expandFavourites("Z GARRETT-63362");
-            //await FavoritePage.expandFavourites("2022");
-            //await FavoritePage.focusOn("(Claims)");
-            //await FavoritePage.tickOnFile("testfile");
-           //await FavoritePage.deleteFile();
+            await FavoritePage.expandFavourites("Z GARRETT-63362");
+            await FavoritePage.expandFavourites("2022");
+            await FavoritePage.focusOn("(Claims)");
+            await FavoritePage.tickOnFile("testfile");
+           await FavoritePage.deleteFile();
     });
 
 });

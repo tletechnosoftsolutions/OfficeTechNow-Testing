@@ -70,6 +70,339 @@ class TaskPage extends Page {
     }
 
     
+    /**
+     * create and fill information of task
+     */
+     async task() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await expect($('//div[contains(text(),"Create New Task")]')).toBeExisting();
+        await $('//button[.="Cancel"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await browser.keys(['Enter']);
+        await browser.acceptAlert();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+     
+    /**
+     * create and fill information of task
+     */
+     async task1() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await expect($('//div[contains(text(),"Create New Task")]')).toBeExisting();
+        await $('//button[.="Cancel"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await browser.keys(['Enter']);
+        await browser.acceptAlert();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+     
+    /**
+     * create and fill information of task
+     */
+     async task2() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await expect($('//div[contains(text(),"Create New Task")]')).toBeExisting();
+        await $('//button[.="Cancel"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await browser.keys(['Enter']);
+        await browser.acceptAlert();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+     
+    /**
+     * create and fill information of task
+     */
+     async task3() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await expect($('//div[contains(text(),"Create New Task")]')).toBeExisting();
+        await $('//button[.="Cancel"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await browser.keys(['Enter']);
+        await browser.acceptAlert();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+     
+    /**
+     * create and fill information of task
+     */
+     async task4() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await expect($('//div[contains(text(),"Create New Task")]')).toBeExisting();
+        await $('//button[.="Cancel"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await browser.keys(['Enter']);
+        await browser.acceptAlert();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+     
+    /**
+     * create and fill information of task
+     */
+     async task5() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await expect($('//div[contains(text(),"Create New Task")]')).toBeExisting();
+        await $('//button[.="Cancel"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await browser.keys(['Enter']);
+        await browser.acceptAlert();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+     
+    /**
+     * create and fill information of task
+     */
+     async task6() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await expect($('//div[contains(text(),"Create New Task")]')).toBeExisting();
+        await $('//button[.="Cancel"]').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //await browser.keys(['Enter']);
+        await browser.acceptAlert();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+    /**
+     * create and fill information of task
+     */
+     async createTask1() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Entity
+       // await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').setValue("Clients");
+       await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').click();
+        await ks.sendText("Clients");
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        //await ks.sendKey('enter');
+        //await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('(//div[@role="option"])[1]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//*[contains(@id,"suggestion-text_categoryName")]//li[1]/div/a').click();
+       // await $('//a[.="Business"]').click();
+        //Progress
+       //await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        //await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        //await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+       // await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('//a[.="Task Subject 01"]').click();
+       
+    }
+
+
+     /**
+     * create and fill information of task
+     */
+      async createTask2() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Entity
+       // await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').setValue("Clients");
+       await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').click();
+        await ks.sendText("Clients");
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        //await ks.sendKey('enter');
+        //await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('(//div[@role="option"])[1]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//*[contains(@id,"suggestion-text_categoryName")]//li[1]/div/a').click();
+       // await $('//a[.="Business"]').click();
+        //Progress
+       //await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        //await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        //await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+       // await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('//a[.="Task Subject 01"]').click();
+       
+    }
+
+     /**
+     * create and fill information of task
+     */
+      async createTask3() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Entity
+       // await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').setValue("Clients");
+       await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').click();
+        await ks.sendText("Clients");
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        //await ks.sendKey('enter');
+        //await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('(//div[@role="option"])[1]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//*[contains(@id,"suggestion-text_categoryName")]//li[1]/div/a').click();
+       // await $('//a[.="Business"]').click();
+        //Progress
+       //await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        //await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        //await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+       // await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('//a[.="Task Subject 01"]').click();
+       
+    }
+
+     /**
+     * create and fill information of task
+     */
+      async createTask4() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Entity
+       // await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').setValue("Clients");
+       await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').click();
+        await ks.sendText("Clients");
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        //await ks.sendKey('enter');
+        //await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('(//div[@role="option"])[1]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//*[contains(@id,"suggestion-text_categoryName")]//li[1]/div/a').click();
+       // await $('//a[.="Business"]').click();
+        //Progress
+       //await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        //await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        //await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+       // await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('//a[.="Task Subject 01"]').click();
+       
+    }
+
+     /**
+     * create and fill information of task
+     */
+      async createTask5() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Entity
+       // await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').setValue("Clients");
+       await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').click();
+        await ks.sendText("Clients");
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        //await ks.sendKey('enter');
+        //await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('(//div[@role="option"])[1]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//*[contains(@id,"suggestion-text_categoryName")]//li[1]/div/a').click();
+       // await $('//a[.="Business"]').click();
+        //Progress
+       //await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        //await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        //await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+       // await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('//a[.="Task Subject 01"]').click();
+       
+    }
+
+     /**
+     * create and fill information of task
+     */
+      async createTask6() {
+        await $('//mat-icon[.="add_circle"]/parent::span').click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        //Entity
+       // await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').setValue("Clients");
+       await $('//mat-dialog-container//div[.="Select Entity"]/following-sibling::*/input').click();
+        await ks.sendText("Clients");
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await ks.sendKey('DELETE');
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        //await ks.sendKey('enter');
+        //await new Promise(resolve => setTimeout(resolve, 3000));
+        await $('(//div[@role="option"])[1]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        //Category
+        await $('//mat-dialog-container//label[.="Category"]/following-sibling::*//input').click();
+        await $('//*[contains(@id,"suggestion-text_categoryName")]//li[1]/div/a').click();
+       // await $('//a[.="Business"]').click();
+        //Progress
+       //await $('//mat-dialog-container//label[normalize-space()="Progress"]/following-sibling::*//input').click();
+        //await $('//span[normalize-space()="Awaiting Client"]').click();
+        //End date
+        let end_date = new Date().setDate(new Date().getDate() + 30).toLocaleDateString;
+        await $('(//mat-dialog-container//label[normalize-space()="End Date"]/following-sibling::*//input)[1]').setValue(end_date);
+        //Note
+        await $('//div[contains(@data-placeholder,"Notes")]').setValue("Automation Testing Create Task");
+        //Subject
+        //await $('(//label[normalize-space()="Subject"]/following-sibling::*//input[@type="text"])[2]').click();
+       // await new Promise(resolve => setTimeout(resolve, 1000));
+        //await $('//a[.="Task Subject 01"]').click();
+       
+    }
+
 
     /**
      * create and fill information of task

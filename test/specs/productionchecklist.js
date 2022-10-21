@@ -1331,6 +1331,623 @@ describe('Cabinets/ Favourites page', () => {
         });
        
 
+        it('tc018  Verify the user can see the Client/ Prospect details and the Client/ Prospect folder name in the Recent section when selecting Client/ Prospect folder and its normal folder       ', async () => {   
+
+        //open Cabinet
+        await LoginPage.reload();
+		await CabinetPage.open();
+
+		//1.Create tasks folder Clients
+		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.createTask()
+		//Create tasks Clients - folder A
+		await CabinetPage.expandCabinet("A")
+		//await CabinetPage.createTask()
+		//Collap All cabinets
+		await CabinetPage.collapCabinet('A');
+		await CabinetPage.collapCabinet('Clients');
+
+        });
+
+        
+        it('tc019  Verify the option Move Client/Move DCM/Move Folder  will be hidden if the user does not have the “Delete” permission in CAC   ', async () => {
+
+        //open Cabinet
+        await LoginPage.reload();
+		await CabinetPage.open();
+
+		//2.Create tasks folder Development Cabinet
+		await CabinetPage.expandCabinet('Development Cabinet');
+		await CabinetPage.createTask()
+		//Collap All cabinets
+		await CabinetPage.collapCabinet('Development Cabinet');
+
+
+        });
+
+        
+        it('tc020 Verify the user can move a selected folder to the Client cabinet    ', async () => {  
+
+                   
+        //open Cabinet
+        await LoginPage.reload();
+		await CabinetPage.open();
+
+		//3.Create tasks folder Prospects
+		await CabinetPage.expandCabinet('Prospects');
+		await CabinetPage.createTask()
+		//Create tasks Clients - folder A
+		await CabinetPage.expandCabinet("A")
+		//await CabinetPage.createTask()
+		//Collap All cabinets
+		await CabinetPage.collapCabinet('A');
+		await CabinetPage.collapCabinet('Prospects');
+
+
+        });
+
+
+        
+        it('tc021 Verify the user can move the selected folder to the DCM cabinets, that folder will become a DCM folder', async () => {
+
+        //open Cabinet
+        await LoginPage.reload();
+		await CabinetPage.open();
+
+		//1.Create tasks folder Clients
+		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.createTask()
+		//Create tasks Clients - folder A
+		await CabinetPage.expandCabinet("A")
+		//await CabinetPage.createTask()
+		//Collap All cabinets
+		await CabinetPage.collapCabinet('A');
+		await CabinetPage.collapCabinet('Clients');
+           
+        });
+
+        
+        it('tc022 Verify the user can move the selected client folder to the Normal cabinets, that folder will become a normal folder', async () => {
+
+        //open Cabinet
+        await LoginPage.reload();
+		await CabinetPage.open();
+
+		//2.Create tasks folder Development Cabinet
+		await CabinetPage.expandCabinet('Development Cabinet');
+		await CabinetPage.createTask()
+		//Collap All cabinets
+		await CabinetPage.collapCabinet('Development Cabinet');
+           
+        });
+
+
+        
+        it('tc023 Verify the user can move the selected normal folder to other folders, that folder will still be a normal folder', async () => {
+
+        //open Cabinet
+        await LoginPage.reload();
+		await CabinetPage.open();
+
+		//3.Create tasks folder Prospects
+		await CabinetPage.expandCabinet('Prospects');
+		await CabinetPage.createTask()
+		//Create tasks Clients - folder A
+		await CabinetPage.expandCabinet("A")
+		//await CabinetPage.createTask()
+		//Collap All cabinets
+		await CabinetPage.collapCabinet('A');
+		await CabinetPage.collapCabinet('Prospects');
+           
+        });
+
+
+        
+        it('tc024 Verify the user can not move/ copy the folder when the selected cabinet/folder that has a folder that has the same name', async () => {
+            await LoginPage.reload();
+            await CabinetPage.open();
+            await CabinetPage.expandCabinet('DCM Test');
+            await CabinetPage.expandCabinet("A");
+            await CabinetPage.expandCabinet('AAATEST');
+            await CabinetPage.rightclickFolder("AAATEST");
+            await expect($('//span[contains(.,"Open")]')).toBeExisting();
+            await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
+            await expect($('//span[contains(.,"Add To Favourites")]')).toBeExisting();
+            await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
+            await expect($('//span[contains(.,"Add Structure")]')).toBeExisting();
+            await expect($('//span[contains(.,"Move Folder")]')).toBeExisting();
+            await expect($('//span[contains(.,"Move DCM Test")]')).toBeExisting();
+            await expect($('//span[contains(.,"Copy Folder")]')).toBeExisting();
+            await expect($('//span[contains(.,"Delete Folder")]')).toBeExisting();
+            await expect($('//span[contains(.,"Rename Folder")]')).toBeExisting();
+            await expect($('//span[contains(.,"Add DCM Test Structure")]')).toBeExisting();
+            await expect($('//span[contains(.,"Delete DCM Test")]')).toBeExisting();
+            await expect($('//span[contains(.,"Rename DCM Test")]')).toBeExisting();            
+            await CabinetPage.setFolderColor();
+            await expect($('//span[normalize-space()="AAATEST"]/preceding-sibling::em[contains(@style,"rgb(250, 209, 101)")]')).toBeExisting();    
+            
+        });
+
+
+
+        
+        it('tc025 Verify the user can not move a client/ DCM folder to a normal cabinet or a folder when there is any task that is assigned to that client/ DCM folder', async () => {
+            //Normal Cabinet
+        await LoginPage.reload();
+		await CabinetPage.open();
+        await CabinetPage.expandCabinet('Clients');
+         await CabinetPage.expandCabinet("A");
+         await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+          await CabinetPage.expandCabinet('2022');
+         await CabinetPage.rightclickFolder("2022");
+         await expect($('//span[contains(.,"Open")]')).toBeExisting();
+         await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
+         await expect($('//span[contains(.,"Add To Favourites")]')).toBeExisting();
+         await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
+         await expect($('//span[contains(.,"Add Structure")]')).toBeExisting();
+         await expect($('//span[contains(.,"Move Folder")]')).toBeExisting();
+         await expect($('//span[contains(.,"Copy Folder")]')).toBeExisting();
+         await expect($('//span[contains(.,"Delete Folder")]')).toBeExisting();
+         await expect($('//span[contains(.,"Rename Folder")]')).toBeExisting();
+         await expect($('//span[contains(.,"Show Deleted Files")]')).toBeExisting();
+         await CabinetPage.setFolderColor();
+         await expect($('//span[normalize-space()="2022"]/preceding-sibling::em[contains(@style,"rgb(250, 209, 101)")]')).toBeExisting();
+         
+           
+        });
+
+        it('tc026 Verify the cabinets that doesnt have Write permission in CAC will not display in the File-Browser form when moving/ copying folder to that cabinets', async () => {
+            await LoginPage.reload();
+            //Cabinet
+            await CabinetPage.open();
+            await expect($('button[aria-label= "toggle Clients"]')).toBeExisting();
+            await expect($('button[aria-label= "toggle Development Cabinet"]')).toBeExisting();
+            await CabinetPage.expandCabinet("Clients");
+            await expect($('button[aria-label="toggle A"]')).toBeExisting();
+    
+            //Favourites
+            await FavouritesPage.open();
+            await expect($('button[aria-label= "toggle Clients"]')).toBeExisting();
+            await FavouritesPage.expandFavourites("Clients");
+            await expect($('button[aria-label="toggle A"]')).toBeExisting();
+        });
+
+    
+        it('tc027 Verify when the user can not move/ copy a folder to the Clients cabinet when he doesnt have "Add Client" permission        ', async () => {   
+
+            //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //1.Create tasks folder Clients
+            await CabinetPage.expandCabinet('Clients');
+            await CabinetPage.createTask()
+            //Create tasks Clients - folder A
+            await CabinetPage.expandCabinet("A")
+            //await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('A');
+            await CabinetPage.collapCabinet('Clients');
+    
+            });
+    
+            
+            it('tc028  Verify when the user can not move/ copy a folder to a DCM cabinet a when he doesnt have "Add <DCM name>" permission   ', async () => {
+    
+            //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //2.Create tasks folder Development Cabinet
+            await CabinetPage.expandCabinet('Development Cabinet');
+            await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('Development Cabinet');
+    
+    
+            });
+    
+            
+            it('tc029  Verify there is audit log for the Client Move action when moving Client folder  ', async () => {  
+    
+                       
+            //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //3.Create tasks folder Prospects
+            await CabinetPage.expandCabinet('Prospects');
+            await CabinetPage.createTask()
+            //Create tasks Clients - folder A
+            await CabinetPage.expandCabinet("A")
+            //await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('A');
+            await CabinetPage.collapCabinet('Prospects');
+    
+    
+            });
+    
+    
+            
+            it('tc030 Verify there is audit log Folder Move for each sub-folder that exists in the folder when moving that folder', async () => {
+    
+            //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //1.Create tasks folder Clients
+            await CabinetPage.expandCabinet('Clients');
+            await CabinetPage.createTask()
+            //Create tasks Clients - folder A
+            await CabinetPage.expandCabinet("A")
+            //await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('A');
+            await CabinetPage.collapCabinet('Clients');
+               
+            });
+    
+            
+            it('tc031 Verify there is audit log File Move for each file that exists in the folder and sub-folders when moving that folder', async () => {
+    
+            //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //2.Create tasks folder Development Cabinet
+            await CabinetPage.expandCabinet('Development Cabinet');
+            await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('Development Cabinet');
+               
+            });
+    
+    
+            
+            it('tc032 Verify there is audit log for the Folder Copy action when copying folder', async () => {
+    
+                      //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //3.Create tasks folder Prospects
+            await CabinetPage.expandCabinet('Prospects');
+            await CabinetPage.createTask()
+            //Create tasks Clients - folder A
+            await CabinetPage.expandCabinet("A")
+            //await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('A');
+            await CabinetPage.collapCabinet('Prospects');
+               
+            });
+    
+    
+            
+            it('tc033 Verify there is audit log File Copy for each file that exists in all folders in the normal folder when copying folder', async () => {
+                await LoginPage.reload();
+                await CabinetPage.open();
+                await CabinetPage.expandCabinet('DCM Test');
+                await CabinetPage.expandCabinet("A");
+                await CabinetPage.expandCabinet('AAATEST');
+                await CabinetPage.rightclickFolder("AAATEST");
+                await expect($('//span[contains(.,"Open")]')).toBeExisting();
+                await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
+                await expect($('//span[contains(.,"Add To Favourites")]')).toBeExisting();
+                await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
+                await expect($('//span[contains(.,"Add Structure")]')).toBeExisting();
+                await expect($('//span[contains(.,"Move Folder")]')).toBeExisting();
+                await expect($('//span[contains(.,"Move DCM Test")]')).toBeExisting();
+                await expect($('//span[contains(.,"Copy Folder")]')).toBeExisting();
+                await expect($('//span[contains(.,"Delete Folder")]')).toBeExisting();
+                await expect($('//span[contains(.,"Rename Folder")]')).toBeExisting();
+                await expect($('//span[contains(.,"Add DCM Test Structure")]')).toBeExisting();
+                await expect($('//span[contains(.,"Delete DCM Test")]')).toBeExisting();
+                await expect($('//span[contains(.,"Rename DCM Test")]')).toBeExisting();            
+                await CabinetPage.setFolderColor();
+                await expect($('//span[normalize-space()="AAATEST"]/preceding-sibling::em[contains(@style,"rgb(250, 209, 101)")]')).toBeExisting();    
+                
+            });
+    
+    
+    
+            
+            it('tc034 Verify the user cannot delete a Client folder if there is any task that is assigned to that Client', async () => {
+                //Normal Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+            await CabinetPage.expandCabinet('Clients');
+             await CabinetPage.expandCabinet("A");
+             await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+              await CabinetPage.expandCabinet('2022');
+             await CabinetPage.rightclickFolder("2022");
+             await expect($('//span[contains(.,"Open")]')).toBeExisting();
+             await expect($('//span[contains(.,"Set Folder Colour")]')).toBeExisting();
+             await expect($('//span[contains(.,"Add To Favourites")]')).toBeExisting();
+             await expect($('//span[contains(.,"Add Folder")]')).toBeExisting();
+             await expect($('//span[contains(.,"Add Structure")]')).toBeExisting();
+             await expect($('//span[contains(.,"Move Folder")]')).toBeExisting();
+             await expect($('//span[contains(.,"Copy Folder")]')).toBeExisting();
+             await expect($('//span[contains(.,"Delete Folder")]')).toBeExisting();
+             await expect($('//span[contains(.,"Rename Folder")]')).toBeExisting();
+             await expect($('//span[contains(.,"Show Deleted Files")]')).toBeExisting();
+             await CabinetPage.setFolderColor();
+             await expect($('//span[normalize-space()="2022"]/preceding-sibling::em[contains(@style,"rgb(250, 209, 101)")]')).toBeExisting();
+             
+               
+            });
+    
+            it('tc035 Verify the user cannot delete a DCM folder if there is any task that is assigned to that DCM ', async () => {
+                await LoginPage.reload();
+                //Cabinet
+                await CabinetPage.open();
+                await expect($('button[aria-label= "toggle Clients"]')).toBeExisting();
+                await expect($('button[aria-label= "toggle Development Cabinet"]')).toBeExisting();
+                await CabinetPage.expandCabinet("Clients");
+                await expect($('button[aria-label="toggle A"]')).toBeExisting();
+        
+                //Favourites
+                await FavouritesPage.open();
+                await expect($('button[aria-label= "toggle Clients"]')).toBeExisting();
+                await FavouritesPage.expandFavourites("Clients");
+                await expect($('button[aria-label="toggle A"]')).toBeExisting();
+            });
+
+        it('tc036 Verify the user cannot delete a DCM cabinet if there is any task that is assigned to a DCM in that DCM cabinet        ', async () => {   
+
+            //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //1.Create tasks folder Clients
+            await CabinetPage.expandCabinet('Clients');
+            await CabinetPage.createTask()
+            //Create tasks Clients - folder A
+            await CabinetPage.expandCabinet("A")
+            //await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('A');
+            await CabinetPage.collapCabinet('Clients');
+    
+            });
+    
+            
+            it('tc037 Verify the user cannot delete a normal folder if there is any task that is assigned to that folder    ', async () => {
+    
+            //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //2.Create tasks folder Development Cabinet
+            await CabinetPage.expandCabinet('Development Cabinet');
+            await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('Development Cabinet');
+    
+    
+            });
+    
+            
+            it('tc038 Verify the user cannot delete a normal cabinet if there is any task that is assigned to a folder in that cabinet   ', async () => {  
+    
+                        
+            //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //3.Create tasks folder Prospects
+            await CabinetPage.expandCabinet('Prospects');
+            await CabinetPage.createTask()
+            //Create tasks Clients - folder A
+            await CabinetPage.expandCabinet("A")
+            //await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('A');
+            await CabinetPage.collapCabinet('Prospects');
+    
+    
+            });
+    
+    
+            
+            it('tc039 Verify that the current users Intray will be highlighted by default and displayed at the top in Intray/ Folder Browser/ File Browser/ Save form', async () => {
+    
+            //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //1.Create tasks folder Clients
+            await CabinetPage.expandCabinet('Clients');
+            await CabinetPage.createTask()
+            //Create tasks Clients - folder A
+            await CabinetPage.expandCabinet("A")
+            //await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('A');
+            await CabinetPage.collapCabinet('Clients');
+                
+            });
+    
+            
+            it('tc040 Verify that user can view/ edit/ delete peoples intrays if user has Read/ Write/Delete permission checked in the IAC', async () => {
+    
+            //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //2.Create tasks folder Development Cabinet
+            await CabinetPage.expandCabinet('Development Cabinet');
+            await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('Development Cabinet');
+                
+            });
+    
+    
+            
+            it('tc041 Verify that the user can not move/ copy folder to Intrays folder or create folder in Intrays from Save Form ', async () => {
+    
+             //open Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+    
+            //3.Create tasks folder Prospects
+            await CabinetPage.expandCabinet('Prospects');
+            await CabinetPage.createTask()
+            //Create tasks Clients - folder A
+            await CabinetPage.expandCabinet("A")
+            //await CabinetPage.createTask()
+            //Collap All cabinets
+            await CabinetPage.collapCabinet('A');
+            await CabinetPage.collapCabinet('Prospects');
+                
+            });
+});
+
+
+describe('File', () => {
+	it('tc001 Verify that user can create a Quicknote file ', async () => {
+		//Cabinet
+		await LoginPage.reload();
+		await CabinetPage.open();
+		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet("A")
+		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.collapCabinet('Clients');
+	});
+
+    it('tc002 Verify that the user can create a QuickNote file with Attach To Task checkbox checked', async () => {
+		//Cabinet
+		await LoginPage.reload();
+		await CabinetPage.open();
+		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet("A")
+		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.createQuickNote()
+		await CabinetPage.collapCabinet('Clients');
+	});
+
+    it('tc002 Verify that on the quicknote/ .ott file detail user can select Copy to PDF  button', async () => {
+        await LoginPage.reload();
+        await HomePageMaintenancePage.open();
+	});
+
+
+	it('tc003 Verify that on the quicknote/ .ott file detail user can select the Print button ', async () => {
+        //Cabinet
+        await LoginPage.reload();
+        await CabinetPage.open();
+        await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet("A");
+		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.uploadFileSystem('testfile.xlsx');
+        await expect($('(//span[contains(.,"testfile.xlsx")])[last()]')).toBeExisting();
+      
+    });
+
+    it('tc005 Verify that user can upload a file or multiple files when clicking Upload button ', async () => {
+        //Cabinet
+        await LoginPage.reload();
+        await CabinetPage.open();
+        await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet("A");
+		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.uploadFileSystem('testfile.xlsx');
+        await CabinetPage.uploadFileSystem('testfile.xlsx');
+        await CabinetPage.uploadFileSystem('testfile.xlsx');
+        await expect($('(//span[contains(.,"testfile.xlsx")])[last()]')).toBeExisting();
+      
+    });
+
+    it('tc006 Veirfy after uploading files successfully, display Attach To Task & Attach To Email buttons ', async () => {
+        //Cabinet
+        await LoginPage.reload();
+        await CabinetPage.open();
+        await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet("A");
+		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		await CabinetPage.expandCabinet('2021');
+		await CabinetPage.uploadFileSystem('testfilePDF.pdf');
+      
+    });
+
+    it('tc007 Verify that user can create a new task Add task button ', async () => {
+        await LoginPage.reload();
+		await TaskPage.open();
+        await TaskPage.createTask();
+        await TaskPage.saveAndClose();
+      
+    });
+
+    
+	it('tc008 Verify that user can scan document when clicking Scan here button', async () => {
+		//Cabinet
+		await LoginPage.reload();
+		await CabinetPage.open();
+		await CabinetPage.expandCabinet('Clients');
+		await CabinetPage.expandCabinet("A")
+		await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		await CabinetPage.expandCabinet('2021');
+        await CabinetPage.scan();
+    });
+
+    it('tc010 Verify the user can copy/ move selected files to another location when selecting files and clicking Copy To/ Move To button', async () => {
+        //Pre-condition: set automation group with permission = Write
+       
+            //Check file can be copied from Cabinet
+            await LoginPage.reload();
+            await CabinetPage.open();
+            await CabinetPage.expandCabinet("Clients");
+            await CabinetPage.expandCabinet("A");
+            await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		    await CabinetPage.expandCabinet('2021');
+            await CabinetPage.focusOn("Business");
+            await CabinetPage.tickOnFile("testfile"); //tick on the 1st file
+            await CabinetPage.copyTo(); //Copy to folder: Cabinet/Automation/2022/Emails
+            await CabinetPage.collapCabinet("2021");
+            await CabinetPage.expandCabinet("2022");
+            await CabinetPage.expandCabinet("Business");
+            await expect($('(//span[contains(.,"sample")]/ancestor::td)[1]')).toBeExisting();
+
+
+    });
+
+    it('tc011 Verify the user can delete selected files when clicking Delete button', async () => {
+        //Pre-condition: set automation group with permission = Write
+       
+            //Check file can be copied from Cabinet
+            await LoginPage.reload();
+             //Check file can be deleted in Cabinet
+             await CabinetPage.open();
+             await CabinetPage.expandCabinet("Clients");
+             await CabinetPage.expandCabinet("A");
+             await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+             await CabinetPage.expandCabinet('2021');
+             await CabinetPage.focusOn("Business");
+             await CabinetPage.tickOnFile("testfile"); //tick on the 1st file
+             await CabinetPage.deleteFile();
+
+    });
+
+    it('tc012 Verify the user can export selected files to a .xlsx file when clicking Export button', async () => {
+        //Pre-condition: set automation group with permission = Write
+             await LoginPage.reload();
+            await CabinetPage.open();
+            await CabinetPage.expandCabinet("Clients");
+            await CabinetPage.expandCabinet("A");
+            await CabinetPage.expandCabinet('A New Client Aug 2016-1152');
+		    await CabinetPage.expandCabinet('2021');
+            await CabinetPage.focusOn("Business");
+            await CabinetPage.tickOnFile("testfile"); //tick on the 1st file
+
+    });
+
+
 });
 
 

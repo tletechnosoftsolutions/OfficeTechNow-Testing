@@ -34,8 +34,9 @@ class TaskTemplateMaintenance extends Page {
      * focus on task template
      */
     async focusOn(templateName) {
-        await $('//label[normalize-space()="' + templateName + '"]').scrollIntoView();
-        await $('//label[normalize-space()="' + templateName + '"]').click();
+        await new Promise(resolve => setTimeout(resolve, 3000)); 
+        //await $('//label[normalize-space()="' + templateName + '"]').scrollIntoView();
+        await $('//label[contains(text(),"'+templateName+'")]/parent::div/parent::div/parent::mat-list-item').click();
         await new Promise(resolve => setTimeout(resolve, 500)); 
     }
 
@@ -126,7 +127,25 @@ class TaskTemplateMaintenance extends Page {
         await new Promise(resolve => setTimeout(resolve, 2000));
     }
 
-    
+    /**
+     * open the Task page
+     */
+     async send() {
+        await this.btnAdministration.click()
+        await this.btnTaskTemplateMaintenance.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    /**
+     * open the Task page
+     */
+     async attach() {
+        await this.btnAdministration.click()
+        await this.btnTaskTemplateMaintenance.click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+
      
     /**
      * copy a task template

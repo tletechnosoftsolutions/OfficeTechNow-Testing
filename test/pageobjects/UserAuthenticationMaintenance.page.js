@@ -30,6 +30,15 @@ class UserAuthenticationMaintenancePage extends Page {
      /**
      * open the User Authentication Maintenance page
      */
+      async request() {
+        await this.btnAdministration.click();
+        await this.btnUserAuthenticationMaintenance.click();
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+
+     /**
+     * open the User Authentication Maintenance page
+     */
       async open1() {
         await this.btnAdministration.click();
         await this.btnUserAuthenticationMaintenance.click();
@@ -38,7 +47,7 @@ class UserAuthenticationMaintenancePage extends Page {
      /**
      * open the User Authentication Maintenance page
      */
-      async open2() {
+      async goto() {
         await this.btnAdministration.click();
         await this.btnUserAuthenticationMaintenance.click();
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -46,7 +55,7 @@ class UserAuthenticationMaintenancePage extends Page {
      /**
      * open the User Authentication Maintenance page
      */
-      async open3() {
+      async login() {
         await this.btnAdministration.click();
         await this.btnUserAuthenticationMaintenance.click();
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -62,7 +71,7 @@ class UserAuthenticationMaintenancePage extends Page {
      /**
      * open the User Authentication Maintenance page
      */
-      async open5() {
+      async forgot() {
         await this.btnAdministration.click();
         await this.btnUserAuthenticationMaintenance.click();
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -72,7 +81,7 @@ class UserAuthenticationMaintenancePage extends Page {
      */
     async inviteNewUser(user) {
         await $('//span[contains(text(), "Invite")]').click();
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 5000));
         //Info
         await $('//input[@placeholder="Enter Email"]').setValue(user + "@gmail.com");
         await $('//input[@placeholder="Enter First Name"]').setValue("Automation");
